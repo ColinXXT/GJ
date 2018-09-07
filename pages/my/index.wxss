@@ -1,0 +1,107 @@
+.container{
+  min-height: 100%;
+  overflow: hidden;
+  overflow-y: hidden;
+}
+.userinfo {
+	display: flex;
+	flex-direction: column;
+	padding: 50rpx 0;
+	align-items: center;
+	background: #69C3AA;
+  width: 750rpx;
+}
+
+.userinfo-avatar {
+	width: 160rpx;
+	height: 160rpx;
+	margin: 20rpx;
+	border-radius: 50%;
+}
+
+.userinfo-nickname {
+  margin-top: 20rpx;
+  color: #FFF;
+  text-align: center
+}
+
+
+.version {
+  width:100%;
+  height: 40rpx;
+	line-height: 40rpx;
+	font-size: 24rpx;
+	text-align: center;  
+  padding: 40rpx;
+}
+
+.my-item{
+    width: 100%;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/more/arrow-right.png) no-repeat 750rpx center;
+    background-size: 16rpx auto,750rpx auto;
+    margin: 20rpx 0; 
+    border-bottom: 1px solid #eee;
+    height: 100rpx;
+    line-height: 100rpx;
+    padding-left: 100rpx;
+}
+.left{
+  float:left;
+}
+.tel{
+  width:58rpx;
+  margin-top:20rpx;
+  height:27px;
+  padding-left:20px;
+}
+
+.my-item image{
+  width:50rpx;
+  margin-top:20rpx;
+  margin-right:20rpx;
+}
+
+.about image{
+  width: 320rpx;
+  height: 40rpx;
+}
+.Grid{
+  display: flex;
+}
+.Grid-cell{
+  flex: 1;
+  text-align: left;
+  margin: 10px;
+  height: 41px;
+  line-height: 45px;
+}
+.Grid-cell-sub {
+  flex: 1;
+  text-align: center;
+  border-radius: 4px;
+  margin: 10px;
+  height: 41px;
+  line-height: 45px;
+  margin-top:0px;
+}
+.section {
+display: flex;
+margin: 16rpx;
+padding: 16rpx;
+border-bottom: 1rpx solid #CFD8DC;
+}
+
+text {
+  width: 200rpx;
+}
+
+button {
+  margin: 16rpx;
+}
+.sendMsg {
+  font-size: 12;
+  margin-right: 0;
+  padding: 0;
+  height: inherit;
+  width: 80rpx;
+}

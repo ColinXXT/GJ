@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "车辆年审",
+  "usingComponents": {
+    "v-panel": "../../temp/keyboard/index"
+  }
+}

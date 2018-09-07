@@ -1,0 +1,38 @@
+<view class="container">
+	<view class="userinfo" wx:if="{{userInfo}}">
+		<image wx:if="{{userInfo && userInfo.avatarUrl}}" class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
+		<text class="userinfo-nickname">{{ userInfo.nickName }}</text>
+	</view>
+  <view class="userinfo" wx:else>
+		<image class="userinfo-avatar" src="../../images/more/tx.png" background-size="cover"></image>
+              <view wx:if="{{!userMobile}}" class="my-item" style="border:none;padding-right:100rpx;width:auto;">
+     <button style='width:165px;' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" class="save-btn">登录</button>
+  </view>
+  <view wx:if="{{userMobile}}" class="my-item" style="border:none;padding-right:150rpx;width:auto;">
+    {{userMobile}}
+  </view>
+	</view>
+<view style="height:20rpx;background: #eee;width:100%;"></view>
+  <view data-id="cw" class="my-item" bindtap='gotoOrder'>
+  <image class = "left" src = "../../images/my/bmcw-wzlist-icon.png"mode = "widthFix" />
+    <!-- <navigator url="/pages/order-list/index?vid=chewu" hover-class="navigator-hover">我的车务订单</navigator> -->
+    我的车务订单
+  </view>
+  <view data-id="wz" class="my-item" bindtap='gotoOrder'>
+   <image class = "left" src = "../../images/my/bmcw-orderlist-icon.png" mode = "widthFix"/>
+    <!-- <navigator url="/pages/order-list/index?vid=weizhang" hover-class="navigator-hover">我的违章订单</navigator> -->
+    我的违章订单
+  </view>
+   <modal class="modal" hidden="{{modalFlag}}" cancel-text="取消" bindcancel="modalCancel" bindconfirm="modalOk" confirmText="验证登录">
+    <view class="section">
+    <text>手机号码</text>
+    <input placeholder="请输入手机号码" type="number" maxlength="11" bindinput="inputPhoneNum" />
+    <text wx:if="{{send}}" class="sendMsg" bindtap="sendMsg">发送</text>
+    <text wx:if="{{alreadySend}}" class="sendMsg" bindtap="sendMsg">{{second+"s"}}</text>
+  </view>
+  <view class="section">
+    <text>短信验证</text>
+    <input placeholder="短信验证码" type="number" bindinput="addCode" />
+  </view>     
+</modal>
+</view>

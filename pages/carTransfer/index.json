@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "车辆过户",
+  "usingComponents":{
+    "v-panel":"../../temp/keyboard/index"
+  }
+}

@@ -1,0 +1,21 @@
+  <view class='main'>
+        <block wx:if="{{uploadimage}}">
+        <image class="fullimage" mode="aspectFit" src="{{uploadimage}}"></image>
+        </block>
+ <view>
+  <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>驾驶证号码：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+      </view>
+    </view>
+    <input class='inputStyle' data-id="jszNumber" value='{{jszValue}}'></input>
+    </view>
+     <view class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
+    <button style='background: #FF6100;' type="warn" bindtap="submitOrder">核实驾驶证</button>
+    
+  </view>
+ </view>
+ </view>

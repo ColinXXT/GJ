@@ -1,0 +1,94 @@
+  <view class='main'>
+        <block wx:if="{{uploadimage}}">
+        <image class="fullimage" mode="aspectFit" src="{{uploadimage}}"></image>
+        </block>
+   <view>      
+   <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>车主姓名：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+<view bindtap="carInput">
+      </view>
+      </view>
+    </view>
+    <input class='inputStyle' data-id="owner" placeholder='请输入车主姓名' bindinput='carInput' value='{{ownerValue}}'></input>
+    </view>
+    <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>车牌号码：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+<view bindtap="carInput">
+      </view>
+      </view>
+    </view>
+    <input class='inputStyle' data-id="carNumber" placeholder='请输入车牌号码' bindinput='carInput' value='{{chepaiValue}}'></input>
+    </view>
+      <view class="carStyle">
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>机动车车型：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+<view data-item="carType" bindtap="showItem">
+      <image mode="aspectFill" class = "left1" src = "../../images/driImage/bmcw-know-more.jpg" mode = "widthFix" />
+      </view>
+      </view>
+    </view>
+<input placeholder='请输入车型' data-id="carTypes" class='inputStyle' bindinput='carInput' value='{{carTypesValue}}'></input>
+</view>
+    <view class="carStyle">
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>发动机号码：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+<view bindtap="showMechie">
+      <image mode="aspectFill" class = "left1" src = "../../images/driImage/bmcw-know-more.jpg" mode = "widthFix" />
+      </view>
+      </view>
+    </view>
+<input placeholder='请输入发动机号' data-id="fdjNumber" class='inputStyle' bindinput='carInput' value='{{fadongjiValue}}'></input>
+</view>
+<view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>车架号码：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+<view bindtap="showCheJiaNumber">
+      <image mode="aspectFill" class = "left1" src = "../../images/driImage/bmcw-know-more.jpg" mode = "widthFix" />
+      </view>
+      </view>
+    </view>
+    <input class='inputStyle' data-id="zjNumber" placeholder='请输入车架号' bindinput='carInput' value='{{chejiaValue}}'></input>
+    </view>
+  <view class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
+    <button style='background: #53c0fc;' type="warn" bindtap="save">保存</button>
+    
+  </view>
+</view>
+    
+ <modal class="modal" hidden="{{modalFlag}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+    <view class="dew">
+    <view class="vedw">总质量不超过4.5t、乘坐人数（包括驾驶员）不超过9人或车长6米以下的汽车。</view>
+    <view class="vedw">悬挂<h style="color:red;">蓝底白字</h>的汽车</view>
+      <image  src="../../images/driImage/bmcw-blue-card.png" alt="" class="age"></image>
+      <view class="vedw">总质量4.5t（含）、乘坐人数（驾驶员除外）20人（含）或车长6米（含）以上的汽车。</view>
+      <view class="vedw">悬挂<h style="color:red;">黄底黑字</h>的汽车</view>
+      <image  src="../../images/driImage/bmcw-yellow-card.png" alt="" class="age"></image>    
+</view>
+</modal>
+<modal class="modal" hidden="{{modalFlag1}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+      <image  src="../../images/driImage/bjcg-sl-fdjhm.jpg" alt="" class="age1">
+      </image>       
+</modal>
+<modal class="modal" id='chejianum' hidden="{{modalFlag2}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+      <!-- <image alt="" class="age1"> -->
+      <image  src="../../images/driImage/cjh.png" alt="" class="age1">
+      </image>       
+</modal>
+</view>

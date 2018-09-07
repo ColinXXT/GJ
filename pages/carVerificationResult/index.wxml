@@ -1,0 +1,134 @@
+<view class='mask' hidden='{{maskFlag}}'></view>
+   <v-panel is-show="{{isShow}}" bindok="keyInputDone" binddelete="inputdelete" bindinputchange="inputChange" key-board-type="{{keyBoardType}}" backgroundColor="white" />
+  <view class='main'>
+  <view class="note">
+      <view class="journey_title">车辆年检</view>
+  </view>
+    <view class="carStyle">
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>车牌号码：</view>
+      </view>
+    </view>
+     <view class='inputStyle' bindtap="keyBoard"><view class='picker'>{{carnumber}}</view>    
+     </view>
+</view>
+<view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>首次上牌日期：</view>
+      </view>
+    </view>
+    <picker class='inputStyle' name="reg_date" mode="date" value="{{registedDate}}" start="2018-8-1" end="2025-1" bindchange="bindDateChange">  
+            <view class='picker'>{{registedDate}} </view> 
+    </picker> 
+    </view>
+<view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>办理日期：<h style='color:red;'>（请选择期望办理的日期）</h></view>
+      </view>
+    </view>
+    <picker class='inputStyle' name="banli_date" mode="date" value="{{dates}}" start="2018-8-1" end="2025-1" bindchange="bindDateChange">  
+            <view class='picker'>{{dates}} </view> 
+    </picker> 
+    </view>
+
+    <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>车主姓名：</view>
+      </view>
+    </view>
+    <input class='inputStyle' placeholder='请输入车主姓名' bindinput='inputlinsener' data-id="owner" value='{{ownerValue}}'></input>
+    </view>
+      <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>联系地址：</view>
+      </view>
+    </view>
+    <view class='inputStyle' bindtap="open"><view class='picker'> {{province}}-{{city}}-{{county}} </view></view>
+    <input class='inputStyle' placeholder='请输入详细地址' bindinput='inputlinsener' data-id="address" value='{{carValue}}'></input>
+    </view>
+  <view style="margin:20rpx 0rpx; height:20rpx;background: #eee;width:100%;"></view> 
+
+  <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>车主是否在现场参与办理？</view>
+      </view>
+    </view>
+    </view>
+  
+<radio-group class="radio-group" bindchange="radioChange">
+    <label class="radio" wx:key = "index" wx:for="{{items}}">
+    <view class="radioView">
+        <radio value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}<view></view>
+        </view>
+    </label>
+</radio-group>
+ <view class="tnc">
+      <view bindtap="showRequireInfo" class="journey_text">点击查看所需手续</view>
+      <view bindtap="showNotice" class="journey_text">点击查看注意事项</view>
+  </view>
+  <image style='height:15px; width:100%;' src='../../images/driImage/half.jpg'></image>
+   <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>订单总价</view>
+      </view>
+      <view class="Grid-cell-sub">
+              <text>￥{{price}}</text>
+      </view>
+    </view>
+    </view>
+  <view data-id="{{item.id}}" class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
+    <button style='background: #FF6100;' type="warn" bindtap="submitOrder">提交订单</button>
+    
+  </view>
+    </view>
+     <modal class="modal" hidden="{{modalFlag}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+    <view class="dew">
+    <view class="vedw">1、行驶证原件</view>
+    <view class="vedw">2、登记证原件（大绿本）</view>
+    <view class="vedw">3、购车发票原件（如有过户记录携带过户票原件)</view>
+    <view class="vedw">4、买卖双方身份证原件，及复印件各2张</view>
+    <view class="vedw">5、买方非西安市户籍需提供有效居住证原件</view>
+    <view class="vedw">6、已办理三证合一的企业需营业执照副本和公章</view>
+    <view class="vedw">7、未办理三证合一的企业需组织机构代码证副本和公章</view>
+    <view style='margin-top:10px;' class="vedw"><h style="color:black; font-weight:bold;">快递地址</h></view>
+    <view class="vedw">收件人：xxx</view>
+    <view class="vedw">联系电话：xxxx</view>
+    <view class="vedw">邮寄地址：xxx</view>
+    <view class="vedw">邮政编码：710000</view> 
+</view>
+</modal>
+<modal class="modal" hidden="{{modalFlag1}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+    <view class="dew">
+    <view class="vedw">1、车辆需到场，办理当天车辆不要限号</view>
+    <view class="vedw">2、办理业务前需先处理完毕车辆的所有违章</view>
+    <view class="vedw">3、因车辆问题产生的额外费用需车主自行承担并单独支付</view>
+    <view class="vedw">4、车辆购买方如无法到现场，需要车管所与购车人远程视频确认</view>
+    <view class="vedw">5、请核对办理本市过户所需原车主证件以及车辆证件、新车主证件</view>
+    <view class="vedw">6、已办理三证合一的企业需营业执照副本和公章</view>
+    <view class="vedw">6、已支付的订单，客服确认无法办理后，会在3个工作日之内无条件全额退款</view> 
+</view>
+</modal>
+<view wx:if="{{condition}}" class="citypicker">
+  <picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; " value="{{value}}" bindchange="bindChange" class="citybody" >
+    <view class="cityheader">
+      <view bindtap="open1" class="city-cancel">取消</view>
+      <view bindtap="open1" class="city-true">确定</view>
+    </view>
+    <picker-view-column >
+      <view wx:for="{{provinces}}" wx:key="item" style="line-height: 50px;padding-left:10px;">{{item}}</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{citys}}" wx:key="item" style="line-height: 50px;padding-left:10px;">{{item}}</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{countys}}" wx:key="item" style="line-height: 50px;padding-left:10px;">{{item}}</view>
+    </picker-view-column>
+  </picker-view>
+</view>

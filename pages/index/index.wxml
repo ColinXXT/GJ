@@ -1,0 +1,135 @@
+<view class="container">
+   <view class="swiper-container">
+        <swiper class="swiper_box" 
+                    autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
+            <block wx:for="{{banners}}" wx:key="id">
+                <swiper-item>
+                    <image  src="{{item.picUrl}}" class="slide-image" width="750rpx" height="562.5rpx"/>
+                </swiper-item>
+            </block>
+        </swiper>
+        <view class="dots">  
+            <block wx:for="{{banners}}" wx:key="unique">  
+                <view class="dot{{index == swiperCurrent ? ' active' : ''}}"></view>  
+            </block>  
+        </view>  
+   </view>
+</view>
+<!--autoPlay-->
+<!--Category-->
+<view class="main">
+    <view class="categroy-left">
+        <view wx:for="{{category}}" wx:key="index" data-id="{{item.id}}" data-index="{{index}}"
+            bindtap="switchTab"
+            class="cate-list {{curIndex === index?'on':''}}">{{item.name}}</view>
+    </view>
+
+    <scroll-view class="categroy-right" scroll-y="{{isScroll}}" scroll-into-view="{{toView}}" scroll-with-animation="true">
+         <block wx:for="{{detail}}" wx:for-index wx:key="idx">
+            <view id="{{item.id}}" class="cate-box">
+                <view class="cate-title">
+                    <text>{{item.cate}}</text>
+                </view>
+                <view class="product">
+                    <view class="product-list" wx:for="{{item.detail}}" wx:key="index" wx:for-item="val" bindtap="toDetailsTap" data-id="{{val.id}}">                 
+                            <image src="{{val.thumb}}"></image>
+                            <view class="classname"><text>{{val.name}}</text></view>
+                    </view>
+                </view>
+            </view>
+        </block> 
+    </scroll-view>
+
+</view>
+<!-- <view style="height:20rpx;background: #eee;width:100%;"></view> -->
+
+  <!--banner-->
+  <!-- <view class="cate-banner">
+    <image src="../../images/more/adbanner.jpg"></image>            
+  </view> -->
+  <!--banner-->
+  <view class="svc">
+    <view class='svc_text'>四大服务优势</view>
+  </view>
+  <view class="Grid">
+    <view class="Grid-cell1">
+      <view class="product">
+        <view class="product-list1">
+                <image/>
+                <view class="classname"><text>方便快捷</text></view>
+                <view class="notice_iteml1">省去长时间排队等待，车务顾问全程服务，手续齐全，快速办理</view>
+        </view>
+        </view>
+    </view>
+    <view class="Grid-cell2">
+    <view class="product">
+        <view class="product-list2">
+            <image/>
+                <view class="classname"><text>价格合理</text></view>
+                <view class="notice_iteml1">明码标价，价格合理，杜绝隐性收费</view>
+        </view>
+        </view>
+    </view>
+  </view>
+    <view class="Grid">
+    <view class="Grid-cell3">
+      <view class="product">
+        <view class="product-list3">
+           <image/>
+                  <view class="classname"><text>全程服务</text></view>
+                <view class="notice_iteml1">专业车务顾问，“一对一全程代办服务，客户经理全程实时监督服务</view>
+        </view>
+        </view>
+    </view>
+    <view class="Grid-cell4">
+     <view class="product">
+        <view class="product-list4">
+           <image/>
+                 <view class="classname"><text>退款保障</text></view>
+                <view class="notice_iteml1">服务不满意，款项随时可以退还。</view>
+        </view>
+        </view>
+    </view>
+  </view>
+  <!--serviceJourney-->
+  <view class="svc">
+    <view class='svc_text'>办理流程</view>
+  </view>
+  <view class="journey">
+     <view class='suborder'>
+        <image/>
+        <view class='journey_text1'>提交订单</view>
+    </view>
+    <view class="selection"> 
+     <image/>
+     </view>
+     <view class='suborder1'>
+      <image src = "../../images/cate/icon-user-guide.png"/>
+        <view class='journey_text2'>客户指导</view>
+    </view> 
+    <view class="selection"> 
+     <image/>
+     </view>
+    <view class="Grid">
+      <view class="Grid-cell">
+        <image/>
+         <view class='journey_text'>上门取件</view>
+     </view>
+      <view class="Grid-cell-sub">
+       <image/>
+         <view class="journey_text">现场陪同</view>
+      </view>
+    </view>
+    <view class='offlineSvc'>
+        <image/>
+        <view class='journey_text1'>线下办理</view>
+    </view> 
+    <view class="selection"> 
+     <image/>
+     </view>
+    <view class='compleOrder'>
+        <image/>
+        <view class='journey_text1'>完成订单</view>
+    </view> 
+  </view>
+   

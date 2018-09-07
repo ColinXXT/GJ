@@ -1,0 +1,52 @@
+<!--servicesList-->
+<view class="container">
+<view class="no-order" wx:if="{{wzList.length==0}}">
+        <image src="/images/order-details/no-order.png" class="no-order-img"></image>
+        <view class="text">暂无违章</view>
+    </view>
+  <view class="page-body" wx:else>
+    <view class="filter-wrap">
+      <view class="InfoItemList b-list">
+  <view class="list-item" wx:for="{{wzList}}" wx:key="{{item.id}}" data-book="{{item}}" >
+    <view class="b-item-right">
+      <text class="b-item-type">时间：{{item.date}}\n</text>
+      <text class="b-item-type">地点：{{item.wzcity}}{{item.area}}\n</text>
+      <text class="b-item-des">违法：{{item.act}}\n</text>
+      <text class="b-item-des">违单号：{{item.archiveno}}</text>
+      <view class="Grid">
+         <view class="Grid-cell">
+              <text class="b-item-des">罚款：<text class='redText'>{{item.money}}</text></text>
+         </view>
+         <view class='Grid-cell-sub'>
+            <text class="b-item-des">记分：<text class='redText'>{{item.fen}}</text></text>
+         </view>
+        </view>
+        <view class="Grid"  wx:if="{{item.handled==0}}">
+         <view class="Grid-cell">
+          <text class="b-item-tipRight">未处理</text>
+        </view>
+        <view class='Grid-cell-sub'>
+          <view class="about" bindtap="calling" wx:if="{{item.fen!=0}}">
+            <text class='b-item-des'>拨打电话：<text class='tel'>400-888-9999</text></text>
+          </view>
+         
+          <view class="about" wx:else>
+           <navigator url="../dxwz/index?wzOrder={{item.archiveno}}&wzfk={{item.money}}&xsz={{xsznumber}}&wzdate={{item.date}}&wzcity={{item.wzcity+'\t'+item.area}}&act={{item.act}}">
+            <image class='dxImage' src='../../images/more/click.png'></image>
+                    </navigator>
+          </view>
+  
+        </view>
+        </view>
+        <view class="Grid"  wx:if="{{item.handled==1}}">
+         <view class="Grid-cell">
+           <text class="b-item-tipRightGrey">已处理</text> 
+        </view>
+        </view>
+    </view> 
+  </view> 
+</view>
+    </view>
+  </view>
+</view>
+

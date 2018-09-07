@@ -1,0 +1,441 @@
+/**index.wxss**/
+
+.container {
+  background-color: #F2f2f2;
+  min-height: 100%;
+}
+.swiper-container{
+  width: 750rpx;
+  position: relative;  
+}
+.swiper_box {
+  width: 100%;
+  height:350rpx;
+}
+swiper-item image {
+  width: 100%;
+  display: inline-block;
+  overflow: hidden;
+  height:350rpx;
+}
+.swiper-container .dots{  
+  position: absolute;  
+  left: 0;  
+  right: 0;  
+  bottom: 20rpx;  
+  display: flex;  
+  justify-content: center;  
+}  
+.swiper-container .dots .dot{  
+  margin: 0 8rpx;  
+  width: 14rpx;  
+  height: 14rpx;  
+  background: #fff;  
+  border-radius: 50%;  
+  transition: all .6s;  
+  opacity: .5;
+}  
+.swiper-container .dots .dot.active{  
+  width: 14rpx;  
+  opacity: 1;
+}
+
+.type-navbar{
+  white-space: nowrap;
+  height: 88rpx;
+  width: 100%;
+  background-color: #fff;
+}
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+.type-box{
+  width:160rpx;
+  box-sizing: content-box;
+  font-size: 24rpx;
+  line-height: 84rpx;
+  text-align: center;
+  display: inline-block;
+  overflow: hidden;
+}
+.type-navbar-item{
+  border-bottom: 4rpx solid #fff;
+}
+.type-item-on{
+  border-bottom: 4rpx solid #e64340;
+}
+
+.type-container{
+  width: 100%;
+  height: 88rpx;
+  background-color: #fff;
+  overflow: hidden;
+}
+.search-view{
+  position:fixed;
+  left:0;
+  right:0;
+  top:0;
+  z-index:500;
+  width: 100%;
+  height: 100rpx;
+  background: gray;
+  display: flex;
+  flex-direction: column;
+}
+.search-content{
+   background: white;
+   width:650rpx;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   padding-top: auto;
+   padding-left: 20rpx;
+   padding-bottom: auto;
+   margin: auto;
+   height: 70rpx;
+   border-radius:5px 5px;
+}
+.search-icon{
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+.select-icon{
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+.tel-icon{
+  width: 470rpx;
+  height: 40rpx;
+  margin-left: 20rpx;
+}
+.search-input{
+  width: 500rpx;
+  font-size: 28rpx;
+}
+.notice_iteml {
+  padding-left: 25rpx;
+  padding-top: 15rpx;
+  padding-bottom: 15rpx;
+  font-size: 26rpx;
+  width: 100%;
+  height: 50rpx;
+  line-height: 50rpx;
+  color: #999;
+}
+
+.my-item{
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/more/arrow-right.png) no-repeat 680rpx center;
+    background-size: 16rpx auto,750rpx auto;
+    margin: 20rpx 0; 
+    border-bottom: 1px solid #eee;
+    line-height: 100rpx;
+    padding-left: 20rpx;
+}
+
+.main{
+    height: 450rpx;
+}
+.categroy-left{
+    float: left;
+    width: 150rpx;
+    height: 100%;
+    border-right: 1px solid #ddd;
+    box-sizing: border-box;
+}
+.categroy-left .cate-list{
+    height: 90rpx;
+    line-height: 90rpx;
+    text-align: center;
+    border-left: 3px solid #fff;
+}
+.categroy-left .cate-list.on{
+    color: #AB956D;
+    border-color: #AB956D;
+}
+.categroy-right{
+    float: right;
+    width: 600rpx;
+    height: 400rpx;
+    overflow: hidden;
+    
+}
+.cate-box{
+    height: 100%;
+    padding:40rpx;
+    box-sizing: border-box;
+}
+
+.cate-title{
+    position: relative;
+    height: 50rpx;
+    line-height: 30rpx;
+    padding:30rpx 0 55rpx;
+    text-align: center;
+    color: #AB956D;
+    font-size: 28rpx;
+}
+.cate-title::before{
+    position: absolute;
+    left: 130rpx;
+    top: 43rpx;
+    content: '';
+    width: 70rpx;
+    height: 4rpx;
+    background: #AB956D;
+}
+.cate-title::after{
+    position: absolute;
+    right: 130rpx;
+    top: 43rpx;
+    content: '';
+    width: 70rpx;
+    height: 4rpx;
+    background: #AB956D;
+}
+
+.product-list{
+    display: inline-block;
+    width: 160rpx;
+    height: 160rpx;
+    text-align: center;
+    margin:0 20rpx 20rpx 0;
+    font-size: 24rpx;
+}
+.product-list image{
+    width: 80rpx;
+    height: 80rpx;
+    margin-bottom: 20rpx;
+}
+.product-list:nth-child(3n){
+    margin-right: 0;
+}
+
+.left{
+  float:left;
+}
+.my-item image{
+  width:50rpx;
+  margin-top:20rpx;
+  margin-right:20rpx;
+}
+.suborder1 image{
+  width:50rpx;
+  margin-top:20rpx;
+  margin-left:99px;
+  height:25px;
+  float: left;
+}
+.cate-banner image{
+    display: block;
+    width: 100%;
+    height: 190rpx;
+}
+.cate-banner1 image{
+    width: 197px;
+    height: 20px;
+    -webkit-background-size: 197px 20px;
+    background-size: 197px 20px;
+    margin: 0 auto 20px;
+}
+.cate-banner1{
+    text-align: center
+}
+.Grid {
+  display: flex;
+}
+.Grid-cell, .Grid-cell-sub {
+  flex: 1;
+  text-align: center;
+  background:#53c0fc;
+  color:#ffffff;
+  border-radius: 4px;
+  margin: 10px;
+  height: 41px;
+  line-height: 45px;
+}
+
+.Grid-cell5 {
+  flex: 1;
+  text-align: left;
+  margin: 10px;
+}
+.Grid-cell1 {
+  flex: 1;
+  text-align: center;
+  border-bottom: 1px dashed #def0fc;
+  border-right: 1px dashed #def0fc;
+  padding-bottom:15rpx;
+
+}
+.Grid-cell2 {
+  flex: 1;
+  text-align: center;
+  border-bottom: 1px dashed #def0fc;
+  padding-bottom:15rpx;
+}
+.Grid-cell3 {
+  flex: 1;
+  text-align: center;
+  border-right: 1px dashed #def0fc;
+  padding-top:15rpx;
+}
+.Grid-cell4 {
+  flex: 1;
+  text-align: center;
+  padding-top:15rpx;
+}
+.svc{
+  padding: 10px;
+  background: #dff4ff;
+}
+
+.journey{
+  padding: 10px;
+  background: #dff4ff;
+}
+
+.svc_text{
+  text-align: center;
+  color: #53C0FB;
+  font-weight:bold;
+}
+.notice_iteml1 {
+  padding-top: 15rpx;
+  padding-bottom: 15rpx;
+  font-size: 26rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  color: #999;
+  text-align: left;
+  padding-left:50rpx;
+}
+
+.product-list1, .product-list2, .product-list3, .product-list4{
+    display: inline-block;
+    height: 160rpx;
+    text-align: center;
+    margin:0 20rpx 20rpx 0;
+    font-size: 24rpx;
+}
+
+.product-list1 image{
+    width: 50px;
+    height: 46px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 0 no-repeat;
+    background-size: 52px 600px;
+}
+.product-list2 image{
+    width: 50px;
+    height: 46px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -60px no-repeat;
+    background-size: 52px 600px;
+}
+
+.product-list3 image{
+    width: 50px;
+    height: 46px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -120px no-repeat;
+    background-size: 52px 600px;
+}
+
+.product-list4 image{
+    width: 50px;
+    height: 46px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -180px no-repeat;
+    background-size: 52px 600px;
+}
+.notice_iteml2 {
+font-size:26rpx;
+line-height:50rpx;
+color:#999;
+text-align:left;
+padding-left:70rpx;
+}
+
+.Grid-cell image{
+   width: 50px;
+    height: 45px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -343px no-repeat;
+    background-size: 52px 615px;
+    float:left;
+    margin-left:20px;
+}
+.Grid-cell-sub image{
+   width: 50px;
+    height: 45px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -388px no-repeat;
+    background-size: 52px 615px;
+    float:left;
+    margin-left:20px;
+}
+.journey_text{
+  margin-right:22px;
+}
+.journey_text1{
+  margin-right:120px;
+}
+.journey_text2{
+  margin-right:94px;
+}
+.suborder, .suborder1, .compleOrder, .offlineSvc{
+  background: #ffffff;
+  border-radius: 4px;
+  margin: 10px;
+  line-height: 41px;
+  color: #53c0fc;
+  text-align: center;
+}
+.suborder image{
+    width: 50px;
+    height: 45px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -295px no-repeat;
+    background-size: 52px 615px;
+    float:left;
+    margin-left:97px;
+}
+.offlineSvc image{
+    width: 50px;
+    height: 45px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -440px no-repeat;
+    background-size: 52px 610px;
+    float:left;
+    margin-left:97px;
+}
+.compleOrder image{
+    width: 50px;
+    height: 45px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -488px no-repeat;
+    background-size: 52px 610px;
+    float:left;
+    margin-left:97px;
+}
+
+.selection image{
+    width: 30px;
+    height: 25px;
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -535px no-repeat;
+    background-size: 52px 615px;
+}
+.selection{
+  text-align: center
+}
+.Grid-cell5 image{
+    width: 113rpx;
+    height: 130rpx;
+    margin-right: 10rpx;
+    float:left;
+}
+
+.svc_stars{
+    width: 177rpx !important;
+    height: 40rpx !important;
+    margin-bottom: 20rpx;
+}
+.copyright{
+  padding: 10px;
+}
