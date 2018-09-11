@@ -22,9 +22,11 @@ Page({
    */
   onReady: function () {
     var self = this;
-    console.log(app.globalData.host + 'findAllCar') 
+    console.log(app.globalData.host + 'findAllCar')
+    console.log(wx.getStorageSync('token')) 
+    
       wx.showLoading({
-        title: '数据加载中...',
+        title: '加载中...',
       })
       wx.request({
         url: app.globalData.host + 'findAllCar',
@@ -143,7 +145,7 @@ Page({
                   url: '../authorize/index',
                 })
                 wx.hideLoading()    
-              }else{
+              } else{
                 wx.showModal({
                   title: '错误提示',
                   content: '扫描失败',
@@ -172,20 +174,18 @@ Page({
    */
   radioChange: function(e){
     var self = this;
-    var data = self.data.driverLists;
-    console.log(e)
+    var result = e.detail.value.split(",");
     wx.showLoading({
       title: '查询中...',
     })
-    console.log(data)
     wx.request({
       url: app.globalData.host + 'saveCarLience',
       data: {
-        "carNumber": data.carNumber,
-        "carType": data.carType,
-        "cjNumber": data.cjNumber,
-        "fdjh": data.fdjh,
-        "owner": data.owner
+        "carNumber": result[0],
+        "carType": result[1],
+        "cjNumber": result[2],
+        "fdjh": result[3],
+        "owner": result[4]
       },
       header: {
         'token': wx.getStorageSync('token')
@@ -196,7 +196,7 @@ Page({
         console.log("response", res);
         if (res.data.httpStatus == 200) {
           wx.navigateTo({
-            url: "/pages/wzlist/index?wxDetails=" + res.data.data + "&driverLists=" + self.data.driverLists
+            url: "/pages/wzlist/index?wxDetails=" + res.data.data + "&driverLists=" + self.data.driverLists + '&chepai=' + result[0] + '&chejia=' + result[2]
           })
           wx.hideLoading()
         } else if (res.data.httpStatus == 401) {
@@ -206,7 +206,7 @@ Page({
           wx.hideLoading()
         } else {
           wx.showToast({
-            title: '查询失败',
+            title: '网络异常，请重试',
             icon: "none"
           })
           wx.hideLoading()
@@ -214,7 +214,7 @@ Page({
       }, fail(res) {
         console.log(res)
         wx.showToast({
-          title: '查询失败',
+          title: '网络异常，请重试',
           icon: "none"
         })
         wx.hideLoading()

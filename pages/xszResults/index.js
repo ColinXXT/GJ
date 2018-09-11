@@ -31,12 +31,18 @@ Page({
   onLoad: function (options) {
     var data = JSON.parse(options.driverInfo);
     console.log(data)
+    var date;
+    if(data.registedDate==""){
+      date = this.data.registedDate
+    }else{
+      date = data.registedDate
+    }
     this.setData({
       carTypesValue: data.carType,
       chepaiValue: data.carNumber,
       fadongjiValue: data.fdjh,
       chejiaValue: data.cjNumber,
-      registedDate: data.registedDate,
+      registedDate: date,
       ownerValue:data.owner
     })
   },
@@ -206,10 +212,10 @@ Page({
       })
       return;
     }
-    
+    console.log(self.data)
     wx.showModal({
       title: '温馨提示',
-      content: '确定扫描结果无误后查询！',
+      content: '扫描结果可能存在误差，请确定无误后查询！',
       success: function (res) {
         if (res.confirm) {
           wx.showLoading({
@@ -222,7 +228,7 @@ Page({
               "carType": self.data.carTypesValue,
               "cjNumber": self.data.chejiaValue,
               "fdjh": self.data.fadongjiValue,
-              "owner": self.data.owner
+              "owner": self.data.ownerValue
             }, 
             header: {
               'token': wx.getStorageSync('token')
@@ -233,13 +239,14 @@ Page({
               console.log("response", res);
               if (res.data.httpStatus == 200) {
                 wx.navigateTo({
-                  url: "/pages/wzlist/index?wxDetails=" + res.data.data
+                  url: "/pages/wzlist/index?wxDetails=" + res.data.data + '&chepai=' + self.data.chepaiValue + '&chejia=' + self.data.chejiaValue
                 })
               } else if (res.data.httpStatus == 401){
                 wx.navigateTo({
                   url: '../authorize/index',
                 })
-              }else{
+                wx.hideLoading()
+              } else{
                 wx.showToast({
                   title: '查询失败',
                   icon:"none"

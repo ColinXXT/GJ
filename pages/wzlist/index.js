@@ -17,9 +17,10 @@ Page({
     console.log(options)
     var data = JSON.parse(options.wxDetails);
    console.log(data.result.lists)
+    app.globalData.chejia = options.chejia,
+    app.globalData.chepai = options.chepai
     this.setData({
-      wzList: data.result.lists
-      
+      wzList: data.result.lists,
       })
   },
 
@@ -84,56 +85,6 @@ Page({
    * 用户下拉刷新
    */
   onPullDownRefresh: function () {
-    // 显示顶部刷新图标 
-    // wx.showNavigationBarLoading();
-  //   var that = this;
-  //   console.log(that.data.wzList[0]) 
-  //   wx.request({
-  //     url: app.globalData.host + 'saveCarLience',
-  //     data: {
-  //       "carNumber": that.data.wzList[0].chepaiValue,
-  //       "carType": that.data.wzList[0].carTypesValue,
-  //       "cjNumber": that.data.wzList[0].chejiaValue,
-  //       "fdjh": that.data.wzList[0].fadongjiValue,
-  //       "owner": that.data.wzList[0].owner
-  //     },
-  //     header: {
-  //       'token': wx.getStorageSync('token')
-  //     },
-  //     method: "POST",
-  //     success: function (res) {
-  //       var res = res;
-  //       console.log("response", res);
-  //       if (res.data.httpStatus == 200) {
-  //          that.setData({
-  //            wzList:res.data.data
-  //          })
-          
-  //       } else if (res.data.httpStatus == 401) {
-  //         wx.navigateTo({
-  //           url: '../authorize/index',
-  //         })
-  //       } else {
-  //         wx.showToast({
-  //           title: '刷新失败',
-  //           icon: "none"
-  //         })
-  //       }
-  //       // 隐藏导航栏加载框
-  //       wx.hideNavigationBarLoading();
-  //       // 停止下拉动作
-  //       wx.stopPullDownRefresh();
-  //     }, fail(res) {
-  //       console.log(res)
-  //       wx.showModal({
-  //         title: '温馨提示',
-  //         content: '请求超时，请重新选择服务项目',
-  //       })
-  //       // 隐藏导航栏加载框
-  //       wx.hideNavigationBarLoading();
-  //       // 停止下拉动作
-  //       wx.stopPullDownRefresh();
-  //     }
-  //   })
-  }
+
+  },
 })

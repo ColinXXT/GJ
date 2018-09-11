@@ -1,10 +1,19 @@
 var wxpay = require('../../utils/pay.js')
 var app = getApp()
+const orderList = [{
+  id:'0',
+  dateAdd:"2018-0-1",
+  statusStr:"待处理",
+  status:0,
+  orderNumber:123456,
+  remark:'代销违章',
+  amountReal: 100,
+}]
 Page({
   data:{
-    statusType: ["待付款", "待处理", "待评价", "已完成"],
+    statusType: ["待处理", "处理中", "已完成"],
     currentType:0,
-    tabClass: ["", "", "", "", ""]
+    tabClass: ["", "", ""]
   },
   statusTap:function(e){
      var curType =  e.currentTarget.dataset.index;
@@ -20,77 +29,22 @@ Page({
       url: "/pages/order-details/index?id=" + orderId
     })
   },
-  cancelOrderTap:function(e){
-    var that = this;
-    var orderId = e.currentTarget.dataset.id;
-     wx.showModal({
-      title: '确定要取消该订单吗？',
-      content: '',
-      success: function(res) {
-        if (res.confirm) {
-          wx.showLoading();
-          wx.request({
-            url: '',
-            data: {
-              token: wx.getStorageSync('token'),
-              orderId: orderId
-            },
-            success: (res) => {
-              wx.hideLoading();
-              if (res.data.code == 0) {
-                that.onShow();
-              }
-            }
-          })
-        }
-      }
-    })
-  },
   toPayTap:function(e){
     var that = this;
     var orderId = e.currentTarget.dataset.id;
     var money = e.currentTarget.dataset.money;
-    var needScore = e.currentTarget.dataset.score;
     wx.request({
       url: '',
       data: {
         token: wx.getStorageSync('token')
       },
       success: function (res) {
-        if (res.data.code == 0) {
-          // res.data.data.balance
-          money = money - res.data.data.balance;
-          if (res.data.data.score < needScore) {
-            wx.showModal({
-              title: '错误',
-              content: '您的积分不足，无法支付',
-              showCancel: false
-            })
-            return;
-          }
-          if (money <= 0) {
-            // 直接使用余额支付
-            wx.request({
-              url: '',
-              method:'POST',
-              header: {
-                'content-type': 'application/x-www-form-urlencoded'
-              },
-              data: {
-                token: wx.getStorageSync('token'),
-                orderId: orderId
-              },
-              success: function (res2) {
-                that.onShow();
-              }
-            })
-          } else {
-            wxpay.wxpay(app, money, "/pages/order-list/index");
-          }
+        if (res.data.httpStatus == 0) {
+            wxpay.pay(app, money, "/pages/order-list/index");     
         } else {
           wx.showModal({
-            title: '错误',
-            content: '无法获取用户资金信息',
+            title: '温馨提示',
+            content: '支付失败',
             showCancel: false
           })
         }
@@ -107,6 +61,8 @@ Page({
   },
   getOrderStatistics : function () {
     var that = this;
+    console.log(1)
+    
     wx.request({
       url: '',
       data: { token: wx.getStorageSync('token') },
@@ -149,6 +105,10 @@ Page({
   },
   onShow:function(){
     // 获取订单列表
+    //this.getOrderStatistics();
+    this.setData({
+      orderList: orderList
+    });
     return;
     wx.showLoading();
     var that = this;
@@ -164,15 +124,11 @@ Page({
         wx.hideLoading();
         if (res.data.code == 0) {
           that.setData({
-            orderList: res.data.data.orderList,
-            logisticsMap : res.data.data.logisticsMap,
-            goodsMap : res.data.data.goodsMap
+            orderList: res.data.data.orderList
           });
         } else {
           this.setData({
-            orderList: null,
-            logisticsMap: {},
-            goodsMap: {}
+            orderList: null
           });
         }
       }
@@ -194,5 +150,19 @@ Page({
   onReachBottom: function() {
     // 页面上拉触底事件的处理函数
   
-  }
+  },
+  /**
+   * 电话联系客服
+   */
+  calling: function () {
+    wx.makePhoneCall({
+      phoneNumber: '400-888-9999', //此号码并非真实电话号码，仅用于测试
+      success: function () {
+        console.log("拨打电话成功！")
+      },
+      fail: function () {
+        console.log("拨打电话失败！")
+      }
+    })
+  },
 })

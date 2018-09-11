@@ -12,9 +12,11 @@
           </view>
       </view>
 </view>  
-  <view class='container_saved'>
+  <view wx:else class='container_saved'>
   <view class="note" >
       <view class="journey_title">
+      <text>车牌号：{{chepai}}\n</text>
+      <text>车架号：{{chejia}}\n</text>
       <text>违章单号：{{wzOrder}}\n</text>
       <text>罚款：<text style='color:red;'>{{wzfk}}\n</text></text>
       <text>违章时间：{{wzdate}}\n</text>
@@ -33,14 +35,25 @@
           </view>
       </label>
   </radio-group>
-  </view>
+  </view> 
     <view class = "add" bindtap = "addInfo">  
     <image  class = "left" src = "../../images/more/6.png" 
     mode = "widthFix" /><view class = "text1">新增驾驶证证代销违章</view> 
       
 </view>  
   </view>
+  
     <view class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
+     <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>订单总价</view>
+      </view>
+      <view class="Grid-cell-sub">
+              <text>￥{{price}}</text>
+      </view>
+    </view>
+    </view>
     <button style='background: #fff2df;' type="warn" bindtap="submitOrder">提交订单</button>
     
   </view>

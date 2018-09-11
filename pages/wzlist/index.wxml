@@ -31,7 +31,7 @@
           </view>
          
           <view class="about" wx:else>
-           <navigator url="../dxwz/index?wzOrder={{item.archiveno}}&wzfk={{item.money}}&xsz={{xsznumber}}&wzdate={{item.date}}&wzcity={{item.wzcity+'\t'+item.area}}&act={{item.act}}">
+           <navigator url="../dxwz/index?wzOrder={{item.archiveno}}&wzfk={{item.money}}&wzdate={{item.date}}&wzcity={{item.wzcity+'\t'+item.area}}&act={{item.act}}">
             <image class='dxImage' src='../../images/more/click.png'></image>
                     </navigator>
           </view>

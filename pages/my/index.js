@@ -77,7 +77,7 @@ Page({
             console.log(res)
             wx.showModal({
               title: '提示',
-              content: '无法登录，请重试',
+              content: '授权失败，请重试',
               showCancel: false
             })
             wx.hideLoading();
@@ -97,7 +97,7 @@ Page({
       success: function (res) {
         console.log(res)
         //false 没有注册过手机号
-        if (res.data.data) {
+        if (res.data.data!="") {
           return;
         } else {
           self.setData({
@@ -262,15 +262,15 @@ Page({
       success: function (res) {
         console.log(res)
         if (res.data.httpStatus == 200) {
-          wx.showToast({
-            title: '验证成功',
-            icon: 'success'
-          })
            setTimeout(function () {
              that.setData({
                modalFlag: true
              })
           }, 2000)
+          wx.showToast({
+            title: '验证成功',
+            icon: 'success'
+          })
           wx.hideLoading()    
         } else if(res.data.httpStatus == 401) {
           wx.navigateTo({
@@ -303,11 +303,33 @@ Page({
   },
   gotoOrder:function(e){
     console.log(e.target.dataset.id)
-    console.log(wx.getStorageSync('userInfo'))
+    console.log(wx.getStorageSync('token'))
     if (wx.getStorageSync('userInfo') == "") {
       wx.showModal({
         title: '温馨提示',
         content: '为了给您提供更贴心但服务，请先登录',
+        success: function (res) {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '../my/index',
+            })
+          }
+        }
+      })
+      return;
+    }else if (wx.getStorageSync('token') == "") {
+      wx.showModal({
+        title: '温馨提示',
+        content: '为了给您提供更贴心但服务，请先授权',
+        success: function (res) {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '../authorize/index',
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
       })
       return;
     };

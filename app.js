@@ -39,6 +39,8 @@ App({
     userInfo:null,
     host:"https://www.wxcheguanjia.com/",
     subDomain: "", // 如果你的域名是： 
-    version: "3.0.1"
+    version: "3.0.1",
+    chepai:"",
+    chejia:""
   }
 })  

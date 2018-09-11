@@ -15,7 +15,10 @@ Page({
     wzcity: "",
     wzdate: "",
     xsz: "",
-    xsznumber:''
+    xsznumber:'',
+    price:'',
+    chepai:'',
+    chejia:''
   },
 
   /**
@@ -29,7 +32,8 @@ Page({
         act: options.act,
         wzcity: options.wzcity,
         wzdate: options.wzdate,
-        xsz: options.xsz
+        chepai:app.globalData.chepai,
+        chejia:app.globalData.chejia
       })
   },
 
@@ -37,18 +41,106 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    console.log("getSvsList Api")
-    // wx.setNavigationBarTitle({
-    //   title: "已录入／新增行驶证查违章"//页面标题为路由参数
-    // }) 
-    // this.setData({
-    //   carLincenseList:[
-    //     { id: '1', value: 'JZ00000' },
-    //     { id: '2', value: 'JZ00001' }
-    //   ]
-
-    // }) 
+    this.getPrice(); 
+    this.getDriveList()
   },
+  getDriveList: function(){
+    console.log("getSvsList Api")
+    var self = this;
+    console.log(app.globalData.host + 'personLicence/findAllById')
+    console.log(wx.getStorageSync('token'))
+
+    wx.showLoading({
+      title: '加载中...',
+    })
+    wx.request({
+      url: app.globalData.host + 'personLicence/findAllById',
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'POST',
+      success: function (res) {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          self.setData({
+            carLincenseList: res.data.data
+          })
+          wx.hideLoading()
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading()
+        } else {
+          setTimeout(function () {
+            wx.showToast({
+              title: res.data.data,
+              icon: 'none'
+            })
+          }, 1000)
+        }
+        wx.hideLoading()
+      }, fail(res) {
+        console.log(res)
+        wx.showModal({
+          title: '错误提示',
+          content: '网络异常，请返回重新选择',
+          showCancel: false,
+          success: function (res) {
+            wx.navigateBack()
+          }
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+  getPrice: function(){
+    var self = this;
+    wx.showLoading({
+      title: '加载中...',
+    })
+    wx.request({
+      url: app.globalData.host + '/product/getWZPrice?price=' + self.data.wzfk,
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          self.setData({
+            price: res.data.data
+          })
+          wx.hideLoading()
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading()
+        } else {
+          setTimeout(function () {
+            wx.showToast({
+              title: res.data.data,
+              icon: 'none'
+            })
+          }, 1000)
+        }
+        wx.hideLoading()
+      }, fail(res) {
+        console.log(res)
+        wx.showModal({
+          title: '错误提示',
+          content: '网络异常，请返回重新选择',
+          showCancel: false,
+          success: function (res) {
+            wx.navigateBack()
+          }
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+  
 
   /**
    * 生命周期函数--监听页面显示
@@ -98,8 +190,8 @@ Page({
     }
   },
   /**
-   * 图片获取跟上传
-   */  
+     * 图片获取跟上传
+     */
   bindChooseImage: function () {
     var that = this;
 
@@ -110,71 +202,56 @@ Page({
       success: function (res) {
         // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片  
         var tempFilePaths = res.tempFilePaths;
-        console.log(tempFilePaths)
-        wx.navigateTo({
-          url: "/pages/jsResults/index?type=jsz&uploadimage=" + tempFilePaths[0] + "&wzOrder=" + that.data.wzOrder + "&wzfk=" + that.data.wzfk + "&xsz=" + that.data.xsz + "&wzdate=" + that.data.wzdate + "&wzcity=" + that.data.wzcity + "&act=" + that.data.act        
-          })
-    
-      return
+        console.log(tempFilePaths[0])
         //启动上传等待中...  
-        wx.showToast({
-          title: '正在上传...',
-          icon: 'loading',
-          mask: true,
-          duration: 10000
+        wx.showLoading({
+          title: '正在上传扫描',
         })
-        var uploadImgCount = 0;
-        for (var i = 0, h = tempFilePaths.length; i < h; i++)         {
-          wx.uploadFile({
-            url: '',
-            filePath: tempFilePaths[i],
-            name: 'uploadfile_ant',
-            formData: {
-              'imgIndex': i
-            },
-            header: {
-              "Content-Type": "multipart/form-data"
-            },
-            success: function (res) {
-              uploadImgCount++;
-              var data = JSON.parse(res.data);
-              //服务器返回格式: { "chejiaValue":"0000", chepaiValue": "0000", "fadongjiValue": "00000", "Url": "https://test.com/1.jpg" }
-              var productInfo = that.data.productInfo;
-              if (productInfo.bannerInfo == null) {
-                productInfo.bannerInfo = [];
-              }
-              productInfo.bannerInfo.push({
-                "chejiaValue": data.chejiaValue,
-                "chepaiValue": data.chepaiValue,
-                "fadongjiValue": data.fadongjiValue,
-                "url": data.Url
-              });
-              that.setData({
-                productInfo: productInfo
-              });
-
-              //如果是最后一张,则隐藏等待中  
-              if (uploadImgCount == tempFilePaths.length) {
-                wx.hideToast();
-              }
+        wx.uploadFile({
+          //http://localhost:8080/getCarLiencesInfo
+          url: app.globalData.host + 'personLicence/upload',
+          filePath: tempFilePaths[0],
+          name: 'img',
+          header: {
+            "Content-Type": "multipart/form-data",
+            'token': wx.getStorageSync('token')
+          },
+          success: function (res) {
+            var data = JSON.parse(res.data);
+            console.log(data)
+            if (data.httpStatus == 200) {
               wx.navigateTo({
-                url: "/pages/wzlist/index?detail=" + ""
+                url: "/pages/jsResults/index?wzOrder=" + that.data.wzOrder + "&wzfk=" + that.data.wzfk + "&wzdate=" + that.data.wzdate + "&wzcity=" + that.data.wzcity + "&act=" + that.data.act+"&driverInfo=" + JSON.stringify(data.data) 
               })
-            },
-            fail: function (res) {
-              wx.hideToast();
+              wx.hideLoading()
+            } else if (data.httpStatus == 401) {
+              wx.navigateTo({
+                url: '../authorize/index',
+              })
+              wx.hideLoading()
+            } else {
               wx.showModal({
                 title: '错误提示',
-                content: '上传图片失败',
+                content: '扫描失败',
                 showCancel: false,
                 success: function (res) { }
               })
+              wx.hideLoading()
             }
-          });
-        }
+          },
+          fail: function (res) {
+            wx.showModal({
+              title: '错误提示',
+              content: '上传图片失败',
+              showCancel: false,
+              success: function (res) { }
+            })
+            wx.hideLoading()
+          }
+        });
       }
     });
-  },  
+  },
 
  /**
    * 选行驶证查询

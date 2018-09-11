@@ -260,3 +260,26 @@ button[type=warn] {
 color:#5F5F5F;
 background-color:#E64340;
 }
+.Grid {
+  display: flex;
+  color:#5F5F5F;
+  font-size: 13pt;
+}
+
+.Grid-cell{
+  flex: 1;
+  text-align: left;
+  margin: 10px;
+  height: 41px;
+  line-height: 45px;
+}
+.Grid-cell-sub {
+  flex: 1;
+  text-align: right;
+  /* background:#53c0fc; */
+  color:#FF6000;
+  border-radius: 4px;
+  margin: 10px;
+  height: 41px;
+  line-height: 45px;
+}

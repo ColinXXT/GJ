@@ -3,6 +3,39 @@
         <image class="fullimage" mode="aspectFit" src="{{uploadimage}}"></image>
         </block>
  <view>
+ <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>姓名：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+      </view>
+    </view>
+    <input bindinput='inputlinsener' class='inputStyle' data-id="name" value='{{name}}'></input>
+    </view>
+
+     <view class='carStyle'>
+      <view class="Grid">
+      <view class="Grid-cell">
+              <view>性别：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+      </view>
+    </view>
+    <input bindinput='inputlinsener' class='inputStyle' data-id="sex" value='{{sex}}'></input>
+    </view>
+
+    <view class='carStyle'>
+      <view class="Grid">
+      <view class="Grid-cell">
+              <view>准驾车型：</view>
+      </view>
+      <view class="Grid-cell-sub2">
+      </view>
+    </view>
+    <input bindinput='inputlinsener' class='inputStyle' data-id="drivingModel" value='{{drivingModel}}'></input>
+    </view>
+
   <view class='carStyle'>
     <view class="Grid">
       <view class="Grid-cell">
@@ -11,10 +44,10 @@
       <view class="Grid-cell-sub2">
       </view>
     </view>
-    <input class='inputStyle' data-id="jszNumber" value='{{jszValue}}'></input>
+    <input bindinput='inputlinsener' class='inputStyle' data-id="lienceNumber" value='{{lienceNumber}}'></input>
     </view>
      <view class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
-    <button style='background: #FF6100;' type="warn" bindtap="submitOrder">核实驾驶证</button>
+    <button style='background: #FF6100;' type="warn" bindtap="save">核实驾驶证</button>
     
   </view>
  </view>

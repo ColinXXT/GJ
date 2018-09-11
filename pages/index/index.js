@@ -199,7 +199,20 @@ Page({
         }
       })
       return;
-    };
+    } else if (wx.getStorageSync('token') == ""){
+      wx.showModal({
+        title: '温馨提示',
+        content: '为了给您提供更贴心但服务，请先授权',
+        success: function (res) {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '../authorize/index',
+            })
+          }
+        }
+      })
+      return;
+    }
  
     switch (svsType) {
       case "wzcx":
