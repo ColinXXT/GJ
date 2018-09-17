@@ -8,14 +8,16 @@ Page({
   data: {
     uploadimage: "",
     condition: false,
-    userInfo: {}
+    userInfo: {},
+    results:[],
+    driverLists:[]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+
   },
 
   /**
@@ -164,49 +166,10 @@ Page({
      */
   radioChange: function (e) {
     var self = this;
-    console.log(e)
-    wx.showLoading({
-      title: '查询中...',
+    self.setData({
+      results: e.detail.value.split(",")
     })
-    wx.request({
-      url: app.globalData.host + 'saveCarLience',
-      data: {
-        "carNumber": self.data.chepaiValue,
-        "carType": self.data.carTypesValue,
-        "cjNumber": self.data.chejiaValue,
-        "fdjh": self.data.fadongjiValue,
-        "owner": self.data.owner
-      },
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      method: "POST",
-      success: function (res) {
-        var res = res;
-        console.log("response", res);
-        if (res.data.httpStatus == 200) {
-          wx.navigateTo({
-            url: "/pages/carVerificationResult/index"
-          })
-        } else if (res.data.httpStatus == 401) {
-          wx.navigateTo({
-            url: '../authorize/index',
-          })
-        } else {
-          wx.showToast({
-            title: '查询失败',
-            icon: "none"
-          })
-        }
-        wx.hideLoading()
-      }, fail(res) {
-        wx.showModal({
-          title: '温馨提示',
-          content: '请求超时，请重新选择服务项目',
-        })
-        wx.hideLoading()
-      }
-    })
+    this.goToResult();
   },
   /**
    * 用户点击右上角分享
@@ -222,4 +185,18 @@ Page({
       condition: true
     })
   },
+  bindtap1: function () {
+   this.goToResult();
+  },
+  /**
+   * 去扫描结果页面
+   * **/
+  goToResult : function(){
+    var result = this.data.results;
+    if (result.length > 0) {
+      wx.navigateTo({
+        url: "/pages/carVerificationResult/index?type=radio&carNumber=" + result[0] + "&carType=" + result[1] + "&cjNumber=" + result[2] + "&fdjh=" + result[3] + "&owner=" + result[4] + "&registedDate=" + result[5]
+      })
+    }
+  }
 })

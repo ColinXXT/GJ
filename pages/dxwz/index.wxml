@@ -16,20 +16,19 @@
   <view class="note" >
       <view class="journey_title">
       <text>车牌号：{{chepai}}\n</text>
-      <text>车架号：{{chejia}}\n</text>
       <text>违章单号：{{wzOrder}}\n</text>
       <text>罚款：<text style='color:red;'>{{wzfk}}\n</text></text>
       <text>违章时间：{{wzdate}}\n</text>
       <text>违法地点：{{wzcity}}\n</text>
       <text>违法：{{act}}\n</text>
       </view>
-  </view>
+      </view>
   <view wx:if="{{carLincenseList.length>0}}">
-    <view style='margin-top:20px;'>选择已录入的驾驶证直接下单</view>
+    <view style='margin-top:20px;'>选择已录入的驾驶证</view>
       <radio-group class="radio-group" bindchange="radioChange">
       <label class="radio" wx:key = "index" wx:for="{{carLincenseList}}">
       <view class="radioView">
-          <radio value="{{item.value}}" checked="{{item.checked}}"/>{{item.value}}
+          <radio value="{{item.lienceNumber}}"/>{{item.name}} - {{item.lienceNumber}}
               <view>
             </view>
           </view>
@@ -54,7 +53,19 @@
       </view>
     </view>
     </view>
-    <button style='background: #fff2df;' type="warn" bindtap="submitOrder">提交订单</button>
-    
+    <button style='background: #fff2df;' type="warn" data-money="{{price}}" bindtap="submitOrder">提交订单</button>
+  
   </view>
+   <modal class="modal" hidden="{{modalFlag}}" cancel-text="取消" bindcancel="modalCancel" bindconfirm="modalOk" confirmText="验证登录">
+    <view class="section">
+    <text>手机号码</text>
+    <input placeholder="请输入手机号码" type="number" maxlength="11" bindinput="inputPhoneNum" />
+    <text wx:if="{{send}}" class="sendMsg" bindtap="sendMsg">发送</text>
+    <text wx:if="{{alreadySend}}" class="sendMsg" bindtap="sendMsg">{{second+"s"}}</text>
+  </view>
+  <view class="section">
+    <text>短信验证</text>
+    <input placeholder="短信验证码" type="number" bindinput="addCode" />
+  </view>     
+</modal>
 </view>

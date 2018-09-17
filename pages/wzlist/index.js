@@ -17,7 +17,6 @@ Page({
     console.log(options)
     var data = JSON.parse(options.wxDetails);
    console.log(data.result.lists)
-    app.globalData.chejia = options.chejia,
     app.globalData.chepai = options.chepai
     this.setData({
       wzList: data.result.lists,

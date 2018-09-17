@@ -138,7 +138,7 @@ swiper-item image {
 }
 
 .main{
-    height: 450rpx;
+    height: 350rpx;
 }
 .categroy-left{
     float: left;
@@ -148,8 +148,8 @@ swiper-item image {
     box-sizing: border-box;
 }
 .categroy-left .cate-list{
-    height: 90rpx;
-    line-height: 90rpx;
+    height: 100rpx;
+    line-height: 100rpx;
     text-align: center;
     border-left: 3px solid #fff;
 }
@@ -160,7 +160,7 @@ swiper-item image {
 .categroy-right{
     float: right;
     width: 600rpx;
-    height: 400rpx;
+    height: 300rpx;
     overflow: hidden;
     
 }
@@ -172,7 +172,7 @@ swiper-item image {
 
 .cate-title{
     position: relative;
-    height: 50rpx;
+    height: 30rpx;
     line-height: 30rpx;
     padding:30rpx 0 55rpx;
     text-align: center;
@@ -293,7 +293,10 @@ swiper-item image {
   padding: 10px;
   background: #dff4ff;
 }
-
+.svc1{
+  padding: 10px;
+  background:gray;
+}
 .journey{
   padding: 10px;
   background: #dff4ff;

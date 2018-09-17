@@ -119,7 +119,13 @@ page{
   height: 41px;
   line-height: 45px;
 }
-
+.note image{
+  width:50rpx;
+  float:left;
+  margin-top:15rpx;
+  margin-right:20rpx;
+  height:27px;
+}
 .Grid {
   display: flex;
 }

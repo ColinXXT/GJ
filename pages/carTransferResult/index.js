@@ -44,7 +44,8 @@ Page({
     disabled: true,
     buttonType: 'default',
     phoneNum: '',
-    isRegPhone:''
+    isRegPhone:'',
+    buyerName:''
   },
 
   /**
@@ -80,6 +81,7 @@ Page({
     })
     var vType = options.type;
     if (vType == "radio"){
+      console.log(options)
       this.setData({
         carnumber: options.carNumber,
         fadongjiValue: options.fdjh,
@@ -234,6 +236,11 @@ Page({
           addressValue: e.detail.value
         })
         break;
+      case 'buyerName':
+        this.setData({
+          buyerName: e.detail.value
+        })
+        break;
     }
   },
   /**
@@ -243,6 +250,7 @@ Page({
 console.log(e)
     var money = e.target.dataset.money;
     var self = this;
+    console.log(this.data)
     if (!validateCar.validateCar(this.data.carnumber)) return;
     if (this.data.ownerValue == "") {
       wx.showModal({
@@ -255,6 +263,13 @@ console.log(e)
       wx.showModal({
         title: '提示',
         content: "车牌号不能为空"
+      })
+      return;
+    }
+    if (this.data.buyerName == "") {
+      wx.showModal({
+        title: '提示',
+        content: "买家姓名不能为空"
       })
       return;
     }
@@ -276,7 +291,7 @@ console.log(e)
         showCancel: false,
         success: function (res) {
           if (res.confirm) {
-            self.setData({
+            this.setData({
               phoneModalFlag: false
             })
           }

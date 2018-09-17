@@ -202,7 +202,7 @@ page{
 .add{
   width:100%;  
   bottom: 0;
-  padding-top:50px;
+  padding-top:30px;
 }
 .left{
   float:left;
@@ -282,4 +282,26 @@ background-color:#E64340;
   margin: 10px;
   height: 41px;
   line-height: 45px;
+  font-weight: bold;
+}
+/*手机号部分*/
+.section {
+display: flex;
+margin: 16rpx;
+padding: 16rpx;
+border-bottom: 1rpx solid #CFD8DC;
+}
+text {
+  width: 200rpx;
+}
+
+button {
+  margin: 16rpx;
+}
+.sendMsg {
+  font-size: 12;
+  margin-right: 0;
+  padding: 0;
+  height: inherit;
+  width: 80rpx;
 }

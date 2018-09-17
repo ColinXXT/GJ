@@ -3,7 +3,7 @@
 const carDetails = [
   {
     "id": "search",
-    "cate": "违章服务",
+    "cate": "查询代办",
     "detail": [
       {
         "thumb": "/images/cate/bmcw-wz-icon.jpg",
@@ -19,7 +19,7 @@ const carDetails = [
   },
   {
     "id": "carValidate",
-    "cate": "审车",
+    "cate": "汽车服务",
     "detail": [
       {
         "thumb": "/images/cate/bmcw-wz-icon.jpg",
@@ -27,52 +27,15 @@ const carDetails = [
         "id": "qcns"
       }, 
       {
-        "thumb": "/images/cate/bmcw-wts-icon.jpg",
-        "name": "敬请期待",
-        "id": "dxwz"
-      },
-    ]
-  },
-  {
-    "id": "newCarsChanges",
-    "cate": "过户",
-    "detail": [
-      {
         "thumb": "/images/cate/main1.jpg",
-        "name": "本市过户",
-        "id": "bsgh"
+        "name": "汽车过户",
+        "id": "qcgh"
       },
-      {
-        "thumb": "/images/cate/main2.jpg",
-        "name": "车辆外迁",
-        "id": "clwq"
-      },
-      {
-        "thumb": "/images/cate/main3.jpg",
-        "name": "车辆迁入",
-        "id": "clqr"
-      }
-    ]
-  },
-  {
-    "id": "carsBoarding",
-    "cate": "上牌",
-    "detail": [
       {
         "thumb": "/images/cate/main4.jpg",
-        "name": "国产车",
-        "id": "gcc"
+        "name": "新车上牌",
+        "id": "xcsp"
       },
-      {
-        "thumb": "/images/cate/main5.jpg",
-        "name": "进口车",
-        "id": "jkc"
-      },
-      {
-        "thumb": "/images/cate/main6.jpg",
-        "name": "平行车辆",
-        "id": "pxcl"
-      }
     ]
   },
   {
@@ -105,11 +68,9 @@ Page({
     selectCurrent:0,
     remind: '加载中',
     category: [
-      { name: '违章查询', id: 'search' },
-      { name: '车辆年审', id: 'carValidate' },
-      { name: '车辆过户', id: 'newCarsChanges' },
-      { name: '新车上牌', id: 'carsBoarding' },
-      { name: '车辆托运', id: 'inspection' },
+      { name: '违章服务', id: 'search' },
+      { name: '汽车服务', id: 'carValidate' },
+      { name: '托运服务', id: 'inspection' },
     ],
     detail: [],
     curIndex: 0,
@@ -213,25 +174,20 @@ Page({
       })
       return;
     }
- 
     switch (svsType) {
       case "wzcx":
         wx.navigateTo({
           url: "/pages/wxcx/index?id=" + e.currentTarget.dataset.id
           })
         break;
-      case "bsgh":
-      case "clwq":
-      case "clqr":
+      case "qcgh":
         wx.navigateTo({
           url: "/pages/carTransfer/index?id=" + e.currentTarget.dataset.id
         })
         break;
-      case "gcc":
-      case "jkc":
-      case "pxcl":
+      case "xcsp":
         wx.navigateTo({
-          url: "/pages/carTransfer/index?id=" + e.currentTarget.dataset.id
+          url: "/pages/newCar/index?id=" + e.currentTarget.dataset.id
         })
         break;
       case "qcns":

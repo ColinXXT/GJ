@@ -1,6 +1,5 @@
 {
   "navigationBarTitleText": "车辆过户",
-  "usingComponents":{
-    "v-panel":"../../temp/keyboard/index"
-  }
+  "navigationBarBackgroundColor": "#69C3AA",
+  "navigationBarTextStyle": "light"
 }

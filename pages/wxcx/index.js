@@ -7,7 +7,9 @@ Page({
   data: {
     uploadimage:"" ,
     condition:false,
-    driverLists:{}
+    driverLists:{},
+    results:[],
+    wxDetails:{}
   },
 
   /**
@@ -39,7 +41,8 @@ Page({
           if (res.data.httpStatus == 200) {
               self.setData({
                 driverLists: res.data.data
-              })     
+              })
+      
             wx.hideLoading()    
           } else if (res.data.httpStatus == 401) {  
             wx.navigateTo({
@@ -174,7 +177,10 @@ Page({
    */
   radioChange: function(e){
     var self = this;
-    var result = e.detail.value.split(",");
+    self.setData({
+      results: e.detail.value.split(",")
+    })
+    var result = self.data.results;
     wx.showLoading({
       title: '查询中...',
     })
@@ -185,7 +191,9 @@ Page({
         "carType": result[1],
         "cjNumber": result[2],
         "fdjh": result[3],
-        "owner": result[4]
+        "owner": result[4],
+        "path":result[5],
+        "registedDate":result[6]
       },
       header: {
         'token': wx.getStorageSync('token')
@@ -195,8 +203,11 @@ Page({
         var res = res;
         console.log("response", res);
         if (res.data.httpStatus == 200) {
+          self.setData({
+            wxDetails: res.data.data
+          })
           wx.navigateTo({
-            url: "/pages/wzlist/index?wxDetails=" + res.data.data + "&driverLists=" + self.data.driverLists + '&chepai=' + result[0] + '&chejia=' + result[2]
+            url: "/pages/wzlist/index?wxDetails=" + self.data.wxDetails + "&driverLists=" + self.data.driverLists + '&chepai=' + result[0]
           })
           wx.hideLoading()
         } else if (res.data.httpStatus == 401) {
@@ -234,5 +245,71 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  modalOk: function () {
+    var that = this;
+    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
+    wx.showLoading({
+      title: '验证中',
+    })
+    wx.request({
+      //http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
+      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          setTimeout(function () {
+            that.setData({
+              modalFlag: true
+            })
+          }, 2000)
+          wx.showToast({
+            title: '验证成功',
+            icon: 'success'
+          })
+          wx.hideLoading()
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading()
+        } else {
+          wx.showToast({
+            title: res.data.data,
+            icon: 'none'
+          })
+          wx.hideLoading()
+        }
+      },
+      fail: function (res) {
+        console.log(res)
+        wx.showModal({
+          title: '温馨提示',
+          content: '验证失败，请重新绑定',
+          showCancel: false
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+  modalCancel: function () {
+    this.setData({
+      modalFlag: true
+    })
+  },
+  bindtap1: function (e) {
+    var self = this;
+    var result = this.data.results;
+    var wxDetails = this.data.wxDetails;
+    console.log()
+    if (JSON.stringify(wxDetails) != "{}"){
+     wx.navigateTo({
+        url: "/pages/wzlist/index?wxDetails=" + wxDetails + "&driverLists=" + self.data.driverLists + '&chepai=' + result[0]
+      })
+    }  
   }
 })

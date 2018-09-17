@@ -4,15 +4,19 @@
     "pages/order-list/index",
     "pages/my/index",
     "pages/xszResults/index",
-    "pages/carTransfer/index",
     "pages/wzlist/index",
     "pages/wxcx/index",
     "pages/dxwz/index",
     "pages/jsResults/index",
-    "pages/order-details/index",
     "pages/authorize/index",
     "pages/carVerification/index",
-    "pages/carVerificationResult/index"
+    "pages/carVerificationResult/index",
+    "pages/carTransfer/index",
+    "pages/carTransferResult/index",
+    "pages/newCar/index",
+    "pages/carConsignment/index",
+    "pages/carConsignmentResult/index",
+    "pages/order-details/index"
   ],
   "window": {
     "backgroundTextStyle": "dark",

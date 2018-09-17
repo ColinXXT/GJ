@@ -129,11 +129,10 @@ page{
     width:100%;
     background-color: #fff;
     margin-bottom: 20rpx;
-    margin-top: 20rpx;
 }
 .goods-list .list-title{
     font-size: 28rpx;
-    color: #000;
+    color:red;
     padding: 30rpx 0 25rpx 30rpx;
 }
 .goods-list  .a-goods{
@@ -157,7 +156,7 @@ page{
     height:160rpx;
 }
 .goods-list  .a-goods .text-box{
-    width: 510rpx;
+    width: 695rpx;
     box-sizing: border-box;
     padding-top: 10rpx;
 }
@@ -194,6 +193,9 @@ page{
  }
 .a-goods .text-box .arow01{
     margin-bottom: 30rpx;
+}
+.a-goods .text-box .arow02{
+    margin-bottom: 0rpx;
 }
 .a-goods .text-box .arow .goods-price{
     font-size:26rpx;
@@ -292,3 +294,4 @@ page{
     color: #e64340;
     text-align: right;
 }
+

@@ -42,6 +42,14 @@
     </view>
     <input class='inputStyle' placeholder='请输入车主姓名' bindinput='inputlinsener' data-id="owner" value='{{ownerValue}}'></input>
     </view>
+    <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>买方姓名：</view>
+      </view>
+    </view>
+    <input class='inputStyle' placeholder='请输入买方姓名' bindinput='inputlinsener' data-id="buyerName" value='{{buyerName}}'></input>
+    </view>
       <view class='carStyle'>
     <view class="Grid">
       <view class="Grid-cell">

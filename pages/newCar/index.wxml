@@ -1,32 +1,12 @@
 <view class='mask' hidden='{{maskFlag}}'></view>
-   <v-panel is-show="{{isShow}}" bindok="keyInputDone" binddelete="inputdelete" bindinputchange="inputChange" key-board-type="{{keyBoardType}}" backgroundColor="white" />
   <view class='main'>
   <view class="note">
-      <view class="journey_title"><image src='../../images/more/warn.png'/>扫描结果可能存在误差，请核实/修改</view>
+      <view class="journey_title">请如实填写</view>
   </view>
-    <view class="carStyle">
-    <view class="Grid">
-      <view class="Grid-cell">
-              <view><h class='noteIcon'>*</h>车牌号码：</view>
-      </view>
-    </view>
-     <view class='inputStyle' bindtap="keyBoard"><view class='picker'>{{carnumber}}</view>    
-     </view>
-</view>
 <view class='carStyle'>
     <view class="Grid">
       <view class="Grid-cell">
-              <view><h class='noteIcon'>*</h>首次上牌日期：</view>
-      </view>
-    </view>
-    <picker class='inputStyle' name="reg_date" mode="date" value="{{registedDate}}" start="2018-8-1" end="2025-1" bindchange="bindDateChange">  
-            <view class='picker'>{{registedDate}} </view> 
-    </picker> 
-    </view>
-<view class='carStyle'>
-    <view class="Grid">
-      <view class="Grid-cell">
-              <view><h class='noteIcon'>*</h>办理日期：<h style='color:red;'>（请选择期望办理的日期）</h></view>
+              <view><h class='noteIcon'>*</h>办理日期：</view>
       </view>
     </view>
     <picker class='inputStyle' name="banli_date" mode="date" value="{{dates}}" start="2018-8-1" end="2025-1" bindchange="bindDateChange">  
@@ -40,7 +20,7 @@
               <view><h class='noteIcon'>*</h>车主姓名：</view>
       </view>
     </view>
-    <input class='inputStyle' placeholder='请输入车主姓名' bindinput='inputlinsener' data-id="owner" value='{{ownerValue}}'></input>
+    <input class='inputStyle' placeholder='请输入买方姓名' bindinput='inputlinsener' data-id="ownValue" value='{{ownValue}}'></input>
     </view>
       <view class='carStyle'>
     <view class="Grid">
@@ -49,7 +29,7 @@
       </view>
     </view>
     <view class='inputStyle' bindtap="open"><view class='picker'> {{province}}-{{city}}-{{county}} </view></view>
-    <input class='inputStyle' placeholder='请输入详细地址' bindinput='inputlinsener' data-id="address" value='{{carValue}}'></input>
+    <input class='inputStyle' placeholder='请输入详细地址' bindinput='inputlinsener' data-id="addressValue" value='{{addressValue}}'></input>
     </view>
   <view style="margin:20rpx 0rpx; height:20rpx;background: #eee;width:100%;"></view> 
 
@@ -83,7 +63,7 @@
       </view>
     </view>
     </view>
-  <view data-id="{{item.id}}" class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
+  <view class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
     <button style='background: #FF6100;' data-money="{{price}}" type="warn" bindtap="submitOrder">提交订单</button>
     
   </view>
@@ -97,7 +77,7 @@
     <view class="vedw">5、买方非西安市户籍需提供有效居住证原件</view>
     <view class="vedw">6、已办理三证合一的企业需营业执照副本和公章</view>
     <view class="vedw">7、未办理三证合一的企业需组织机构代码证副本和公章</view>
-    <view style='margin-top:10px;' class="vedw"><h style="color:black; font-weight:bold;">公司地址</h></view>
+    <view style='margin-top:10px;' class="vedw"><h style="color:black; font-weight:bold;">快递地址</h></view>
     <view class="vedw">收件人：xxx</view>
     <view class="vedw">联系电话：xxxx</view>
     <view class="vedw">邮寄地址：xxx</view>
@@ -121,7 +101,7 @@
       <view bindtap="open1" class="city-cancel">取消</view>
       <view bindtap="open1" class="city-true">确定</view>
     </view>
-    <picker-view-column >
+    <picker-view-column>
       <view wx:for="{{provinces}}" wx:key="item" style="line-height: 50px;padding-left:10px;">{{item}}</view>
     </picker-view-column>
     <picker-view-column>
@@ -144,3 +124,6 @@
     <input placeholder="短信验证码" type="number" bindinput="addCode" />
   </view>     
 </modal>
+     
+  
+

@@ -15,7 +15,6 @@ Page({
     
 	},	
   onShow() {
-    console.log("show")
     let that = this;
     let userInfo = wx.getStorageSync('userInfo')
     that.setData({
@@ -88,6 +87,9 @@ Page({
   },
   isPhoneRegisted:function(){
     var self = this;
+    wx.showLoading({
+      title: '手机号检测中',
+    })
     wx.request({
       url: app.globalData.host + 'isPhoneRegisted',
       method: 'GET',
@@ -97,14 +99,16 @@ Page({
       success: function (res) {
         console.log(res)
         //false 没有注册过手机号
-        if (res.data.data!="") {
+        if (res.data.data!=null) {
           return;
         } else {
           self.setData({
             modalFlag: false
           })
         }
+        wx.hideLoading()
       }, fail(res) {
+        wx.hideLoading()
         console.log(res)
       }
     })

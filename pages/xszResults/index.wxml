@@ -1,4 +1,9 @@
+ <view class='mask' hidden='{{maskFlag}}'></view>
   <view class='main'>
+   <view class="note">
+      <view class="journey_title"><image src='../../images/more/warn.png'/>扫描结果可能存在误差，请核实/修改</view>
+      </view>
+  <v-panel is-show="{{isShow}}" bindok="keyInputDone" binddelete="inputdelete" bindinputchange="inputChange" key-board-type="{{keyBoardType}}" backgroundColor="white" />
         <block wx:if="{{uploadimage}}">
         <image class="fullimage" mode="aspectFit" src="{{uploadimage}}"></image>
         </block>
@@ -25,7 +30,9 @@
       </view>
       </view>
     </view>
-    <input class='inputStyle' data-id="carNumber" placeholder='请输入车牌号码' bindinput='carInput' value='{{chepaiValue}}'></input>
+    <!-- <input class='inputStyle' data-id="carNumber" placeholder='请输入车牌号码' bindinput='carInput' value='{{chepaiValue}}'></input> -->
+    <view class='inputStyle' bindtap="keyBoard"><view class='picker'>{{carnumber}}</view>    
+     </view>
     </view>
     <view class='carStyle'>
     <view class="Grid">

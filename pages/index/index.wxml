@@ -48,7 +48,7 @@
     <image src="../../images/more/adbanner.jpg"></image>            
   </view> -->
   <!--banner-->
-  <view class="svc">
+  <view class="svc1">
     <view class='svc_text'>四大服务优势</view>
   </view>
   <view class="Grid">

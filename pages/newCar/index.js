@@ -1,32 +1,25 @@
 var app = getApp();
 var tcity = require("../../utils/citys.js");
-var validateCar = require("../../utils/validateCar.js");
-var dateFormat = require("../../utils/util.js");
-var wxpay = require('../../utils/pay.js')
+var wxpay = require('../../utils/pay.js');
+var list = [];
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    detail: [],
-    isShow: false,
-    maskFlag: true,
-    keyBoardType: 1,
-    carnumber: '请输入车牌号',
-    registedDate:'2018-1-1',
-    dates: "2018-1-1",
+    areaIndex: 0,
+    dates:"2018-1-1",
     price: "0",
-    ownerValue: "",
-    addressValue: "",
+    licenceIndex: 0,
+    ownValue:"",
+    addressValue:"",
     items: [
       { name: 'Y', value: '是：车主自行驾车到现场参与办理。', checked: 'true' },
-      { name: 'N', value: '否：由温馨车管家司机代驾，上门取送车。' },
+      { name: 'N', value: '否：由车管家司机代驾，上门取送车。' },
     ],
-    imageUrl: "",
-    curIndex: 0,
     modalFlag: true,
-    modalFlag1: true,
+    modalFlag1:true,
     provinces: [],
     province: "",
     citys: [],
@@ -35,24 +28,20 @@ Page({
     county: '',
     value: [0, 0, 0],
     values: [0, 0, 0],
-    condition: false,
-    //手机号
-    phoneModalFlag: true,
-    send: false,
-    alreadySend: false,
-    second: 60,
-    disabled: true,
-    buttonType: 'default',
-    phoneNum: '',
-    isRegPhone:''
+    isRegPhone:"",
+    phoneModalFlag:true,
+    multiIndex: [0, 0],
+    multiArray:[],
+    objectMultiArray:{},
+    maskFlag: true,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function () {
     var that = this;
-    tcity.init(that);
+    tcity.init(that); 
     var cityData = that.data.cityData;
     const provinces = [];
     const citys = [];
@@ -69,7 +58,6 @@ Page({
     for (let i = 0; i < cityData[0].sub[0].sub.length; i++) {
       countys.push(cityData[0].sub[0].sub[i].name)
     }
-    console.log(cityData)
     that.setData({
       'provinces': provinces,
       'citys': citys,
@@ -78,28 +66,12 @@ Page({
       'city': cityData[0].sub[0].name,
       'county': cityData[0].sub[0].sub[0].name
     })
-    var vType = options.type;
-    if (vType == "radio"){
-      this.setData({
-        carnumber: options.carNumber,
-        fadongjiValue: options.fdjh,
-        chejiaValue: options.cjNumber,
-        registedDate: dateFormat.formatDate(options.registedDate),
-        ownerValue: options.owner
-      })
-    }else{
-      var data = JSON.parse(options.driverInfo);
-      console.log(data)
-      this.setData({
-        carnumber: data.carNumber,
-        fadongjiValue: data.fdjh,
-        chejiaValue: data.cjNumber,
-        registedDate: dateFormat.formatDate(data.registedDate),
-        ownerValue: data.owner
-      })
-    }
+    console.log(citys)
     console.log('初始化完成');
-  },
+    that.setData({
+      price:600
+    })
+},
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -113,50 +85,60 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+  
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+  
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+  
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+  
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+  
   },
 
-  modalOk: function () {
+  bindPickerChange: function (e) {
+    this.setData({
+      areaIndex: e.detail.value
+    })
+  },
+  bindLicenceChange:function(e){
+    this.setData({
+      licenceIndex: e.detail.value
+    })
+  },
+  modalOk: function(){
     this.setData({
       modalFlag: true,
-      modalFlag1: true,
+      modalFlag1:true,
     })
   },
-  showRequireInfo: function (e) {
+  showRequireInfo: function(e){
     var self = this;
-    self.setData({
-      modalFlag: false
-    })
-  },
-  showNotice: function (e) {
+        self.setData({
+          modalFlag: false
+        })
+    },
+  showNotice: function(e){
     var self = this;
     self.setData({
       modalFlag1: false
@@ -165,16 +147,16 @@ Page({
   /**
    * 监听车牌键盘输入动作
    */
-  inputChange: function (e) {
+  inputChange:function(e){
     console.log("input behavior")
 
-    if (e.detail) {
+    if(e.detail){
       this.setData({
         keyBoardType: 2,
       })
     }
     let province = e.detail;
-    let carnumber = this.data.carnumber.replace('请输入车牌号', '');
+    let carnumber = this.data.carnumber.replace('请输入车牌号','');
     this.setData({
       carnumber: carnumber + province,
     })
@@ -183,7 +165,7 @@ Page({
   /**
    * 监听车牌键盘删除动作
    */
-  inputdelete: function () {
+  inputdelete:function(){
     console.log("delect")
     let carnumber = this.data.carnumber;
     var arr = carnumber.split('');
@@ -201,7 +183,7 @@ Page({
   },
   backKeyboard() {//返回省份键盘
     this.setData({
-      keyBoardType: 2
+      keyBoardType:2
     })
   },
   /**
@@ -209,67 +191,55 @@ Page({
    */
   radioChange: function (e) {
     var self = this;
-    if (e.detail.value == "Y") {
+    if(e.detail.value=="Y"){
       self.setData({
         price: 600
       })
-    } else if (e.detail.value == "N") {
+    } else if (e.detail.value == "N"){
       self.setData({
         price: 700
       })
     }
   },
 
-  inputlinsener: function (e) {
+  inputlinsener:function(e){
     console.log(e)
     let val = e.target.dataset.id;
     switch (val) {
-      case 'owner':
+      case 'ownValue':
         this.setData({
-          ownerValue: e.detail.value
+          ownValue: e.detail.value
         })
         break;
-      case 'address':
+      case 'addressValue':
         this.setData({
           addressValue: e.detail.value
         })
         break;
-    }
+      }
   },
   /**
    * 提交订单 
    */
-  submitOrder: function (e) {
-console.log(e)
-    var money = e.target.dataset.money;
+  submitOrder:function(e){
     var self = this;
-    if (!validateCar.validateCar(this.data.carnumber)) return;
-    if (this.data.ownerValue == "") {
-      wx.showModal({
-        title: '提示',
-        content: "车主姓名不能为空"
-      })
-      return;
-    }
-    if (this.data.carnumber == "") {
-      wx.showModal({
-        title: '提示',
-        content: "车牌号不能为空"
-      })
-      return;
-    }
-    if (this.data.addressValue == "") {
-      wx.showModal({
-        title: '提示',
-        content: "地址不能为空"
-      })
-      return;
-    }
-    // var reqData = Object.assign({}, { "wzOrder": self.data.wzOrder }, { "chepai": self.data.chepai }, { "carName": self.data.carName }, { "carNumber": self.data.carNumber })
-    // console.log(data)
-    if(self.data.isRegPhone){
+    if (self.data.ownValue == "") {
+        wx.showModal({
+          title: '提示',
+          content: "车主姓名不能为空"
+        })
+        return;
+      }
+      if (self.data.addressValue == "") {
+        wx.showModal({
+          title: '提示',
+          content: "地址不能为空"
+        })
+        return;
+      }
+    if (self.data.isRegPhone) {
       wxpay.wxpay(app, money, 0, "/pages/order-list/index", "");
-    }else{
+    } else {
       wx.showModal({
         title: '温馨提示',
         content: '为了给您更好的服务，请绑定手机号',
@@ -281,7 +251,7 @@ console.log(e)
             })
           }
         }
-      })    
+      })
     }
   },
 
@@ -294,9 +264,9 @@ console.log(e)
       dates: e.detail.value
     })
   },
-  /**
-  * 监听省市区三级联动键盘
-  */
+   /**
+   * 监听省市区三级联动键盘
+   */
   bindChange: function (e) {
     //console.log(e);
     var val = e.detail.value
@@ -352,9 +322,9 @@ console.log(e)
       return;
     }
   },
-  /**
-  * 监听省市区三级联动键盘
-  */
+   /**
+   * 监听省市区三级联动键盘
+   */
   open: function () {
     this.setData({
       condition: !this.data.condition,
@@ -370,23 +340,16 @@ console.log(e)
   /**
    * 监听车牌键盘
    */
-  keyBoard: function () {
+  keyBoard:function(){
     this.setData({
-      isShow: !this.data.isShow,
-      maskFlag: false
-    })
-  },
-  keyInputDone: function () {
-    this.setData({
-      isShow: !this.data.isShow,
-      maskFlag: true
+      isShow: !this.data.isShow
     })
   },
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+  
   },
   // 手机号部分
   inputPhoneNum: function (e) {
@@ -539,9 +502,9 @@ console.log(e)
       success: function (res) {
         console.log(res)
         if (res.data.httpStatus == 200) {
-            that.setData({
-              phoneModalFlag: true
-            })
+          that.setData({
+            phoneModalFlag: true
+          })
           wx.showToast({
             title: '验证成功',
             icon: 'success'
@@ -586,9 +549,9 @@ console.log(e)
       },
       success: function (res) {
         console.log(res)
-          self.setData({
-            isRegPhone: res.data.data
-          })       
+        self.setData({
+          isRegPhone: res.data.data
+        })
       }, fail(res) {
         console.log(res)
       }

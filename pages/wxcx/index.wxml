@@ -1,7 +1,7 @@
 <view class="container">
  <view wx:if="{{driverLists.length==0}}">
  <view class='note'>
-          <view class='journey_title'>拍照录入行驶证</view>
+          <view class='journey_title'>选取行驶证获取该车辆信息</view>
   </view>
         <image class="title" src="/images/more/photo.png"></image> 
       <view class="content">
@@ -14,7 +14,7 @@
 </view>
  <view wx:elif="{{condition}}">
   <view class='note'>
-          <view class='journey_title'>拍照录入行驶证</view>
+          <view class='journey_title'>选取行驶证获取该车辆信息</view>
   </view>
         <image class="title" src="/images/more/photo.png"></image> 
       <view class="content">
@@ -29,8 +29,8 @@
     <view>选择已录入的车牌号查违章</view>
       <radio-group class="radio-group" bindchange="radioChange">
       <label class="radio" wx:key = "index" wx:for="{{driverLists}}">
-      <view class="radioView">
-          <radio bindtap = "bindtap1" value="{{item.carNumber}},{{item.carType}},{{item.cjNumber}},{{item.fdjh}},{{item.owner}}" checked="{{item.checked}}"/>{{item.carNumber}}<image  class = "left" src = "../../images/more/right.png" 
+      <view class="radioView" bindtap = "bindtap1">
+          <radio value="{{item.carNumber}},{{item.carType}},{{item.cjNumber}},{{item.fdjh}},{{item.owner}},{{item.path}},{{item.registedDate}}" />{{item.carNumber}}<image  class = "left" src = "../../images/more/right.png" 
     mode = "widthFix" />
               <view>
             </view>

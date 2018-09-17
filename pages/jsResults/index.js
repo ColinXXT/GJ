@@ -22,15 +22,20 @@ Page({
     wzfk: "",
     act: "",
     wzcity: "",
-    wzdate: ""
+    wzdate: "",
+    code: "",
+    fen: "",
+    handled: "",
+    archiveno: "",
+    path:""
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options);
     var data = JSON.parse(options.driverInfo);
+    console.log(data.path)
     this.setData({
       chepai:app.globalData.chepai,
       chejia:app.globalData.chejia,
@@ -48,7 +53,12 @@ Page({
       wzfk: options.wzfk,
       act: options.act,
       wzcity: options.wzcity,
-      wzdate: options.wzdate
+      wzdate: options.wzdate,
+      code: options.code,
+      fen: options.fen,
+      handled: options.handled,
+      archiveno: options.archiveno,
+      path: data.path
      })
     },
 
@@ -122,6 +132,7 @@ Page({
     wx.showLoading({
       title: '保存中...',
     })
+    console.log(self.data.path)
     wx.request({
       url: app.globalData.host + '/personLicence/save',
       data: {
@@ -134,7 +145,8 @@ Page({
         country: self.data.country,
         evidenceData: self.data.evidenceData,
         usefulFromData: self.data.usefulFromData,
-        usefulToData: self.data.usefulToData
+        usefulToData: self.data.usefulToData,
+        path:self.data.path
       },
       header: {
         'token': wx.getStorageSync('token')
@@ -145,7 +157,7 @@ Page({
         console.log("response", res);
         if (res.data.httpStatus == 200) {
           wx.navigateTo({
-            url: "/pages/dxwz/index?wzOrder=" + self.data.wzOrder + "&wzfk=" + self.data.wzfk + "&wzdate=" + self.data.wzdate + "&wzcity=" + self.data.wzcity + "&act=" + self.data.act
+            url: "/pages/dxwz/index?wzOrder=" + self.data.wzOrder + "&wzfk=" + self.data.wzfk + "&wzdate=" + self.data.wzdate + "&wzcity=" + self.data.wzcity + "&act=" + self.data.act + "&code=" + self.data.code + "&fen=" + self.data.fen + "&handled=" + self.data.handled + "&archiveno=" + self.data.archiveno + "&path=" + self.data.path  
           })
         } else if (res.data.httpStatus == 401) {
           wx.navigateTo({

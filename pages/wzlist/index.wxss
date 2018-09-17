@@ -154,7 +154,20 @@ page{
 .tel{
    text-decoration: underline;
 }
-
-
+.note{
+  text-align: left;
+  background: #fff2df;
+  color:#5F5F5F;
+  border-radius: 4px;
+  margin: 10px;
+  height: 41px;
+  line-height: 45px;
+}
+.journey_title{
+  text-align: center;
+  margin-left:10px;
+  font-size:32rpx;
+  margin-right:10px;
+}
 
 

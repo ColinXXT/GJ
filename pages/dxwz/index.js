@@ -1,4 +1,6 @@
 var app = getApp();
+var wxpay = require('../../utils/pay.js')
+
 Page({
 
   /**
@@ -7,18 +9,35 @@ Page({
   data: {
     productInfo: {},
     uploadimage:""  ,
-    carLincenseList:[],
+    carLincenseList:{},
     condition:false,
+    wzList:{},
     wzOrder: "",
     wzfk: "",
     act: "",
     wzcity: "",
     wzdate: "",
+    code:"",
+    fen:"",
+    handled:"",
+    archiveno:"",
     xsz: "",
-    xsznumber:'',
+    carNumber:'',
+    carName:'',
     price:'',
     chepai:'',
-    chejia:''
+    userIp: '',
+    //手机号
+    modalFlag: true,
+    send: false,
+    alreadySend: false,
+    second: 60,
+    disabled: true,
+    buttonType: 'default',
+    phoneNum: '',
+    isRegPhone:'',
+    path:"",
+    lienceNumber:""
   },
 
   /**
@@ -26,30 +45,46 @@ Page({
    */
   onLoad: function (options) {
     console.log(options)
+    var arrList = {
+      "money": options.wzfk,
+      "action": options.act,
+      "area": options.wzcity,
+      "date": options.wzdate,
+      "code": options.code,
+      "fen": options.fen,
+      "handled": options.handled,
+      "archiveno": options.archiveno
+    };
       this.setData({
+        wzList:arrList,
         wzOrder: options.wzOrder,
         wzfk: options.wzfk,
         act: options.act,
         wzcity: options.wzcity,
         wzdate: options.wzdate,
         chepai:app.globalData.chepai,
-        chejia:app.globalData.chejia
+        code: options.code,
+        fen: options.fen,
+        handled: options.handled,
+        archiveno: options.archiveno
       })
+
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+    var self = this;
     this.getPrice(); 
-    this.getDriveList()
+    this.getDriveList();  
+    this.isPhoneRegisted();
   },
   getDriveList: function(){
     console.log("getSvsList Api")
     var self = this;
     console.log(app.globalData.host + 'personLicence/findAllById')
     console.log(wx.getStorageSync('token'))
-
     wx.showLoading({
       title: '加载中...',
     })
@@ -65,6 +100,7 @@ Page({
           self.setData({
             carLincenseList: res.data.data
           })
+          console.log(self.data.carLincenseList)
           wx.hideLoading()
         } else if (res.data.httpStatus == 401) {
           wx.navigateTo({
@@ -177,17 +213,33 @@ Page({
   
   },
 
-  submitOrder:function(){
-    if(this.data.xsznumber!=""){
-      wx.showToast({
-        title: '下单成功',
-      })
-    }else{
+  submitOrder:function(e){
+    var self = this;
+    var money = e.currentTarget.dataset.money;
+    var wzData = self.data.wzList;
+    if (this.data.carNumber==""){
       wx.showToast({
         title: '请选择驾驶证',
-        icon:"none"
+        icon: "none"
       })
-    }
+    }else{
+      if (self.data.isRegPhone) {
+        wxpay.wzPay(app, money, 1, "/pages/order-list/index", wzData);
+      } else {
+        wx.showModal({
+          title: '温馨提示',
+          content: '为了给您更好的服务，请绑定手机号',
+          showCancel: false,
+          success: function (res) {
+            if (res.confirm) {
+              self.setData({
+                modalFlag: false
+              })
+            }
+          }
+        })
+      }  
+   }
   },
   /**
      * 图片获取跟上传
@@ -221,7 +273,7 @@ Page({
             console.log(data)
             if (data.httpStatus == 200) {
               wx.navigateTo({
-                url: "/pages/jsResults/index?wzOrder=" + that.data.wzOrder + "&wzfk=" + that.data.wzfk + "&wzdate=" + that.data.wzdate + "&wzcity=" + that.data.wzcity + "&act=" + that.data.act+"&driverInfo=" + JSON.stringify(data.data) 
+                url: "/pages/jsResults/index?wzOrder=" + that.data.wzOrder + "&wzfk=" + that.data.wzfk + "&wzdate=" + that.data.wzdate + "&wzcity=" + that.data.wzcity + "&act=" + that.data.act + "&code=" + that.data.code + "&fen=" + that.data.fen + "&handled=" + that.data.handled+ "&archiveno=" + that.data.archiveno+"&driverInfo=" + JSON.stringify(data.data) 
               })
               wx.hideLoading()
             } else if (data.httpStatus == 401) {
@@ -260,17 +312,9 @@ Page({
     var self = this;
     console.log(e);
     self.setData({
-      xsznumber:e.detail.value
+      carNumber: e.detail.value
     })
-    // wx.showModal({
-    //   title: '微信快捷支付',
-    //   content: '￥200',
-    //   success: function (res) {
-    //     if (res.confirm) {
-    //       console.log('用户点击确定')
-    //     }
-    //   }
-    // })
+    app.globalData.lienceNumber = self.data.carNumber;
   },
   /**
    * 新增驾驶证
@@ -285,5 +329,224 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  // 手机号部分
+  inputPhoneNum: function (e) {
+    let phoneNum = e.detail.value
+    if (phoneNum.length === 11) {
+      let checkedNum = this.checkPhoneNum(phoneNum)
+      if (checkedNum) {
+        this.setData({
+          phoneNum: phoneNum
+        })
+        console.log('phoneNum' + this.data.phoneNum)
+        this.showSendMsg()
+        this.activeButton()
+      }
+    } else {
+      this.setData({
+        phoneNum: ''
+      })
+      this.hideSendMsg()
+    }
+  },
+
+  checkPhoneNum: function (phoneNum) {
+    let str = /^1\d{10}$/
+    if (str.test(phoneNum)) {
+      return true
+    } else {
+      wx.showToast({
+        title: '手机号不正确',
+        // image: '../../images/fail.png',
+        icon: "none"
+      })
+      return false
+    }
+  },
+
+  showSendMsg: function () {
+    if (!this.data.alreadySend) {
+      this.setData({
+        send: true
+      })
+    }
+  },
+
+  hideSendMsg: function () {
+    this.setData({
+      send: false,
+      disabled: true,
+      buttonType: 'default'
+    })
+  },
+
+  sendMsg: function () {
+    wx.request({
+      url: app.globalData.host + 'findPhone?telphone=' + this.data.phoneNum,
+      //http://localhost:8080/findPhone?telphone={ telphone }
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'GET',
+      success: function (res) {
+        var res = JSON.parse(res.data);
+        console.log(res)
+        if (res.error_code == 0) {
+          wx.showToast({
+            title: "发送成功",
+            icon: 'success'
+          })
+        } else {
+          wx.showToast({
+            title: res.reason,
+            icon: 'none'
+          })
+        }
+      }, fail(res) {
+        console.log(res)
+        wx.showModal({
+          title: '温馨提示',
+          content: '发送失败，请重新绑定',
+          showCancel: false
+        })
+      }
+    })
+    this.setData({
+      alreadySend: true,
+      send: false
+    })
+    this.timer()
+  },
+
+  timer: function () {
+    let promise = new Promise((resolve, reject) => {
+      let setTimer = setInterval(
+        () => {
+          this.setData({
+            second: this.data.second - 1
+          })
+          if (this.data.second <= 0) {
+            this.setData({
+              second: 60,
+              alreadySend: false,
+              send: true
+            })
+            resolve(setTimer)
+          }
+        }
+        , 1000)
+    })
+    promise.then((setTimer) => {
+      clearInterval(setTimer)
+    })
+  },
+
+  // 验证码
+  addCode: function (e) {
+    this.setData({
+      code: e.detail.value
+    })
+    this.activeButton()
+    console.log('code' + this.data.code)
+  },
+
+  // 按钮
+  activeButton: function () {
+    let { phoneNum, code, otherInfo } = this.data
+    if (phoneNum && code && otherInfo) {
+      this.setData({
+        disabled: false,
+        buttonType: 'primary'
+      })
+    } else {
+      this.setData({
+        disabled: true,
+        buttonType: 'default'
+      })
+    }
+  },
+
+  modalOk: function () {
+    var that = this;
+    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
+    wx.showLoading({
+      title: '验证中',
+    })
+    wx.request({
+      //http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
+      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          setTimeout(function () {
+            that.setData({
+              modalFlag: true
+            })
+          }, 2000)
+          wx.showToast({
+            title: '验证成功',
+            icon: 'success'
+          })
+          that.setData({
+            isRegPhone:res.data.data
+          })
+          wx.hideLoading()
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading()
+        } else {
+          wx.showToast({
+            title: res.data.msg,
+            icon: 'none'
+          })
+          wx.hideLoading()
+        }
+      },
+      fail: function (res) {
+        console.log(res)
+        wx.showModal({
+          title: '温馨提示',
+          content: '验证失败，请重新绑定',
+          showCancel: false
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+  modalCancel: function () {
+    this.setData({
+      modalFlag: true,
+    })
+  },
+  isPhoneRegisted: function () {
+    var self = this;
+    wx.request({
+      url: app.globalData.host + 'isPhoneRegisted',
+      method: 'GET',
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      success: function (res) {
+        console.log(res)
+        if(res.data.httpStatus == 200){
+          self.setData({
+            isRegPhone:res.data.data
+          })
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+        } 
+      }, fail(res) {
+        console.log(res)
+      }
+    })
   }
 })

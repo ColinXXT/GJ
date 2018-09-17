@@ -16,12 +16,7 @@
   <view data-id="cw" class="my-item" bindtap='gotoOrder'>
   <image class = "left" src = "../../images/my/bmcw-wzlist-icon.png"mode = "widthFix" />
     <!-- <navigator url="/pages/order-list/index?vid=chewu" hover-class="navigator-hover">我的车务订单</navigator> -->
-    我的车务订单
-  </view>
-  <view data-id="wz" class="my-item" bindtap='gotoOrder'>
-   <image class = "left" src = "../../images/my/bmcw-orderlist-icon.png" mode = "widthFix"/>
-    <!-- <navigator url="/pages/order-list/index?vid=weizhang" hover-class="navigator-hover">我的违章订单</navigator> -->
-    我的违章订单
+    我的订单
   </view>
    <modal class="modal" hidden="{{modalFlag}}" cancel-text="取消" bindcancel="modalCancel" bindconfirm="modalOk" confirmText="验证登录">
     <view class="section">

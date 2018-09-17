@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "行驶证扫描结果",
+  "navigationBarTitleText": "车辆过户",
   "usingComponents": {
     "v-panel": "../../temp/keyboard/index"
   }

@@ -77,9 +77,10 @@ Page({
     wx.login({
       success: function (res) {
       console.log(res)
-      
+        wx.showLoading({
+          title: '授权中...',
+        })
         wx.request({
-          // url: 'http://172.20.10.2:8080/auth?jsCode='+res.code,
           url: app.globalData.host + 'auth?jsCode=' + res.code,
           method: "POST",
           data: {
@@ -99,11 +100,13 @@ Page({
                 showCancel: false
               })
               return;
+
             }
             wx.setStorageSync('token', res.data.data)
             console.log(wx.getStorageSync('token'))
             // wx.setStorageSync('uid', res.data.data.uid)
             // 回到原来的地方放
+            wx.hideLoading();
             wx.navigateBack();
           },
           fail: function (res) {

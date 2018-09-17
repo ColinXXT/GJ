@@ -3,7 +3,7 @@ var app = getApp()
 const orderList = [{
   id:'0',
   dateAdd:"2018-0-1",
-  statusStr:"待处理",
+  statusStr:"代付款",
   status:0,
   orderNumber:123456,
   remark:'代销违章',
@@ -11,9 +11,9 @@ const orderList = [{
 }]
 Page({
   data:{
-    statusType: ["待处理", "处理中", "已完成"],
+    statusType: ["未支付","待处理", "处理中", "已完成"],
     currentType:0,
-    tabClass: ["", "", ""]
+    tabClass: ["", "", "",""]
   },
   statusTap:function(e){
      var curType =  e.currentTarget.dataset.index;
@@ -31,25 +31,8 @@ Page({
   },
   toPayTap:function(e){
     var that = this;
-    var orderId = e.currentTarget.dataset.id;
     var money = e.currentTarget.dataset.money;
-    wx.request({
-      url: '',
-      data: {
-        token: wx.getStorageSync('token')
-      },
-      success: function (res) {
-        if (res.data.httpStatus == 0) {
-            wxpay.pay(app, money, "/pages/order-list/index");     
-        } else {
-          wx.showModal({
-            title: '温馨提示',
-            content: '支付失败',
-            showCancel: false
-          })
-        }
-      }
-    })    
+    wxpay.wxpayOrder(app, money, 0, "/pages/order-list/index");    
   },
   onLoad:function(options){
     // 生命周期函数--监听页面加载
@@ -164,5 +147,5 @@ Page({
         console.log("拨打电话失败！")
       }
     })
-  },
+  }
 })

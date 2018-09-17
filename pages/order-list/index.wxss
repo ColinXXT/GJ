@@ -97,6 +97,15 @@
     width: 120rpx;
     height: 120rpx;
 }
+.goods-info{
+    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/more/arrow-right.png) no-repeat 680rpx center;
+    background-size: 16rpx auto,750rpx auto;
+    margin: 20rpx 0; 
+    border-bottom: 1px solid #eee;
+    line-height: 100rpx;
+    padding-left: 20rpx;
+}
+
 .goods-info  .goods-des{
     width: 540rpx;
     height: 78rpx;
