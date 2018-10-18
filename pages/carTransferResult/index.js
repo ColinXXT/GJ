@@ -13,20 +13,34 @@ Page({
     isShow: false,
     maskFlag: true,
     keyBoardType: 1,
+    selected:"",
+    selectedValue:"Y",
     carnumber: '请输入车牌号',
-    registedDate:'2018-1-1',
-    dates: "2018-1-1",
-    price: "0",
+    dates: dateFormat.getNowTime(),
+    nowTime: dateFormat.getNowTime(),
+    time: dateFormat.formatTime(),
+    cartube:"西安市车辆管理所总所",
+    price: "？",
     ownerValue: "",
+    contactValue:"",
     addressValue: "",
     items: [
-      { name: 'Y', value: '是：车主自行驾车到现场参与办理。', checked: 'true' },
+      { name: 'Y', value: '是：车主自行驾车到车管所参与办理。', checked: 'true' },
       { name: 'N', value: '否：由温馨车管家司机代驾，上门取送车。' },
     ],
+    cartubeArr: ["总所：西安市长安区郭杜北街49号", "郊县所：西安市未央区三桥西部车城内", "东区分所：东三环通塬路与金茂四路十字", "西区分所：西安市沣东新城西户路中段8号", "北区分所：渭水欣居南门向西50米", "南区分所：西安市东仪路19号"],
+    transferServiceArr: ["-请选择服务类型-","本市过户", "车辆迁入","车辆外迁"],
+    transferServiceIndex:"0",
+    transferService:"本市过户",
     imageUrl: "",
+    cartubeIndex: 0,
     curIndex: 0,
-    modalFlag: true,
-    modalFlag1: true,
+    bsghModel: true,
+    bsghModel1: true,
+    clqrModel:true,
+    clqrModel1:true,
+    clwqModel:true,
+    clwqModel1:true,
     provinces: [],
     province: "",
     citys: [],
@@ -45,7 +59,6 @@ Page({
     buttonType: 'default',
     phoneNum: '',
     isRegPhone:'',
-    buyerName:''
   },
 
   /**
@@ -81,7 +94,6 @@ Page({
     })
     var vType = options.type;
     if (vType == "radio"){
-      console.log(options)
       this.setData({
         carnumber: options.carNumber,
         fadongjiValue: options.fdjh,
@@ -97,7 +109,8 @@ Page({
         fadongjiValue: data.fdjh,
         chejiaValue: data.cjNumber,
         registedDate: dateFormat.formatDate(data.registedDate),
-        ownerValue: data.owner
+        ownerValue: data.owner,
+        path:data.path
       })
     }
     console.log('初始化完成');
@@ -109,6 +122,8 @@ Page({
   onReady: function () {
     var self = this;
     this.isPhoneRegisted();
+    //this.getPrice();
+    app.globalData.orderNumber = "";
   },
 
   /**
@@ -148,21 +163,68 @@ Page({
 
   modalOk: function () {
     this.setData({
-      modalFlag: true,
-      modalFlag1: true,
+      bsghModel: true,
+      bsghModel1: true,
+      clwqModel:true,
+      clwqModel1:true,
+      clqrModel:true,
+      clqrModel1:true
     })
   },
   showRequireInfo: function (e) {
     var self = this;
-    self.setData({
-      modalFlag: false
-    })
+    let val = self.data.transferServiceIndex;
+    switch (val) {
+      case "0":
+        wx.showToast({
+          title: '请选择对应服务',
+          image: "../../images/more/error.png",
+        })
+      break;
+      case "1":
+        self.setData({
+          bsghModel: false
+        })
+        break;
+      case "2":
+        this.setData({
+          clqrModel: false
+        })
+        break;
+      case "3":
+        this.setData({
+          clwqModel: false
+        })
+        break;  
+    }
   },
   showNotice: function (e) {
     var self = this;
-    self.setData({
-      modalFlag1: false
-    })
+    let val = self.data.transferServiceIndex;
+    console.log(self.data.transferServiceIndex)
+    switch (val) {
+      case "0":
+        wx.showToast({
+          title: '请选择对应服务',
+          image: "../../images/more/error.png",
+        })
+        break;
+      case "1":
+        self.setData({
+          bsghModel1: false
+        })
+        break;
+      case "2":
+        this.setData({
+          clqrModel1: false
+        })
+        break;
+      case "3":
+        this.setData({
+          clwqModel1: false
+        })
+        break;
+    }
   },
   /**
    * 监听车牌键盘输入动作
@@ -213,12 +275,16 @@ Page({
     var self = this;
     if (e.detail.value == "Y") {
       self.setData({
-        price: 600
+        selectedValue:"Y",
+        addressValue:""
       })
+      self.getPrice();
     } else if (e.detail.value == "N") {
       self.setData({
-        price: 700
+        selectedValue: "N",
+        addressValue:""
       })
+      self.getPrice();
     }
   },
 
@@ -226,19 +292,14 @@ Page({
     console.log(e)
     let val = e.target.dataset.id;
     switch (val) {
-      case 'owner':
+      case 'contactPoint':
         this.setData({
-          ownerValue: e.detail.value
+          contactValue: e.detail.value
         })
         break;
       case 'address':
         this.setData({
           addressValue: e.detail.value
-        })
-        break;
-      case 'buyerName':
-        this.setData({
-          buyerName: e.detail.value
         })
         break;
     }
@@ -250,40 +311,57 @@ Page({
 console.log(e)
     var money = e.target.dataset.money;
     var self = this;
-    console.log(this.data)
-    if (!validateCar.validateCar(this.data.carnumber)) return;
-    if (this.data.ownerValue == "") {
+    if (self.data.transferServiceIndex == 0) {
       wx.showModal({
-        title: '提示',
-        content: "车主姓名不能为空"
+        title: '温馨提示',
+        content: "请选择服务类型"
+      })
+      return;
+    }
+    if (!validateCar.validateCar(this.data.carnumber)) return;
+    if (this.data.contactValue == "") {
+      wx.showModal({
+        title: '温馨提示',
+        content: "联系人姓名不能为空"
       })
       return;
     }
     if (this.data.carnumber == "") {
       wx.showModal({
-        title: '提示',
+        title: '温馨提示',
         content: "车牌号不能为空"
       })
       return;
     }
-    if (this.data.buyerName == "") {
+    
+      if (self.data.selectedValue=="N" && self.data.addressValue == "") {
       wx.showModal({
-        title: '提示',
-        content: "买家姓名不能为空"
-      })
-      return;
-    }
-    if (this.data.addressValue == "") {
-      wx.showModal({
-        title: '提示',
+        title: '温馨提示',
         content: "地址不能为空"
       })
       return;
     }
-    // var reqData = Object.assign({}, { "wzOrder": self.data.wzOrder }, { "chepai": self.data.chepai }, { "carName": self.data.carName }, { "carNumber": self.data.carNumber })
-    // console.log(data)
+    var subDriArr = {
+      "car_number": self.data.carnumber,
+      "fdj_number": self.data.fadongjiValue,
+      "cj_number": self.data.chejiaValue,
+      "registed_date": self.data.registedDate,
+      "owner_person": self.data.ownerValue,
+      "name": self.data.contactValue,
+      "price": money,
+      "resolveTime": self.data.dates+" "+self.data.time,
+      "address": self.data.selectedValue == "Y" ? self.data.cartube :self.data.province + self.data.city + self.data.county + self.data.addressValue
+  };
     if(self.data.isRegPhone){
-      wxpay.wxpay(app, money, 0, "/pages/order-list/index", "");
+      wx.showModal({
+        title: '',
+        content: '确认订单？',
+        success: function (res) {
+          if (res.confirm) {
+            wxpay.wzPay(app, money, self.data.selected, subDriArr);
+          }
+        }
+      })
     }else{
       wx.showModal({
         title: '温馨提示',
@@ -291,7 +369,7 @@ console.log(e)
         showCancel: false,
         success: function (res) {
           if (res.confirm) {
-            this.setData({
+            self.setData({
               phoneModalFlag: false
             })
           }
@@ -300,16 +378,36 @@ console.log(e)
     }
   },
 
+
   /**
    * 监听日期 - picker
    */
-  bindDateChange: function (e) {
+  bindApoDateChange: function (e) {
     console.log(e.detail.value)
     this.setData({
       dates: e.detail.value
     })
   },
   /**
+   * 监听日期 - picker
+   */
+  bindTimeChange: function (e) {
+    console.log(e.detail.value)
+    this.setData({
+      time: e.detail.value
+    })
+  },
+  /**
+   * 监听车管所 - picker
+   */
+  bindCartubeChange: function (e){
+    console.log(e)
+    this.setData({
+      cartubeIndex: e.detail.value,
+      cartube: this.data.cartubeArr[e.detail.value]
+    })
+  },
+   /**
   * 监听省市区三级联动键盘
   */
   bindChange: function (e) {
@@ -374,6 +472,7 @@ console.log(e)
     this.setData({
       condition: !this.data.condition,
       maskFlag: false,
+      addressValue: ""
     })
   },
   open1: function () {
@@ -431,8 +530,7 @@ console.log(e)
     } else {
       wx.showToast({
         title: '手机号不正确',
-        // image: '../../images/fail.png',
-        icon: "none"
+        image: "../../images/more/error.png",
       })
       return false
     }
@@ -455,8 +553,7 @@ console.log(e)
 
   sendMsg: function () {
     wx.request({
-      url: app.globalData.host + 'findPhone?telphone=' + this.data.phoneNum,
-      //http://localhost:8080/findPhone?telphone={ telphone }
+      url: app.globalData.host + '/findPhone?telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -472,7 +569,7 @@ console.log(e)
         } else {
           wx.showToast({
             title: res.reason,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
         }
       }, fail(res) {
@@ -540,13 +637,12 @@ console.log(e)
   },
   phoneModalOk: function () {
     var that = this;
-    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
     wx.showLoading({
       title: '验证中',
+      mask:true
     })
     wx.request({
-      //http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
-      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -570,7 +666,7 @@ console.log(e)
         } else {
           wx.showToast({
             title: res.data.msg,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
           wx.hideLoading()
         }
@@ -594,7 +690,7 @@ console.log(e)
   isPhoneRegisted: function () {
     var self = this;
     wx.request({
-      url: app.globalData.host + 'isPhoneRegisted',
+      url: app.globalData.host + '/isPhoneRegisted',
       method: 'GET',
       header: {
         'token': wx.getStorageSync('token')
@@ -608,5 +704,113 @@ console.log(e)
         console.log(res)
       }
     })
+  },
+  getPrice: function () {
+    var self = this;
+    var svsType = self.data.transferServiceIndex;
+    if (svsType == "0") {
+      self.setData({
+        price: "0.00"
+      });
+      return;
+    }
+    var radioType = self.data.selectedValue;
+    console.log(radioType)
+    switch (svsType) {
+      case "1":
+        if (radioType=="Y"){
+          self.setData({
+            selected:"4"
+          });
+        }else{
+          self.setData({
+            selected: "5"
+          });
+        }
+        break;
+      case "2":
+        if (radioType == "Y") {
+          self.setData({
+            selected: "8"
+          });
+        } else {
+          self.setData({
+            selected: "9"
+          });
+        }
+      break;
+      case "3":
+        if (radioType == "Y") {
+          self.setData({
+            selected: "10"
+          });
+        } 
+        break;
+    }
+    console.log("提交的下单的参数"+self.data.selected)
+    wx.showLoading({
+      title: '加载中...',
+      mask:true
+    })
+    wx.request({
+      url: app.globalData.host + '/product/gerPrice?productId=' + self.data.selected,
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          self.setData({
+            price: res.data.data
+          })
+          wx.hideLoading()
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading()
+        } else {
+          wx.showModal({
+            title: '温馨提示',
+            content: '服务器不稳定，获取价格失败，请重试',
+            showCancel: false,
+            success:function(){
+              wx.reLaunch({
+                url: '/pages/index/index',
+              })
+            }
+          })
+        }
+        wx.hideLoading()
+      }, fail(res) {
+        console.log(res)
+        wx.showModal({
+          title: '错误提示',
+          content: '网络异常，请返回重新选择',
+          showCancel: false,
+          success: function (res) {
+            wx.navigateBack()
+          }
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+  move: function () {},
+  bindTransferSvsChange: function(e){
+    var self = this;
+  
+    console.log(e)
+    self.setData({
+      selectedValue: "Y",
+      items: [
+        { name: 'Y', value: '是：车主自行驾车到车管所参与办理。', checked: 'true' },
+        { name: 'N', value: '否：由温馨车管家司机代驾，上门取送车。' },
+      ],
+      transferServiceIndex: e.detail.value,
+      transferService: self.data.transferServiceArr[e.detail.value]
+    })
+    self.getPrice();
   }
 })

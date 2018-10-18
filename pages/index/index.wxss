@@ -129,7 +129,7 @@ swiper-item image {
 }
 
 .my-item{
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/more/arrow-right.png) no-repeat 680rpx center;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/arrow-right.png) no-repeat 680rpx center;
     background-size: 16rpx auto,750rpx auto;
     margin: 20rpx 0; 
     border-bottom: 1px solid #eee;
@@ -138,7 +138,7 @@ swiper-item image {
 }
 
 .main{
-    height: 350rpx;
+    height: 400rpx;
 }
 .categroy-left{
     float: left;
@@ -295,7 +295,7 @@ swiper-item image {
 }
 .svc1{
   padding: 10px;
-  background:gray;
+  background:#dff4ff;
 }
 .journey{
   padding: 10px;
@@ -329,27 +329,27 @@ swiper-item image {
 .product-list1 image{
     width: 50px;
     height: 46px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 0 no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 0 no-repeat;
     background-size: 52px 600px;
 }
 .product-list2 image{
     width: 50px;
     height: 46px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -60px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -60px no-repeat;
     background-size: 52px 600px;
 }
 
 .product-list3 image{
     width: 50px;
     height: 46px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -120px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -120px no-repeat;
     background-size: 52px 600px;
 }
 
 .product-list4 image{
     width: 50px;
     height: 46px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -180px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -180px no-repeat;
     background-size: 52px 600px;
 }
 .notice_iteml2 {
@@ -363,7 +363,7 @@ padding-left:70rpx;
 .Grid-cell image{
    width: 50px;
     height: 45px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -343px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -343px no-repeat;
     background-size: 52px 615px;
     float:left;
     margin-left:20px;
@@ -371,7 +371,7 @@ padding-left:70rpx;
 .Grid-cell-sub image{
    width: 50px;
     height: 45px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -388px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -388px no-repeat;
     background-size: 52px 615px;
     float:left;
     margin-left:20px;
@@ -396,7 +396,7 @@ padding-left:70rpx;
 .suborder image{
     width: 50px;
     height: 45px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -295px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -295px no-repeat;
     background-size: 52px 615px;
     float:left;
     margin-left:97px;
@@ -404,7 +404,7 @@ padding-left:70rpx;
 .offlineSvc image{
     width: 50px;
     height: 45px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -440px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -440px no-repeat;
     background-size: 52px 610px;
     float:left;
     margin-left:97px;
@@ -412,7 +412,7 @@ padding-left:70rpx;
 .compleOrder image{
     width: 50px;
     height: 45px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -488px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -488px no-repeat;
     background-size: 52px 610px;
     float:left;
     margin-left:97px;
@@ -421,7 +421,7 @@ padding-left:70rpx;
 .selection image{
     width: 30px;
     height: 25px;
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/cate/index-icon.png) 0 -535px no-repeat;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/index-icon.png) 0 -535px no-repeat;
     background-size: 52px 615px;
 }
 .selection{
@@ -442,3 +442,22 @@ padding-left:70rpx;
 .copyright{
   padding: 10px;
 }
+/*悬浮按钮*/
+.img-plus-style {  
+  height: 70rpx;  
+  width: 70rpx;  
+  position: fixed;  
+  bottom: 220rpx;  
+  right: 30rpx;  
+  opacity: 0.7
+}  
+.img-plus-style1 {  
+  height: 70rpx;  
+  width: 70rpx;  
+  position: fixed;  
+  bottom: 130rpx;  
+  right: 30rpx;   
+  opacity: 0.7
+}  
+.zindex100{z-index: 100}
+.yc{opacity: 0}

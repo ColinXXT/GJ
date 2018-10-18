@@ -1,8 +1,9 @@
 <!--servicesList-->
 <view class="container">
+
 <view class="no-order" wx:if="{{wzList.length==0}}">
         <image src="/images/order-details/no-order.png" class="no-order-img"></image>
-        <view class="text">暂无违章</view>
+        <view class="text">您没有任何违章</view>
     </view>
   <view class="page-body" wx:else>
    <view class='note'>
@@ -30,18 +31,11 @@
         </view>
         <view class='Grid-cell-sub'>
           <view class="about" bindtap="calling" wx:if="{{item.fen!=0}}">
-            <text class='b-item-des'>拨打电话：<text class='tel'>400-888-9999</text></text>
+            <text class='b-item-des'>联系客服处理</text>
           </view>
-         <!--
-         code: options.code,
-        fen: options.fen,
-        handled: options.handled,
-        archiveno: options.archiveno
-         
-         -->
           <view class="about" wx:else>
            <navigator url="../dxwz/index?wzOrder={{item.archiveno}}&wzfk={{item.money}}&wzdate={{item.date}}&wzcity={{item.wzcity+'\t'+item.area}}&act={{item.act}}&code={{item.code}}&fen={{item.fen}}&handled={{item.handled}}&archiveno={{item.archiveno}}">
-            <image class='dxImage' src='../../images/more/click.png'></image>
+            <image class='dxImage' src='https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/click.png'></image>
                     </navigator>
           </view>
   
@@ -57,5 +51,11 @@
 </view>
     </view>
   </view>
+  <view>  
+      <contact-button type="default-dark" size="20" session-from="weapp" class="img-plus-style zindex100 yc">
+      </contact-button>
+      <image src="../../images/more/service.png" class="img-plus-style"></image> 
+      <image src="../../images/more/tel.png" class="img-plus-style1" bindtap="calling"></image>
+    </view>
 </view>
 

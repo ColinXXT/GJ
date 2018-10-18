@@ -295,3 +295,47 @@ page{
     text-align: right;
 }
 
+.goods-img-container{
+    height: 185rpx;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+.goods-img-container .img-box{
+    width: 120rpx;
+    height: 120rpx;
+    overflow: hidden;
+    margin-right: 20rpx;
+    background-color: #f7f7f7;
+    display: inline-block;
+}
+.a-order  .goods-info,
+.goods-img-container{
+    width: 720rpx;
+    margin-left: 30rpx;
+    border-bottom: 1rpx solid #eee;
+    padding: 30rpx 0;
+    display: flex;
+    align-items: center;
+}
+.goods-img-container .img-box .goods-img{
+    width: 120rpx;
+    height: 120rpx;
+}
+.dxImage{
+  width:40px;
+  height:30px;
+}
+.previewimg{
+	float:left;
+	width:45%;
+	height:200px;
+	margin:2%;
+}
+.previewimg image{
+	width:100%;
+	height:100%;
+}
+.preImage{
+  font-size:26rpx;
+  color: green
+}

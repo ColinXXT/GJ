@@ -1,116 +1,98 @@
 <view class="container">
+<!--驾驶／行驶证信息-->
+
 <!--订单信息-->
-    <view wx:if="{{orderDetail.goods.length>0}}" class="goods-list" style="margin-top:10px !important;">
+    <view class="goods-list" style="margin-top:10px !important;">
+        <view wx:if="{{imgalist.length>0}}">
+          <scroll-view class="goods-img-container" scroll-x="true">
+                    <view class="img-box" wx:for="{{imgalist}}" wx:for-item="image">
+                        <image src="{{image}}" data-src="{{image}}" class="goods-img" bindtap="previewImage"></image>
+                    </view>
+                    <image class='dxImage' src='../../images/more/showimg.png'/><h class='preImage'>点击放大</h>
+                </scroll-view>
+            </view>
             <view class="list-title" >订单信息</view>
-            <block wx:for-items="{{orderDetail.goods}}" wx:key="{{index}}">
             <view class="a-goods">
                 <view class="text-box">
-                 <view wx:if="{{item.orderId}}" class="arow arow01">
+                 <view wx:if="{{orderDetail.orderNumber}}" class="arow arow01">
                         <view class="goods-name">订单编号</view>
-                        <view class="goods-price">{{item.orderId}}                         </view>
+                        <view class="goods-price">{{orderDetail.orderNumber}}                         </view>
                   </view>
-                  <view wx:if="{{item.productId}}" class="arow arow01">
-                        <view class="goods-name">产品编号</view>
-                        <view class="goods-price">{{item.productId}}                         </view>
+                  <view wx:if="{{orderDetail.productEntity}}" class="arow arow01">
+                        <view class="goods-name">服务名称</view>
+                        <view class="goods-price">{{orderDetail.productEntity.productName}}                         </view>
                   </view> 
-                  <view wx:if="{{item.productPrice}}" class="arow arow01">
+                  <view wx:if="{{orderDetail.price}}" class="arow arow01">
                         <view class="goods-name">产品价格</view>
-                        <view class="goods-price">{{item.productPrice}}                         </view>
+                        <view class="goods-price">{{orderDetail.price}}                         </view>
                   </view> 
-                  <view wx:if="{{item.orderstatus}}" class="arow arow01">
+                  <view wx:if="{{orderStatus}}" class="arow arow01">
                         <view class="goods-name">订单状态</view>
-                        <view class="goods-price"><h style="color:red;">{{item.orderstatus}}</h>                         </view>
+                        <view class="goods-price"><h style="color:red;">{{orderStatus}}</h>                         </view>
                   </view> 
-                  <view wx:if="{{item.dealOrderDate}}" class="arow arow01">
+                  <view wx:if="{{orderDetail.timestamp}}" class="arow arow01">
                         <view class="goods-name">下单时间</view>
-                        <view class="goods-price">{{item.dealOrderDate}}                         </view>
-                  </view>   
-                    <view wx:if="{{item.yuyueDate}}" class="arow arow01">
+                        <view class="goods-price">{{orderDetail.timestamp}}                         </view>
+                  </view>  
+                    <view wx:if="{{orderDetail.resolveTime}}" class="arow arow01">
                         <view class="goods-name">预约时间</view>
-                        <view class="goods-price">{{item.yuyueDate}}                         </view>
+                        <view class="goods-price">{{orderDetail.resolveTime}}                         </view>
                   </view>
-                    <view wx:if="{{item.address}}" class="arow arow02">
-                        <view class="goods-name">接车地址</view>
-                        <view class="goods-price">{{item.address}}</view>
+                    <view wx:if="{{orderDetail.address}}" class="arow arow02">
+                        <view class="goods-name">预约地址</view>
+                        <view class="goods-price">{{orderDetail.address}}</view>
                     </view>
                 </view>
             </view>
-            </block>
         </view>
 <!--违章信息-->
-    <view wx:if="{{orderDetail.wzlist.length>0}}" class="goods-list">
-            <view class="list-title">违章信息</view>
-            <block wx:for-items="{{orderDetail.wzlist}}" wx:key="{{index}}">
+    <view wx:if="{{orderDetail.peccancyEntity}}" class="goods-list">
+            <view class="list-title">代办违章信息</view>
             <view class="a-goods">
                 <view class="text-box">
-                 <view wx:if="{{item.wzDate}}" class="arow arow01">
+                 <view wx:if="{{orderDetail.peccancyEntity.date}}" class="arow arow01">
                         <view class="goods-name">违章时间</view>
-                        <view class="goods-price">{{item.wzDate}}                         </view>
+                        <view class="goods-price">{{orderDetail.peccancyEntity.date}}                         </view>
                   </view>
-                  <view wx:if="{{item.wzAddr}}" class="arow arow01">
+                  <view wx:if="{{orderDetail.peccancyEntity.area}}" class="arow arow01">
                         <view class="goods-name">违章地点</view>
-                        <view class="goods-price">{{item.wzAddr}}                         </view>
+                        <view class="goods-price">{{orderDetail.peccancyEntity.area}}                         </view>
                   </view> 
-                  <view wx:if="{{item.wzAct}}" class="arow arow01">
+                  <view wx:if="{{orderDetail.peccancyEntity.action}}" class="arow arow01">
                         <view class="goods-name">违章行为</view>
-                        <view class="goods-price">{{item.wzAct}}                         </view>
+                        <view class="goods-price">{{orderDetail.peccancyEntity.action}}                         </view>
                   </view> 
-                  <view wx:if="{{item.wzkf}}" class="arow arow01">
+                  <view wx:if="{{orderDetail.peccancyEntity.fen}}" class="arow arow01">
                         <view class="goods-name">违章扣分</view>
-                        <view class="goods-price">{{item.wzkf}}                         </view>
+                        <view class="goods-price">{{orderDetail.peccancyEntity.fen}}                         </view>
                   </view>   
-                    <view wx:if="{{item.wzfk}}" class="arow arow02">
+                    <view wx:if="{{orderDetail.peccancyEntity.money}}" class="arow arow02">
                         <view class="goods-name">违章罚款</view>
-                        <view class="goods-price">{{item.wzfk}}                         </view>
+                        <view class="goods-price">{{orderDetail.peccancyEntity.money}}                         </view>
                   </view>
                 </view>
             </view>
-            </block>
-        </view>
-
-<!--驾驶／行驶证信息-->
-    <view wx:if="{{orderDetail.driverList.length>0}}" class="goods-list">
-            <view class="list-title">办理材料</view>
-            <block wx:for-items="{{orderDetail.driverList}}" wx:key="{{index}}">
-            <view class="a-goods">
-                <view class="text-box">
-                 <view wx:if="{{item.carNumber}}" class="arow arow01">
-                        <view class="goods-name">驾照号</view>
-                        <view class="goods-price">{{item.carNumber}}                         </view>
-                  </view>
-                  <view wx:if="{{item.carName}}" class="arow arow01">
-                        <view class="goods-name">驾照所属人</view>
-                        <view class="goods-price">{{item.carName}}                         </view>
-                  </view> 
-                  <view wx:if="{{item.chejiaNumber}}" class="arow arow01">
-                        <view class="goods-name">车架号</view>
-                        <view class="goods-price">{{item.chejiaNumber}}                         </view>
-                  </view> 
-                  <view wx:if="{{item.chejiaName}}" class="arow arow02">
-                        <view class="goods-name">车主姓名</view>
-                        <view class="goods-price">{{item.chejiaName}}                         </view>
-                  </view>   
-                </view>
-            </view>
-            </block>
         </view>
 <!--代办人信息-->
-    <view wx:if="{{orderDetail.handlerList.length>0}}" class="goods-list">
+    <view wx:if="{{orderDetail.serverPeopleEntity}}" class="goods-list">
             <view class="list-title">代办人信息</view>
-            <block wx:for-items="{{orderDetail.handlerList}}" wx:key="{{index}}">
             <view class="a-goods">
                 <view class="text-box">
-                    <view wx:if="{{item.handlerName}}" class="arow arow01">
+                    <view wx:if="{{orderDetail.serverPeopleEntity.name}}" class="arow arow01">
                         <view class="goods-name">代办人姓名</view>
-                        <view class="goods-price">{{item.handlerName}}                         </view>
+                        <view class="goods-price">{{orderDetail.serverPeopleEntity.name}}                         </view>
                   </view>
-                  <view wx:if="{{item.handlerPhone}}" class="arow arow02">
+                  <view wx:if="{{orderDetail.serverPeopleEntity.phoneNumber}}" class="arow arow02">
                         <view class="goods-name">代办人电话</view>
-                        <view class="goods-price">{{item.handlerPhone}}                         </view>
+                        <view class="goods-price">{{orderDetail.serverPeopleEntity.phoneNumber}}                        
+                         </view>
+                                         </view> 
+                  <view wx:if="{{orderDetail.serverPeopleEntity.address}}" class="arow arow02">
+                        <view class="goods-name">代办人地址</view>
+                        <view class="goods-price">{{orderDetail.serverPeopleEntity.address}}                         </view>
                   </view> 
                  
                 </view>
             </view>
-            </block>
         </view>
 </view>

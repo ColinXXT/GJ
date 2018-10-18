@@ -10,7 +10,8 @@ Page({
     condition: false,
     userInfo: {},
     results:[],
-    driverLists:[]
+    driverLists:[],
+    remind:'加载中'
   },
 
   /**
@@ -25,12 +26,8 @@ Page({
    */
   onReady: function () {
     var self = this;
-    console.log(app.globalData.host + 'findAllCar')
-    wx.showLoading({
-      title: '数据加载中...',
-    })
     wx.request({
-      url: app.globalData.host + 'findAllCar',
+      url: app.globalData.host + '/findAllCar',
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -38,33 +35,35 @@ Page({
       success: function (res) {
         console.log(res.data.data)
         if (res.data.httpStatus == 200) {
-          setTimeout(function () {
-            wx.hideLoading()
             self.setData({
               driverLists: res.data.data
             })
-          }, 1000)
         } else if (res.data.httpStatus == 401) {
-          wx.hideLoading()
           wx.navigateTo({
             url: '../authorize/index',
           })
-
         } else {
-          wx.hideLoading()
           setTimeout(function () {
             wx.showToast({
               title: res.data.data,
-              icon: 'none'
+              image: "../../images/more/error.png",
             })
           }, 1000)
         }
+        setTimeout(function () {
+          self.setData({
+            remind: ''
+          });
+        }, 1000);
       }, fail(res) {      
         wx.showModal({
           title: '温馨提示',
           content: '请求超时，请重新选择服务项目',
+          showCancel: false,
+          success: function (res) {
+            wx.navigateBack()
+          }
         })
-        wx.hideLoading()
       }
     })
   },
@@ -118,11 +117,11 @@ Page({
         var tempFilePaths = res.tempFilePaths;
         wx.showLoading({
           title: '扫描中',
+          mask:true
         })
         console.log(tempFilePaths[0])
         wx.uploadFile({
-          //http://localhost:8080/getCarLiencesInfo
-          url: app.globalData.host + 'getCarLiencesInfo',
+          url: app.globalData.host + '/getCarLiencesInfo',
           filePath: tempFilePaths[0],
           name: 'image',
           header: {
@@ -143,7 +142,7 @@ Page({
             } else {
               wx.showToast({
                 title: '扫描失败',
-                icon: 'none'
+                image: "../../images/more/error.png",
               })
             }
             wx.hideLoading()
@@ -194,7 +193,7 @@ Page({
   goToResult : function(){
     var result = this.data.results;
     if (result.length > 0) {
-      wx.navigateTo({
+      wx.redirectTo({
         url: "/pages/carTransferResult/index?type=radio&carNumber=" + result[0] + "&carType=" + result[1] + "&cjNumber=" + result[2] + "&fdjh=" + result[3] + "&owner=" + result[4] + "&registedDate=" + result[5]
       })
     }

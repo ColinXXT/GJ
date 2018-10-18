@@ -13,17 +13,24 @@ Page({
     isShow: false,
     maskFlag: true,
     keyBoardType: 1,
+    selected:"2",
+    selectedValue:"Y",
     carnumber: '请输入车牌号',
-    registedDate:'2018-1-1',
-    dates: "2018-1-1",
-    price: "0",
+    dates: dateFormat.getNowTime(),
+    nowTime: dateFormat.getNowTime(),
+    time: dateFormat.formatTime(),
+    cartube:"西安市车辆管理所总所",
+    price: "？",
     ownerValue: "",
+    contactValue:"",
     addressValue: "",
     items: [
-      { name: 'Y', value: '是：车主自行驾车到现场参与办理。', checked: 'true' },
+      { name: 'Y', value: '是：车主自行驾车到车管所参与办理。', checked: 'true' },
       { name: 'N', value: '否：由温馨车管家司机代驾，上门取送车。' },
     ],
+    cartubeArr: ["总所：西安市长安区郭杜北街49号", "郊县所：西安市未央区三桥西部车城内", "东区分所：东三环通塬路与金茂四路十字", "西区分所：西安市沣东新城西户路中段8号", "北区分所：渭水欣居南门向西50米", "南区分所：西安市东仪路19号"],
     imageUrl: "",
+    cartubeIndex: 0,
     curIndex: 0,
     modalFlag: true,
     modalFlag1: true,
@@ -85,7 +92,8 @@ Page({
         fadongjiValue: options.fdjh,
         chejiaValue: options.cjNumber,
         registedDate: dateFormat.formatDate(options.registedDate),
-        ownerValue: options.owner
+        ownerValue: options.owner,
+        path: options.path ? options.path : null
       })
     }else{
       var data = JSON.parse(options.driverInfo);
@@ -95,7 +103,8 @@ Page({
         fadongjiValue: data.fdjh,
         chejiaValue: data.cjNumber,
         registedDate: dateFormat.formatDate(data.registedDate),
-        ownerValue: data.owner
+        ownerValue: data.owner,
+        path: data.path ? data.path : null
       })
     }
     console.log('初始化完成');
@@ -107,6 +116,8 @@ Page({
   onReady: function () {
     var self = this;
     this.isPhoneRegisted();
+    this.getPrice();
+    app.globalData.orderNumber = "";
   },
 
   /**
@@ -211,12 +222,18 @@ Page({
     var self = this;
     if (e.detail.value == "Y") {
       self.setData({
-        price: 600
+        selected: "2",
+        selectedValue:"Y",
+        addressValue:""
       })
+      self.getPrice();
     } else if (e.detail.value == "N") {
       self.setData({
-        price: 700
+        selected: "3",
+        selectedValue: "N",
+        addressValue:""
       })
+      self.getPrice();
     }
   },
 
@@ -224,9 +241,9 @@ Page({
     console.log(e)
     let val = e.target.dataset.id;
     switch (val) {
-      case 'owner':
+      case 'contactPoint':
         this.setData({
-          ownerValue: e.detail.value
+          contactValue: e.detail.value
         })
         break;
       case 'address':
@@ -244,31 +261,48 @@ console.log(e)
     var money = e.target.dataset.money;
     var self = this;
     if (!validateCar.validateCar(this.data.carnumber)) return;
-    if (this.data.ownerValue == "") {
+    if (this.data.contactValue == "") {
       wx.showModal({
-        title: '提示',
-        content: "车主姓名不能为空"
+        title: '温馨提示',
+        content: "联系人姓名不能为空"
       })
       return;
     }
     if (this.data.carnumber == "") {
       wx.showModal({
-        title: '提示',
+        title: '温馨提示',
         content: "车牌号不能为空"
       })
       return;
     }
-    if (this.data.addressValue == "") {
+      if (self.data.selectedValue=="N" && self.data.addressValue == "") {
       wx.showModal({
-        title: '提示',
+        title: '温馨提示',
         content: "地址不能为空"
       })
       return;
     }
-    // var reqData = Object.assign({}, { "wzOrder": self.data.wzOrder }, { "chepai": self.data.chepai }, { "carName": self.data.carName }, { "carNumber": self.data.carNumber })
-    // console.log(data)
+    var subDriArr = {
+      "car_number": self.data.carnumber,
+      "fdj_number": self.data.fadongjiValue,
+      "cj_number": self.data.chejiaValue,
+      "registed_date": self.data.registedDate,
+      "owner_person": self.data.ownerValue,
+      "name": self.data.contactValue,
+      "price": money,
+      "resolveTime": self.data.dates+" "+self.data.time,
+      "address": self.data.selectedValue == "Y" ? self.data.cartube :self.data.province + self.data.city + self.data.county + self.data.addressValue
+  };
     if(self.data.isRegPhone){
-      wxpay.wxpay(app, money, 0, "/pages/order-list/index", "");
+      wx.showModal({
+        title: '',
+        content: '确认订单？',
+        success: function (res) {
+          if (res.confirm) {
+            wxpay.wzPay(app, money, self.data.selected, subDriArr);
+          }
+        }
+      })
     }else{
       wx.showModal({
         title: '温馨提示',
@@ -291,10 +325,38 @@ console.log(e)
   bindDateChange: function (e) {
     console.log(e.detail.value)
     this.setData({
+      registedDate: e.detail.value
+    })
+  },
+  /**
+  * 监听日期 - picker
+  */
+  bindApoDateChange: function (e) {
+    console.log(e.detail.value)
+    this.setData({
       dates: e.detail.value
     })
   },
   /**
+   * 监听日期 - picker
+   */
+  bindTimeChange: function (e) {
+    console.log(e.detail.value)
+    this.setData({
+      time: e.detail.value
+    })
+  },
+  /**
+   * 监听车管所 - picker
+   */
+  bindCartubeChange: function (e){
+    console.log(e)
+    this.setData({
+      cartubeIndex: e.detail.value,
+      cartube: this.data.cartubeArr[e.detail.value]
+    })
+  },
+   /**
   * 监听省市区三级联动键盘
   */
   bindChange: function (e) {
@@ -359,6 +421,7 @@ console.log(e)
     this.setData({
       condition: !this.data.condition,
       maskFlag: false,
+      addressValue: ""
     })
   },
   open1: function () {
@@ -416,8 +479,7 @@ console.log(e)
     } else {
       wx.showToast({
         title: '手机号不正确',
-        // image: '../../images/fail.png',
-        icon: "none"
+        image: "../../images/more/error.png",
       })
       return false
     }
@@ -440,8 +502,7 @@ console.log(e)
 
   sendMsg: function () {
     wx.request({
-      url: app.globalData.host + 'findPhone?telphone=' + this.data.phoneNum,
-      //http://localhost:8080/findPhone?telphone={ telphone }
+      url: app.globalData.host + '/findPhone?telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -457,7 +518,7 @@ console.log(e)
         } else {
           wx.showToast({
             title: res.reason,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
         }
       }, fail(res) {
@@ -525,13 +586,12 @@ console.log(e)
   },
   phoneModalOk: function () {
     var that = this;
-    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
     wx.showLoading({
       title: '验证中',
+      mask:true
     })
     wx.request({
-      //http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
-      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -555,7 +615,7 @@ console.log(e)
         } else {
           wx.showToast({
             title: res.data.msg,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
           wx.hideLoading()
         }
@@ -579,7 +639,7 @@ console.log(e)
   isPhoneRegisted: function () {
     var self = this;
     wx.request({
-      url: app.globalData.host + 'isPhoneRegisted',
+      url: app.globalData.host + '/isPhoneRegisted',
       method: 'GET',
       header: {
         'token': wx.getStorageSync('token')
@@ -593,5 +653,57 @@ console.log(e)
         console.log(res)
       }
     })
-  }
+  },
+  getPrice: function () {
+    var self = this;
+    wx.showLoading({
+      title: '加载中...',
+      mask:true
+    })
+    wx.request({
+      url: app.globalData.host + '/product/gerPrice?productId=' + self.data.selected,
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          self.setData({
+            price: res.data.data
+          })
+          wx.hideLoading()
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading()
+        } else {
+          wx.showModal({
+            title: '温馨提示',
+            content: '服务器不稳定，获取价格失败，请重试',
+            showCancel: false,
+            success: function () {
+              wx.reLaunch({
+                url: '/pages/index/index',
+              })
+            }
+          })
+        }
+        wx.hideLoading()
+      }, fail(res) {
+        console.log(res)
+        wx.showModal({
+          title: '错误提示',
+          content: '网络异常，请返回重新选择',
+          showCancel: false,
+          success: function (res) {
+            wx.navigateBack()
+          }
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+  move: function () {}
 })

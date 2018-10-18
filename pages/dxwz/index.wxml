@@ -3,7 +3,7 @@
   <view class='note1'>
           <view class='journey_title'>拍照录入驾驶证</view>
   </view>
-        <image class="title" src="/images/more/photo.png"></image> 
+        <image class="title" src="https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/photo.png"></image> 
       <view class="content">
           <view class="bd">
             <view class="confirm-btn" bindtap='bindChooseImage'>
@@ -24,7 +24,7 @@
       </view>
       </view>
   <view wx:if="{{carLincenseList.length>0}}">
-    <view style='margin-top:20px;'>选择已录入的驾驶证</view>
+    <view style='margin-top:20px;'>选择驾驶证代销</view>
       <radio-group class="radio-group" bindchange="radioChange">
       <label class="radio" wx:key = "index" wx:for="{{carLincenseList}}">
       <view class="radioView">

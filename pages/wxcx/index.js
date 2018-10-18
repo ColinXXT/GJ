@@ -9,29 +9,25 @@ Page({
     condition:false,
     driverLists:{},
     results:[],
-    wxDetails:{}
+    wxDetails:{},
+    remind: '加载中'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    console.log(options)
   },
 
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
     var self = this;
-    console.log(app.globalData.host + 'findAllCar')
-    console.log(wx.getStorageSync('token')) 
-    
-      wx.showLoading({
-        title: '加载中...',
-      })
       wx.request({
-        url: app.globalData.host + 'findAllCar',
+        url: app.globalData.host + '/findAllCar',
         header: {
           'token': wx.getStorageSync('token')
         },
@@ -41,23 +37,24 @@ Page({
           if (res.data.httpStatus == 200) {
               self.setData({
                 driverLists: res.data.data
-              })
-      
-            wx.hideLoading()    
+              })  
           } else if (res.data.httpStatus == 401) {  
             wx.navigateTo({
               url: '../authorize/index',
-            })
-            wx.hideLoading()    
+            })  
           } else {
             setTimeout(function () {
               wx.showToast({
                 title: res.data.data,
-                icon: 'none'
+                image: "../../images/more/error.png",
               })
             },1000)
-          }
-          wx.hideLoading()
+          };
+          setTimeout(function () {
+            self.setData({
+              remind: ''
+            });
+          }, 1000);
         }, fail(res) {
           console.log(res)
           wx.showModal({
@@ -68,7 +65,6 @@ Page({
               wx.navigateBack()
             }
           })
-          wx.hideLoading()
         }
       })
   },
@@ -100,7 +96,7 @@ Page({
   onPullDownRefresh: function () {
   
   },
-
+  
   /**
    * 页面上拉触底事件的处理函数
    */
@@ -125,10 +121,10 @@ Page({
         //启动上传等待中...  
         wx.showLoading({
           title: '正在上传扫描',
+          mask: true
         })
           wx.uploadFile({
-            //http://localhost:8080/getCarLiencesInfo
-            url: app.globalData.host + 'getCarLiencesInfo',
+            url: app.globalData.host + '/getCarLiencesInfo',
             filePath: tempFilePaths[0],
             name: 'image',
             header: { 
@@ -183,9 +179,10 @@ Page({
     var result = self.data.results;
     wx.showLoading({
       title: '查询中...',
+      mask: true
     })
     wx.request({
-      url: app.globalData.host + 'saveCarLience',
+      url: app.globalData.host + '/saveCarLience',
       data: {
         "carNumber": result[0],
         "carType": result[1],
@@ -206,7 +203,7 @@ Page({
           self.setData({
             wxDetails: res.data.data
           })
-          wx.navigateTo({
+          wx.redirectTo({
             url: "/pages/wzlist/index?wxDetails=" + self.data.wxDetails + "&driverLists=" + self.data.driverLists + '&chepai=' + result[0]
           })
           wx.hideLoading()
@@ -218,7 +215,7 @@ Page({
         } else {
           wx.showToast({
             title: '网络异常，请重试',
-            icon: "none"
+            image: "../../images/more/error.png",
           })
           wx.hideLoading()
         }
@@ -226,7 +223,7 @@ Page({
         console.log(res)
         wx.showToast({
           title: '网络异常，请重试',
-          icon: "none"
+          image: "../../images/more/error.png",
         })
         wx.hideLoading()
       }
@@ -248,13 +245,12 @@ Page({
   },
   modalOk: function () {
     var that = this;
-    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
     wx.showLoading({
       title: '验证中',
+      mask: true
     })
     wx.request({
-      //http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
-      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -280,7 +276,7 @@ Page({
         } else {
           wx.showToast({
             title: res.data.data,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
           wx.hideLoading()
         }

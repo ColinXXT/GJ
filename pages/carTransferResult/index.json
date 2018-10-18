@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "车辆过户",
+  "navigationBarTitleText": "车辆过户（迁）",
   "usingComponents": {
     "v-panel": "../../temp/keyboard/index"
   }

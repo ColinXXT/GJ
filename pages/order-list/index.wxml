@@ -7,25 +7,51 @@
     </view>
     <view class="no-order" hidden="{{orderList ? true : false}}">
         <image src="/images/order-details/no-order.png" class="no-order-img"></image>
-        <view class="text">暂无订单</view>
+        <view class="text">您还没有相关的订单</view>
     </view>
     <view class="order-list" hidden="{{orderList ? false : true}}">
         <view class="a-order" wx:for-items="{{orderList}}" wx:key="{{index}}">
-            <view class="order-date">
-                <view class="date-box">下单时间：{{item.dateAdd}}</view>
-                <view class="status {{(item.status==-1 || item.status==4) ? '':'red'}}">{{item.statusStr}}</view>
+                <view class="order-date">
+                 <view class="date-box">下单时间：{{item.timestamp}}
+                </view>
+                <view wx:if="{{item.orderStatus==0}}" class="status {{'red'}}">未支付</view>
+                <view wx:elif="{{item.orderStatus==1}}" class="status {{'red'}}">待处理</view>
+                <view wx:elif="{{item.orderStatus==2}}">处理中</view>
+                <view wx:else>已完成</view>
             </view>
-            <view class="goods-info" bindtap="orderDetail" data-id="{{item.id}}">
+            <view class="goods-info" data-id="{{item}}" bindtap="orderDetail" data-value="{{item}}">
                 <view class="goods-des">
-                   <view>订单号:{{item.orderNumber}} </view>
-                   <view wx:if="{{item.remark && item.remark != ''}}">备注： {{item.remark}}</view>
+                   <view>预约时间: {{item.resolveTime}} </view>
+                   <view>订单号: {{item.orderNumber}} </view>
+                   <view wx:if="{{item.productEntity}}">
+                      <view wx:if="{{item.productEntity.productName}}">服务名称：{{item.productEntity.productName}}</view>
+                   </view>                
                 </view>
             </view>
+            <view>
+                <scroll-view wx:if="{{item.personLienceEntity.path || item.carLienceEntity.path}}" class="goods-img-container" scroll-x="true">
+                    <view class="img-box" wx:if="{{item.personLienceEntity.path}}">
+                        <image src="{{item.personLienceEntity.path}}" class="goods-img"></image>
+                    </view>
+                    <view class="img-box" wx:if="{{item.carLienceEntity.path}}">
+                        <image src="{{item.carLienceEntity.path}}" class="goods-img"></image>
+                    </view>
+                </scroll-view>
+            </view>
             <view class="price-box">
-                <view class="total-price">合计：¥ {{item.amountReal}}</view>
-                <view class="btn topay-btn" hidden="{{item.status==0? false : true}}" bindtap="toPayTap" data-id="{{item.id}}" data-money="{{item.amountReal}}">马上付款</view>        
-                <view class="btn topay-btn" hidden="{{item.status==1? false : true}}" bindtap="calling">联系客服</view>        
+                <view class="total-price">合计：¥ {{item.price}}</view>
+                <view class="btn topay-btn-del" hidden="{{item.orderStatus==0? false : true}}" bindtap="toDelTap" data-productId="{{item.productEntity.productId}}" data-orderId="{{item.orderNumber}}" data-money="{{item.price}}">删除订单</view>
+                <view class="btn topay-btn" hidden="{{item.orderStatus==0? false : true}}" bindtap="toPayTap" data-productId="{{item.productEntity.productId}}" data-orderId="{{item.orderNumber}}" data-money="{{item.price}}">马上付款</view> 
+
+                <view class="btn topay-btn-del" hidden="{{item.orderStatus==2? false : true}}" bindtap="calling" data-phone="{{item.serverPeopleEntity.phoneNumber}}">联系代办人</view>  
+                <view class="btn topay-btn" hidden="{{item.orderStatus==2? false : true}}" bindtap="completedOrder" data-oid="{{item.orderNumber}}">完成订单</view>          
             </view>  
         </view>
+    </view>
+     <view>  
+      <contact-button type="default-dark" size="20" session-from="weapp" class="img-plus-style zindex100 yc">
+      </contact-button>
+      <image src="../../images/more/service.png" class="img-plus-style"></image> 
+      <image src="../../images/more/tel.png" class="img-plus-style1" bindtap="calling"></image>
     </view>
 </view>

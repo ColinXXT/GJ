@@ -202,11 +202,6 @@ page{
   margin: 0rpx 0rpx 0rpx 20rpx;
 }
 
-#chejianum image{
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/driImage/bjcg-help-vinCard.png) 0 0 no-repeat;
-    background-size: 550rpx 332rpx;
-
-}
 .journey_text{
   text-align: center
 }

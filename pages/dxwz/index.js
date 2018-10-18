@@ -26,7 +26,6 @@ Page({
     carName:'',
     price:'',
     chepai:'',
-    userIp: '',
     //手机号
     modalFlag: true,
     send: false,
@@ -79,17 +78,17 @@ Page({
     this.getPrice(); 
     this.getDriveList();  
     this.isPhoneRegisted();
+    app.globalData.orderNumber = "";
   },
   getDriveList: function(){
     console.log("getSvsList Api")
     var self = this;
-    console.log(app.globalData.host + 'personLicence/findAllById')
-    console.log(wx.getStorageSync('token'))
     wx.showLoading({
       title: '加载中...',
+      mask: true
     })
     wx.request({
-      url: app.globalData.host + 'personLicence/findAllById',
+      url: app.globalData.host + '/personLicence/findAllById',
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -111,7 +110,7 @@ Page({
           setTimeout(function () {
             wx.showToast({
               title: res.data.data,
-              icon: 'none'
+              image: "../../images/more/error.png",
             })
           }, 1000)
         }
@@ -134,6 +133,7 @@ Page({
     var self = this;
     wx.showLoading({
       title: '加载中...',
+      mask: true
     })
     wx.request({
       url: app.globalData.host + '/product/getWZPrice?price=' + self.data.wzfk,
@@ -154,12 +154,14 @@ Page({
           })
           wx.hideLoading()
         } else {
-          setTimeout(function () {
-            wx.showToast({
-              title: res.data.data,
-              icon: 'none'
-            })
-          }, 1000)
+          wx.showModal({
+            title: '温馨提示',
+            content: '服务器不稳定，获取价格失败，请重试',
+            showCancel: false,
+            success: function () {
+             wx.navigateBack()
+            }
+          })
         }
         wx.hideLoading()
       }, fail(res) {
@@ -216,15 +218,23 @@ Page({
   submitOrder:function(e){
     var self = this;
     var money = e.currentTarget.dataset.money;
-    var wzData = self.data.wzList;
+    var reqData = Object.assign({}, { "peccancyEntity": self.data.wzList }, { "personLienceNumber": app.globalData.lienceNumber }, { "carNumber": app.globalData.chepai }, { "price": money})        
     if (this.data.carNumber==""){
       wx.showToast({
         title: '请选择驾驶证',
-        icon: "none"
+        image:"../../images/more/error.png",
       })
     }else{
       if (self.data.isRegPhone) {
-        wxpay.wzPay(app, money, 1, "/pages/order-list/index", wzData);
+        wx.showModal({
+          title: '',
+          content: '确认订单？',
+          success: function (res) {
+            if (res.confirm) {
+              wxpay.wzPay(app, money, 1, reqData);
+            }
+          }
+        })
       } else {
         wx.showModal({
           title: '温馨提示',
@@ -258,10 +268,10 @@ Page({
         //启动上传等待中...  
         wx.showLoading({
           title: '正在上传扫描',
+          mask: true
         })
         wx.uploadFile({
-          //http://localhost:8080/getCarLiencesInfo
-          url: app.globalData.host + 'personLicence/upload',
+          url: app.globalData.host + '/personLicence/upload',
           filePath: tempFilePaths[0],
           name: 'img',
           header: {
@@ -358,8 +368,7 @@ Page({
     } else {
       wx.showToast({
         title: '手机号不正确',
-        // image: '../../images/fail.png',
-        icon: "none"
+        image: "../../images/more/error.png",
       })
       return false
     }
@@ -383,8 +392,7 @@ Page({
 
   sendMsg: function () {
     wx.request({
-      url: app.globalData.host + 'findPhone?telphone=' + this.data.phoneNum,
-      //http://localhost:8080/findPhone?telphone={ telphone }
+      url: app.globalData.host + '/findPhone?telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -400,7 +408,7 @@ Page({
         } else {
           wx.showToast({
             title: res.reason,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
         }
       }, fail(res) {
@@ -469,13 +477,12 @@ Page({
 
   modalOk: function () {
     var that = this;
-    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
     wx.showLoading({
       title: '验证中',
+      mask: true
     })
     wx.request({
-      //http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
-      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -504,7 +511,7 @@ Page({
         } else {
           wx.showToast({
             title: res.data.msg,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
           wx.hideLoading()
         }
@@ -528,7 +535,7 @@ Page({
   isPhoneRegisted: function () {
     var self = this;
     wx.request({
-      url: app.globalData.host + 'isPhoneRegisted',
+      url: app.globalData.host + '/isPhoneRegisted',
       method: 'GET',
       header: {
         'token': wx.getStorageSync('token')

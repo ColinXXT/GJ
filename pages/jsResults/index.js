@@ -131,6 +131,7 @@ Page({
         if (res.confirm) {
     wx.showLoading({
       title: '保存中...',
+      mask: true
     })
     console.log(self.data.path)
     wx.request({
@@ -167,7 +168,7 @@ Page({
         } else {
           wx.showToast({
             title: '保存失败',
-            icon: "none"
+            image: "../../images/more/error.png",
           })
         }
         wx.hideLoading()

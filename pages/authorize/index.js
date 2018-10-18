@@ -77,11 +77,8 @@ Page({
     wx.login({
       success: function (res) {
       console.log(res)
-        wx.showLoading({
-          title: '授权中...',
-        })
         wx.request({
-          url: app.globalData.host + 'auth?jsCode=' + res.code,
+          url: app.globalData.host + '/auth?jsCode=' + res.code,
           method: "POST",
           data: {
             nickName: wx.getStorageSync("userInfo").nickName,
@@ -93,9 +90,8 @@ Page({
             console.log(res.data)
             if (res.data.httpStatus != 200) {
               // 登录错误
-              wx.hideLoading();
               wx.showModal({
-                title: '提示',
+                title: '温馨提示',
                 content: '无法登录，请重试',
                 showCancel: false
               })
@@ -106,8 +102,12 @@ Page({
             console.log(wx.getStorageSync('token'))
             // wx.setStorageSync('uid', res.data.data.uid)
             // 回到原来的地方放
-            wx.hideLoading();
-            wx.navigateBack();
+            wx.showToast({
+              title: '请重新选择服务',
+              duration:1500,
+              icon:"success"
+            })
+            wx.navigateBack()
           },
           fail: function (res) {
             console.log(res)

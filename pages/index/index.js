@@ -3,15 +3,15 @@
 const carDetails = [
   {
     "id": "search",
-    "cate": "查询代办",
+    "cate": "违章服务",
     "detail": [
       {
         "thumb": "/images/cate/bmcw-wz-icon.jpg",
-        "name": "违章查询",
+        "name": "违章查询代办",
         "id": "wzcx"
       },
       {
-        "thumb": "/images/cate/bmcw-wts-icon.jpg",
+        "thumb": "/images/cate/main5.jpg",
         "name": "敬请期待",
         "id": "dxwz"
       },
@@ -22,25 +22,41 @@ const carDetails = [
     "cate": "汽车服务",
     "detail": [
       {
-        "thumb": "/images/cate/bmcw-wz-icon.jpg",
+        "thumb": "/images/cate/bmcw-jz-icon.jpg",
         "name": "汽车年审",
         "id": "qcns"
       }, 
       {
         "thumb": "/images/cate/main1.jpg",
-        "name": "汽车过户",
+        "name": "汽车过户 (迁）",
         "id": "qcgh"
       },
       {
         "thumb": "/images/cate/main4.jpg",
-        "name": "新车上牌",
+        "name": "汽车上牌",
         "id": "xcsp"
       },
     ]
   },
   {
+    "id": "certService",
+    "cate": "证件服务",
+    "detail": [
+      {
+        "thumb": "/images/cate/main9.jpg",
+        "name": "证照服务",
+        "id": "zjfw"
+      },
+      {
+        "thumb": "/images/cate/bmcw-wts-icon.jpg",
+        "name": "驾驶证服务",
+        "id": "jszfw"
+      },
+    ]
+  },
+  {
     "id": "inspection",
-    "cate": "车辆托运",
+    "cate": "托运服务",
     "detail": [
       {
         "thumb": "/images/cate/main7.jpg",
@@ -70,7 +86,8 @@ Page({
     category: [
       { name: '违章服务', id: 'search' },
       { name: '汽车服务', id: 'carValidate' },
-      { name: '托运服务', id: 'inspection' },
+      { name: '证件服务', id: 'certService' },
+      { name: '托运服务', id: 'inspection' }
     ],
     detail: [],
     curIndex: 0,
@@ -88,10 +105,10 @@ Page({
   onLoad: function () {
     var that = this
     var imageInfo = [{
-      picUrl: "../../images/more/banner1.jpg"
+      picUrl: "https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/banner1.jpg"
     },
       {
-        picUrl: "../../images/more/banner2.jpg"
+        picUrl: "https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/banner2.jpg"
       }];
     that.setData({
       banners: imageInfo
@@ -195,17 +212,32 @@ Page({
           url: "/pages/carVerification/index?id=" + e.currentTarget.dataset.id
         })
           break;
+      case "zjfw":
+        wx.navigateTo({
+          url: "/pages/documentService/index?id=" + e.currentTarget.dataset.id
+        })
+        break;
+      case "jszfw":
+        wx.navigateTo({
+          url: "/pages/jszService/index?id=" + e.currentTarget.dataset.id
+        })
+        break;      
       case "bscl":
       case "ydcl":
       case "dxwz":  
         wx.showToast({
-          title: '敬请期待',
-          icon: 'success',
+          title: '敬请期待！',
+          image: '/images/cate/hope.png',
           duration: 1500
         })
         break;
 
     }
    
-  }
+  },
+  calling: function () {
+    wx.makePhoneCall({
+      phoneNumber: '029-88850320',
+    })
+  },
 })

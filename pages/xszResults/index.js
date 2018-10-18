@@ -16,16 +16,13 @@ Page({
     imageUrl:"",
     curIndex: 0,
     isScroll: false,
-    modalFlag: true,
-    modalFlag1:true,
-    modalFlag2:true,
+    modalFlag:true,
     chepaiValue:"",
     fadongjiValue:'',
     chejiaValue:'',
-    uploadimage: "",
     carTypesValue:"",
     ownerValue:"",
-    registedDate: "2018-1-1",
+    nowTime: dateFormat.getNowTime(),
     carnumber: '',
     path:''
   },
@@ -34,6 +31,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    
     var data = JSON.parse(options.driverInfo);
     this.setData({
       carTypesValue: data.carType,
@@ -42,7 +40,7 @@ Page({
       chejiaValue: data.cjNumber,
       registedDate: dateFormat.formatDate(data.registedDate),
       ownerValue:data.owner,
-      path:data.path
+      path:data.path ? data.path : ""
     })
   },
 
@@ -93,31 +91,17 @@ Page({
    */
   modalOk: function(){
     this.setData({
-      modalFlag: true,
-      modalFlag1:true,
-      modalFlag2:true
+      modalFlag:true
     })
   },
 
   /**
    * 监听model
    */
-  showItem: function(e){
-    var self = this;
-        self.setData({
-          modalFlag: false
-        })
-    },
-  showMechie: function(e){
-    var self = this;
-    self.setData({
-      modalFlag1: false
-    })
-  },
   showCheJiaNumber: function (e) {
     var self = this;
       self.setData({
-        modalFlag2: false
+        modalFlag: false
       })
   },
 
@@ -208,9 +192,10 @@ Page({
         if (res.confirm) {
           wx.showLoading({
             title: '查询中',
+            mask: true
           })
           wx.request({
-            url: app.globalData.host + 'saveCarLience',
+            url: app.globalData.host + '/saveCarLience',
             data: {
               "carNumber": self.data.carnumber,
               "carType": self.data.carTypesValue,
@@ -228,7 +213,7 @@ Page({
               var res = res;
               console.log("response", res);
               if (res.data.httpStatus == 200) {
-                wx.navigateTo({
+                wx.redirectTo({
                   url: "/pages/wzlist/index?wxDetails=" + res.data.data + '&chepai=' + self.data.carnumber + '&chejia=' + self.data.chejiaValue
                 })
               } else if (res.data.httpStatus == 401){
@@ -239,7 +224,7 @@ Page({
               } else{
                 wx.showToast({
                   title: '查询失败',
-                  icon:"none"
+                  image: "../../images/more/error.png"
                 })
               }
               wx.hideLoading()
@@ -327,4 +312,5 @@ Page({
       keyBoardType: 2
     })
   },
+  move:function(){}
 })

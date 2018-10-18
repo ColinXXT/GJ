@@ -1,53 +1,67 @@
 var app = getApp();
-const orderDetail = {
-  handlerList : [{
-    handlerName:"阿华",
-    handlerPhone:"18819187898"
-  }],
-  driverList:[{
-    carNumber:"陕A12345",
-    carName:"小明",
-    chejiaNumber:"ASD65321",
-    chejiaName:"小花"
-  }],
-  wzlist:[{
-    wzDate:"2017-8-8",
-    wzAddr:"西安南二环",
-    wzAct:"变更车道影响其他车辆行驶",
-    wzkf:0,
-    wzfk:60
-  }],
-  goods : [{
-    orderId:12344555,
-    productId: "不扣分代销违章",
-    orderstatus:"处理中",
-    dealOrderDate:"2018-1-1",
-    yuyueDate:"2018-4-5",
-    address: "高新区丈八四路",
-    productPrice:120
-  }],
-}
- 
 
 Page({
     data:{
-      orderId:1,
-        goodsList:[],
-        yunPrice:"0.00"
+      orderDetail:{},
+      orderStatus:"",
+      imgalist: []
     },
-    onLoad:function(e){
-      var orderId = e.id;
-      this.data.orderId = orderId;
-      this.setData({
-        orderId: orderId
-      });
-    },
-    onShow : function () {
+    onLoad:function(options){
       var that = this;
+      
+      var orderDetails = JSON.parse(options.orderDetails);
+      var tempImageList = [];
+      if (orderDetails.carLienceEntity && orderDetails.carLienceEntity.path){
+        tempImageList.push(orderDetails.carLienceEntity.path)
+      }
+      if (orderDetails.personLienceEntity && orderDetails.personLienceEntity.path) {
+        tempImageList.push(orderDetails.personLienceEntity.path)
+      }
+      
       that.setData({
-        orderDetail: orderDetail
-      });
-      console.log(this.data.orderDetail.handlerList.length)
-      return;
-    }
+        orderDetail: orderDetails,
+        imgalist : tempImageList
+      });   
+      that.getStatusById(orderDetails.orderStatus); 
+  },
+    onShow : function () {},
+
+    getStatusById: function (statusId){
+      var self = this;
+      switch (statusId) {
+        case 0:
+          self.setData({
+            orderStatus:"未支付"
+          })
+          break;
+        case 1:
+          self.setData({
+            orderStatus: "待处理"
+          })
+          break;
+        case 2:
+          self.setData({
+            orderStatus: "处理中"
+          })
+          break;
+        case 3:
+          self.setData({
+            orderStatus: "已完成"
+          })
+          break;
+          default:
+          self.setData({
+            orderStatus: ""
+          })
+          break;
+      }
+    },
+  previewImage: function (e) {
+    var current = e.target.dataset.src;
+    console.log(current)
+    wx.previewImage({
+      current: current, // 当前显示图片的http链接
+      urls: this.data.imgalist // 需要预览的图片http链接列表
+    })
+  }  
 })

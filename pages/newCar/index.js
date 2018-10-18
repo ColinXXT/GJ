@@ -1,6 +1,7 @@
 var app = getApp();
 var tcity = require("../../utils/citys.js");
 var wxpay = require('../../utils/pay.js');
+var dateFormat = require("../../utils/util.js");
 var list = [];
 Page({
 
@@ -9,15 +10,23 @@ Page({
    */
   data: {
     areaIndex: 0,
-    dates:"2018-1-1",
+    selected:"6",
+    selectedValue:"Y",
+    dates: dateFormat.getNowTime(),
+    nowTime: dateFormat.getNowTime(),
+    time: dateFormat.formatTime(),
+    cartube:"西安市车辆管理所总所",
     price: "0",
     licenceIndex: 0,
-    ownValue:"",
+    contactValue:"",
     addressValue:"",
+    second:0,
     items: [
-      { name: 'Y', value: '是：车主自行驾车到现场参与办理。', checked: 'true' },
-      { name: 'N', value: '否：由车管家司机代驾，上门取送车。' },
+      { name: 'Y', value: '是：车主自行驾车到车管所参与办理。', checked: 'true' },
+      { name: 'N', value: '否：由温馨车管家司机代驾，上门取送车。' },
     ],
+    cartubeArr: ["总所：西安市长安区郭杜北街49号", "郊县所：西安市未央区三桥西部车城内", "东区分所：东三环通塬路与金茂四路十字", "西区分所：西安市沣东新城西户路中段8号", "北区分所：渭水欣居南门向西50米", "南区分所：西安市东仪路19号"],
+    cartubeIndex: 0,
     modalFlag: true,
     modalFlag1:true,
     provinces: [],
@@ -34,6 +43,7 @@ Page({
     multiArray:[],
     objectMultiArray:{},
     maskFlag: true,
+    remind:"加载中"
   },
 
   /**
@@ -68,9 +78,6 @@ Page({
     })
     console.log(citys)
     console.log('初始化完成');
-    that.setData({
-      price:600
-    })
 },
 
   /**
@@ -78,7 +85,9 @@ Page({
    */
   onReady: function () {
     var self = this;
-    this.isPhoneRegisted();
+      self.getPrice();
+      self.isPhoneRegisted();
+    app.globalData.orderNumber = "";
   },
 
   /**
@@ -191,14 +200,20 @@ Page({
    */
   radioChange: function (e) {
     var self = this;
-    if(e.detail.value=="Y"){
+    if (e.detail.value == "Y") {
       self.setData({
-        price: 600
+        selected: "6",
+        selectedValue:"Y",
+        addressValue: ""
       })
+      self.getPrice();
     } else if (e.detail.value == "N"){
       self.setData({
-        price: 700
+        selected: "7",
+        selectedValue: "N",
+        addressValue:""
       })
+      self.getPrice();
     }
   },
 
@@ -206,12 +221,12 @@ Page({
     console.log(e)
     let val = e.target.dataset.id;
     switch (val) {
-      case 'ownValue':
+      case 'contactPoint':
         this.setData({
-          ownValue: e.detail.value
+          contactValue: e.detail.value
         })
         break;
-      case 'addressValue':
+      case 'address':
         this.setData({
           addressValue: e.detail.value
         })
@@ -222,23 +237,39 @@ Page({
    * 提交订单 
    */
   submitOrder:function(e){
+    var money = e.target.dataset.money;
     var self = this;
-    if (self.data.ownValue == "") {
+    if (self.data.contactValue == "") {
         wx.showModal({
-          title: '提示',
-          content: "车主姓名不能为空"
+          title: '温馨提示',
+          content: "联系人姓名不能为空"
         })
         return;
       }
-      if (self.data.addressValue == "") {
+      if (self.data.selectedValue=="N" && self.data.addressValue == "") {
         wx.showModal({
-          title: '提示',
+          title: '温馨提示',
           content: "地址不能为空"
         })
         return;
       }
-    if (self.data.isRegPhone) {
-      wxpay.wxpay(app, money, 0, "/pages/order-list/index", "");
+    var subDriArr = {
+      "name": self.data.contactValue,
+      "price": money,
+      "resolveTime": self.data.dates +' '+self.data.time,
+      "address": self.data.selectedValue == "Y" ? self.data.cartube :self.data.province + self.data.city + self.data.county + self.data.addressValue
+  };
+    console.log(subDriArr)
+    if(self.data.isRegPhone){
+      wx.showModal({
+        title: '',
+        content: '确认订单？',
+        success: function (res) {
+          if (res.confirm) {
+            wxpay.wzPay(app, money, self.data.selected, subDriArr);
+          }
+        }
+      })
     } else {
       wx.showModal({
         title: '温馨提示',
@@ -262,6 +293,25 @@ Page({
     console.log(e.detail.value)
     this.setData({
       dates: e.detail.value
+    })
+  },
+  /**
+   * 监听日期 - picker
+   */
+  bindTimeChange: function (e) {
+    console.log(e.detail.value)
+    this.setData({
+      time: e.detail.value
+    })
+  },
+  /**
+   * 监听车管所 - picker
+   */
+  bindCartubeChange: function (e){
+    console.log(e)
+    this.setData({
+      cartubeIndex: e.detail.value,
+      cartube: this.data.cartubeArr[e.detail.value]
     })
   },
    /**
@@ -329,6 +379,7 @@ Page({
     this.setData({
       condition: !this.data.condition,
       maskFlag: false,
+      addressValue:""
     })
   },
   open1: function () {
@@ -379,8 +430,7 @@ Page({
     } else {
       wx.showToast({
         title: '手机号不正确',
-        // image: '../../images/fail.png',
-        icon: "none"
+        image: "../../images/more/error.png",
       })
       return false
     }
@@ -403,8 +453,7 @@ Page({
 
   sendMsg: function () {
     wx.request({
-      url: app.globalData.host + 'findPhone?telphone=' + this.data.phoneNum,
-      //http://localhost:8080/findPhone?telphone={ telphone }
+      url: app.globalData.host + '/findPhone?telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -420,7 +469,7 @@ Page({
         } else {
           wx.showToast({
             title: res.reason,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
         }
       }, fail(res) {
@@ -488,13 +537,12 @@ Page({
   },
   phoneModalOk: function () {
     var that = this;
-    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
     wx.showLoading({
       title: '验证中',
+      mask: true
     })
     wx.request({
-      //http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
-      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -518,7 +566,7 @@ Page({
         } else {
           wx.showToast({
             title: res.data.msg,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
           wx.hideLoading()
         }
@@ -528,7 +576,8 @@ Page({
         wx.showModal({
           title: '温馨提示',
           content: '验证失败，请重新绑定',
-          showCancel: false
+          showCancel: false,
+
         })
         wx.hideLoading()
       }
@@ -542,7 +591,7 @@ Page({
   isPhoneRegisted: function () {
     var self = this;
     wx.request({
-      url: app.globalData.host + 'isPhoneRegisted',
+      url: app.globalData.host + '/isPhoneRegisted',
       method: 'GET',
       header: {
         'token': wx.getStorageSync('token')
@@ -556,5 +605,57 @@ Page({
         console.log(res)
       }
     })
-  }
+  },
+  getPrice: function () {
+    var self = this;
+    wx.request({
+      url: app.globalData.host + '/product/gerPrice?productId=' + self.data.selected,
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          self.setData({
+            price: res.data.data
+          })
+
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+ 
+        } else {
+          wx.showModal({
+            title: '温馨提示',
+            content: '服务器不稳定，获取价格失败，请重试',
+            showCancel: false,
+            success: function () {
+              wx.reLaunch({
+                url: '/pages/index/index',
+              })
+            }
+          })
+        } 
+        setTimeout(function () {
+          self.setData({
+            remind: ''
+          });
+        }, 1000);
+      }, fail(res) {
+        console.log(res)
+        wx.showModal({
+          title: '错误提示',
+          content: '网络异常，请返回重新选择',
+          showCancel: false,
+          success: function (res) {
+            wx.navigateBack()
+          }
+        })
+
+      }
+    })
+  },
+  move: function () {}
 })

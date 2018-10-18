@@ -1,8 +1,5 @@
 
-.categroy-right{
-    /* height: 300rpx; */
-    padding: 10px;
-}
+
 .cate-title{
     position: relative;
     height: 30rpx;
@@ -183,8 +180,24 @@
   border-radius: 2px;
   height:35px;
   padding-left:5px;
+}
+.inputStyle_text{
+  margin: 20rpx 20rpx 0rpx 20rpx;
+  border: 1px solid #E0E0E0;
+  border-radius: 2px;
+  height:35px;
+  padding-left:5px;
+  overflow: inherit;
+}
+.inputStyle1{
+  /* margin: 0rpx 20rpx 0rpx 20rpx; */
+  border: 1px solid #E0E0E0;
+  border-radius: 2px;
+  height:35px;
+  padding-left:5px;
 
 }
+
 .title{
   margin: 0rpx 0rpx 0rpx 20rpx;
 }
@@ -245,7 +258,7 @@
 .citybody {
   position: fixed;
   bottom: 0px;
-  background: gray;
+  background:whitesmoke;
 
 }
 
@@ -300,9 +313,26 @@ button {
   width:100%;
   height:100%;
   position:fixed;
-  background-color:#999;
+  background-color:rgba(0,0,0,1);
   z-index:9999;
   top:0;
   left:0;
   opacity:0.5;
+}
+.categroy-right{
+    height: 900rpx;
+    overflow: hidden; 
+}
+.remind-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 300rpx;
+}
+.remind-img {
+  width: 250rpx;
+  height: 250rpx;
+  padding-bottom: 25rpx;
 }

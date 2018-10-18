@@ -131,5 +131,11 @@
         <image/>
         <view class='journey_text1'>完成订单</view>
     </view> 
+    <view>  
+      <contact-button type="default-dark" size="20" session-from="weapp" class="img-plus-style zindex100 yc">
+      </contact-button>
+      <image src="../../images/more/service.png" class="img-plus-style"></image> 
+      <image src="../../images/more/tel.png" class="img-plus-style1" bindtap="calling"></image>
+    </view>
   </view>
    

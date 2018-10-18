@@ -1,14 +1,5 @@
 var wxpay = require('../../utils/pay.js')
 var app = getApp()
-const orderList = [{
-  id:'0',
-  dateAdd:"2018-0-1",
-  statusStr:"代付款",
-  status:0,
-  orderNumber:123456,
-  remark:'代销违章',
-  amountReal: 100,
-}]
 Page({
   data:{
     statusType: ["未支付","待处理", "处理中", "已完成"],
@@ -24,95 +15,98 @@ Page({
      this.onShow();
   },
   orderDetail : function (e) {
-    var orderId = e.currentTarget.dataset.id;
+    console.log(e)
+    var orderDetails = e.currentTarget.dataset.value;
     wx.navigateTo({
-      url: "/pages/order-details/index?id=" + orderId
+      url: "/pages/order-details/index?orderDetails=" + JSON.stringify(orderDetails)
     })
   },
   toPayTap:function(e){
     var that = this;
     var money = e.currentTarget.dataset.money;
-    wxpay.wxpayOrder(app, money, 0, "/pages/order-list/index");    
+    var productId = e.currentTarget.dataset.productid;
+    console.log(e.currentTarget.dataset)
+    var orderId = e.currentTarget.dataset.orderid;
+    wxpay.wxpayOrder(app, money, productId, orderId);  
   },
   onLoad:function(options){
-    // 生命周期函数--监听页面加载
-   
+    // 生命周期函数--监听页面加载  
+    if (options.orderStatus == 1){
+      this.setData({
+        currentType: 1
+        })
+    }else{
+      this.setData({
+        currentType: 0
+      })
+    }
+    
   },
   onReady:function(){
     // 生命周期函数--监听页面初次渲染完成
- 
+    app.globalData.orderNumber = "";
   },
   getOrderStatistics : function () {
     var that = this;
-    console.log(1)
-    
     wx.request({
-      url: '',
-      data: { token: wx.getStorageSync('token') },
+      url: app.globalData.host + '/order/findByStatus?status=' + 0,
+      method: 'GET',
+      header: {
+        'token': wx.getStorageSync('token')
+      },
       success: (res) => {
         wx.hideLoading();
-        if (res.data.code == 0) {
+        if (res.data.httpStatus == 200) {
           var tabClass = that.data.tabClass;
-          if (res.data.data.count_id_no_pay > 0) {
-            tabClass[0] = "red-dot"
+          var currentType = 0;
+          if (res.data.data.length > 0) {
+            that.setData({
+              orderList: res.data.data,
+              tabClass : "red-dot",
+              currentType : 0,
+            });
           } else {
-            tabClass[0] = ""
+            that.setData({
+              tabClass: "",
+              currentType: 1,
+            });
           }
-          if (res.data.data.count_id_no_transfer > 0) {
-            tabClass[1] = "red-dot"
-          } else {
-            tabClass[1] = ""
-          }
-          if (res.data.data.count_id_no_confirm > 0) {
-            tabClass[2] = "red-dot"
-          } else {
-            tabClass[2] = ""
-          }
-          if (res.data.data.count_id_no_reputation > 0) {
-            tabClass[3] = "red-dot"
-          } else {
-            tabClass[3] = ""
-          }
-          if (res.data.data.count_id_success > 0) {
-            //tabClass[4] = "red-dot"
-          } else {
-            //tabClass[4] = ""
-          }
-
-          that.setData({
-            tabClass: tabClass,
-          });
         }
       }
     })
   },
   onShow:function(){
-    // 获取订单列表
-    //this.getOrderStatistics();
-    this.setData({
-      orderList: orderList
-    });
-    return;
-    wx.showLoading();
     var that = this;
-    var postData = {
-      token: wx.getStorageSync('token')
-    };
-    postData.status = that.data.currentType;
-    this.getOrderStatistics();
+    var tabClass = that.data.tabClass;
+    wx.showLoading({
+      title: '数据加载中',
+      mask:true
+    })
+console.log(that.data.currentType)
     wx.request({
-      url: '',
-      data: postData,
+      url: app.globalData.host + '/order/findByStatus?status='+that.data.currentType,
+      method: 'GET',
+      header: {
+        'token': wx.getStorageSync('token')
+      },
       success: (res) => {
-        wx.hideLoading();
-        if (res.data.code == 0) {
-          that.setData({
-            orderList: res.data.data.orderList
-          });
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          if (res.data.data.length > 0){
+            that.setData({
+              orderList: res.data.data
+            });
+          }else{
+            that.setData({
+              orderList: null
+            });
+          }     
+          wx.hideLoading();
         } else {
           this.setData({
             orderList: null
           });
+          wx.hideLoading();
         }
       }
     })
@@ -137,14 +131,96 @@ Page({
   /**
    * 电话联系客服
    */
-  calling: function () {
+  calling: function (e) {
+    console.log(e)
     wx.makePhoneCall({
-      phoneNumber: '400-888-9999', //此号码并非真实电话号码，仅用于测试
-      success: function () {
-        console.log("拨打电话成功！")
+      phoneNumber: e.currentTarget.dataset.phone,
+    })
+  },
+  toDelTap: function(e){
+    console.log(e)
+    var that = this;
+    wx.showLoading({
+      title: '删除数据中',
+      mask: true
+    })
+    wx.request({
+      url: app.globalData.host + '/order/deleleOrder?orderNumber=' + e.currentTarget.dataset.orderid,
+      method: 'GET',
+      header: {
+        'token': wx.getStorageSync('token')
       },
-      fail: function () {
-        console.log("拨打电话失败！")
+      success: (res) => {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          that.onShow();
+          wx.hideLoading();
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading();
+        } else {
+          wx.showModal({
+            title: '温馨提示',
+            content: '服务器不稳定,请重试',
+            showCancel: false
+          })
+          wx.hideLoading();
+        }
+
+      }, fail :(res) => {
+        console.log(res)
+        wx.showModal({
+          title: '错误提示',
+          content: '网络异常，请重试',
+          showCancel: false
+        })
+        wx.hideLoading();
+      }
+    })
+  },
+  completedOrder: function(e){
+    console.log(e)
+    var self = this;
+    var orderId = e.currentTarget.dataset.oid;
+    wx.showLoading({
+      title: '确认中',
+      mask: true
+    })
+    wx.request({
+      url: app.globalData.host + '/order/completeOrder?orderNumber=' + orderId,
+      method: 'GET',
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      success: (res) => {
+        console.log(res)
+        if (res.data.httpStatus == 200) {
+          that.onShow();
+          wx.hideLoading();
+        } else if (res.data.httpStatus == 401) {
+          wx.navigateTo({
+            url: '../authorize/index',
+          })
+          wx.hideLoading();
+        } else {
+          wx.showModal({
+            title: '温馨提示',
+            content: '服务器不稳定,请重试',
+            showCancel:false
+          })
+          wx.hideLoading();
+        }
+
+      }, fail: (res) => {
+        console.log(res)
+        wx.showModal({
+          title: '错误提示',
+          content: '网络异常，请重试',
+          showCancel: false
+        })
+        wx.hideLoading();
       }
     })
   }

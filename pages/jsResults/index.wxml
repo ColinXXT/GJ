@@ -2,8 +2,8 @@
   <view class="note">
       <view class="journey_title"><image src='../../images/more/warn.png'/>扫描结果可能存在误差，请核实/修改</view>
       </view>
-        <block wx:if="{{uploadimage}}">
-        <image class="fullimage" mode="aspectFit" src="{{uploadimage}}"></image>
+        <block wx:if="{{path}}">
+        <image class="fullimage" mode="aspectFit" src="{{path}}"></image>
         </block>
  <view>
  <view class='carStyle'>

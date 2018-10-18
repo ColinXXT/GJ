@@ -1,5 +1,6 @@
-const wzList = [{ "province": "SX", "city": "SX_XA", "hphm": "陕AV05K8", "hpzl": "02", "lists": [{ "date": "2018 - 06 - 17 14: 28: 42", "area": "南二环", "act": "变更车道影响其他车辆行驶", "code": "1043", "fen": "0", "wzcity": "陕西西安", "money": "50", "handled": "0", "archiveno": "6101030004320642" }]}];
+const wzList = [{ "province": "SX", "city": "SX_XA", "hphm": "陕AV05K8", "hpzl": "02", "lists": [{ "date": "2018 - 06 - 17 14: 28: 42", "area": "南二环", "act": "变更车道影响其他车辆行驶", "code": "1043", "fen": "3", "wzcity": "陕西西安", "money": "50", "handled": "0", "archiveno": "6101030004320642" }]}];
 var app = getApp();
+
 Page({
 
   /**
@@ -7,7 +8,8 @@ Page({
    */
   data: {
     wzList: [],
-    driverLists:{}
+    driverLists:{},
+    
   },
 
   /**
@@ -71,13 +73,7 @@ Page({
    */
   calling: function () {
     wx.makePhoneCall({
-      phoneNumber: '400-888-9999', //此号码并非真实电话号码，仅用于测试
-      success: function () {
-        console.log("拨打电话成功！")
-      },
-      fail: function () {
-        console.log("拨打电话失败！")
-      }
+      phoneNumber: '029-88850320',
     })
   },
    /**

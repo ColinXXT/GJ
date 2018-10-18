@@ -10,6 +10,8 @@
     justify-content: space-between;
     align-items: center;
     background-color: #fff;
+    position: fixed;
+    z-index: 99999;
 }
 .status-box .status-label{
     width: 150rpx;
@@ -56,6 +58,7 @@
 }
 .order-list{
     width: 100%;
+    margin-top:40px;
 }
 .order-list .a-order{
     width: 100%;
@@ -79,7 +82,6 @@
 .goods-img-container{
     width: 720rpx;
     margin-left: 30rpx;
-    border-top: 1rpx solid #eee;
     border-bottom: 1rpx solid #eee;
     padding: 30rpx 0;
     display: flex;
@@ -98,7 +100,7 @@
     height: 120rpx;
 }
 .goods-info{
-    background: url(https://raw.githubusercontent.com/ColinXXT/CarServices/master/service/images/more/arrow-right.png) no-repeat 680rpx center;
+    background: url(https://lg-8kezvork-1257374224.cos.ap-shanghai.myqcloud.com/arrow-right.png) no-repeat 680rpx center;
     background-size: 16rpx auto,750rpx auto;
     margin: 20rpx 0; 
     border-bottom: 1px solid #eee;
@@ -107,8 +109,8 @@
 }
 
 .goods-info  .goods-des{
-    width: 540rpx;
-    height: 78rpx;
+    width: 580rpx;
+    height: 120rpx;
     line-height: 39rpx;
     font-size:26rpx;
     color:#000000;
@@ -162,3 +164,28 @@
     border:1px solid #e64340;
     color: #e64340;
 }
+.topay-btn-del{
+    border:1px solid #e64340;
+    color:#e64340;
+    margin-right:-100px;
+}
+/*悬浮按钮*/
+.img-plus-style {  
+  height: 70rpx;  
+  width: 70rpx;  
+  position: fixed;  
+  bottom: 220rpx;  
+  right: 30rpx;  
+  opacity: 0.7
+}  
+.img-plus-style1 {  
+  height: 70rpx;  
+  width: 70rpx;  
+  position: fixed;  
+  bottom: 130rpx;  
+  right: 30rpx;   
+  opacity: 0.7
+}  
+.zindex100{z-index: 100}
+.yc{opacity: 0}
+

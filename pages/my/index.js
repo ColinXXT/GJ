@@ -34,12 +34,13 @@ Page({
     let that = this;
     wx.showLoading({
       title: '登录中',
+      mask: true
     })
     wx.login({
       success: function (res) {
         console.log(res)
         wx.request({
-          url: app.globalData.host+'auth?jsCode=' + res.code,
+          url: app.globalData.host+'/auth?jsCode=' + res.code,
           method: "POST",
           data: {
             nickName: wx.getStorageSync("userInfo").nickName,
@@ -48,7 +49,6 @@ Page({
             city: wx.getStorageSync("userInfo").city
           },
           success: function (res) {
-            console.log(res.data)
             if (res.data.httpStatus == 200) {
               wx.setStorageSync('token', res.data.data)
               console.log(wx.getStorageSync('token'))
@@ -65,7 +65,7 @@ Page({
             } else {
               // 登录错误
               wx.showModal({
-                title: '提示',
+                title: '温馨提示',
                 content: '无法登录，请重试',
                 showCancel: false
               })
@@ -75,7 +75,7 @@ Page({
           fail: function (res) {
             console.log(res)
             wx.showModal({
-              title: '提示',
+              title: '温馨提示',
               content: '授权失败，请重试',
               showCancel: false
             })
@@ -89,9 +89,10 @@ Page({
     var self = this;
     wx.showLoading({
       title: '手机号检测中',
+      mask: true
     })
     wx.request({
-      url: app.globalData.host + 'isPhoneRegisted',
+      url: app.globalData.host + '/isPhoneRegisted',
       method: 'GET',
       header: {
         'token': wx.getStorageSync('token')
@@ -99,7 +100,7 @@ Page({
       success: function (res) {
         console.log(res)
         //false 没有注册过手机号
-        if (res.data.data!=null) {
+        if (res.data.data!="") {
           return;
         } else {
           self.setData({
@@ -141,8 +142,7 @@ Page({
     } else {
       wx.showToast({
         title: '手机号不正确',
-        // image: '../../images/fail.png',
-        icon:"none"
+        image: "../../images/more/error.png",
       })
       return false
     }
@@ -166,8 +166,7 @@ Page({
 
   sendMsg: function () {
     wx.request({
-      url: app.globalData.host + 'findPhone?telphone=' + this.data.phoneNum,
-//http://localhost:8080/findPhone?telphone={ telphone }
+      url: app.globalData.host + '/findPhone?telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -183,7 +182,7 @@ Page({
           }else {
           wx.showToast({
             title: res.reason,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
         }
       },fail(res){
@@ -252,13 +251,12 @@ Page({
 
   modalOk: function () {
     var that = this;
-    console.log(app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum);
     wx.showLoading({
       title: '验证中',
+      mask: true
     })
     wx.request({
-//http://localhost:8080//validate/phone?code={code}&telphone={ telphone }
-      url: app.globalData.host + 'validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
+      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
       header: {
         'token': wx.getStorageSync('token')
       },
@@ -284,7 +282,7 @@ Page({
         } else {
           wx.showToast({
             title: res.data.data,
-            icon: 'none'
+            image: "../../images/more/error.png",
           })
           wx.hideLoading()    
         }
@@ -338,8 +336,7 @@ Page({
       return;
     };
     wx.navigateTo({
-      url: '../order-list/index?vid=' + e.target.dataset
-        .id,
+      url: '../order-list/index'
     })
   }
 })

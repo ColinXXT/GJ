@@ -1,36 +1,66 @@
-<view class='mask' hidden='{{maskFlag}}'></view>
+<view class='mask' catchtouchmove="move" hidden='{{maskFlag}}'></view>
   <view class='main'>
+  <view class="remind-box" wx:if="{{remind}}">
+    <image class="remind-img" src="/images/more/loading.gif"></image>
+  </view>
+  <block wx:else>
   <view class="note">
-      <view class="journey_title">请如实填写</view>
+      <view class="journey_title">如实填写，下单前仔细阅读所需材料跟注意事项</view>
   </view>
 <view class='carStyle'>
     <view class="Grid">
       <view class="Grid-cell">
-              <view><h class='noteIcon'>*</h>办理日期：</view>
+              <view><h class='noteIcon'>*</h>预约日期：<h style='color:red;'>（请选择期望办理的日期）</h></view>
       </view>
     </view>
-    <picker class='inputStyle' name="banli_date" mode="date" value="{{dates}}" start="2018-8-1" end="2025-1" bindchange="bindDateChange">  
+
+    <view class="Grid">
+      <view class="Grid-cell">
+        <picker class='inputStyle1' name="banli_date" mode="date" value="{{dates}}" start="{{nowTime}}" end="2025-1" bindchange="bindDateChange">  
             <view class='picker'>{{dates}} </view> 
-    </picker> 
+        </picker> 
+      </view>
+      <view class="Grid-cell">
+        <picker class='inputStyle1' mode="time" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
+        <view class="picker">
+        {{time}}
+        </view>
+        </picker>
+      </view>
+    </view>  
     </view>
 
     <view class='carStyle'>
     <view class="Grid">
       <view class="Grid-cell">
-              <view><h class='noteIcon'>*</h>车主姓名：</view>
+              <view><h class='noteIcon'>*</h>联系人姓名：</view>
       </view>
     </view>
-    <input class='inputStyle' placeholder='请输入买方姓名' bindinput='inputlinsener' data-id="ownValue" value='{{ownValue}}'></input>
+    <input class='inputStyle' placeholder='请输入联系人姓名' bindinput='inputlinsener' data-id="contactPoint" value='{{contactValue}}'></input>
     </view>
-      <view class='carStyle'>
+    <!--上门取送地址-->
+    <view class='carStyle' hidden='{{selectedValue=="Y"}}'>
     <view class="Grid">
       <view class="Grid-cell">
-              <view><h class='noteIcon'>*</h>联系地址：</view>
+              <view><h class='noteIcon'>*</h>接车地址：</view>
       </view>
     </view>
-    <view class='inputStyle' bindtap="open"><view class='picker'> {{province}}-{{city}}-{{county}} </view></view>
-    <input class='inputStyle' placeholder='请输入详细地址' bindinput='inputlinsener' data-id="addressValue" value='{{addressValue}}'></input>
+    <view class='inputStyle' bindtap="open"><view class='picker'> {{province}}-{{city}}-{{county}} <image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;'/></view></view>
+    <input class='inputStyle_text' placeholder='请输入详细地址' bindinput='inputlinsener' data-id="address" value='{{addressValue}}'></input>
     </view>
+    <!--上门取送地址-->
+    <!--上门取送地址-->
+    <view class='carStyle' hidden='{{selectedValue=="N"}}'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>车管所地址：</view>
+      </view>
+    </view>
+    <picker class='inputStyle' range="{{cartubeArr}}" value="{{cartubeIndex}}" bindchange="bindCartubeChange">  
+            <view class='picker'>{{cartubeArr[cartubeIndex]}}<image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;'/></view> 
+    </picker> 
+    </view>
+    <!--上门取送地址-->
   <view style="margin:20rpx 0rpx; height:20rpx;background: #eee;width:100%;"></view> 
 
   <view class='carStyle'>
@@ -48,9 +78,10 @@
         </view>
     </label>
 </radio-group>
+
  <view class="tnc">
-      <view bindtap="showRequireInfo" class="journey_text">点击查看所需手续</view>
-      <view bindtap="showNotice" class="journey_text">点击查看注意事项</view>
+      <view bindtap="showRequireInfo" class="journey_text">*点击查看所需手续*</view>
+      <view bindtap="showNotice" class="journey_text">*点击查看注意事项*</view>
   </view>
   <image style='height:15px; width:100%;' src='../../images/driImage/half.jpg'></image>
    <view class='carStyle'>
@@ -63,36 +94,35 @@
       </view>
     </view>
     </view>
-  <view class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
+  <view data-id="{{item.id}}" class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
     <button style='background: #FF6100;' data-money="{{price}}" type="warn" bindtap="submitOrder">提交订单</button>
     
   </view>
+  </block>
     </view>
      <modal class="modal" hidden="{{modalFlag}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+     <scroll-view class="categroy-right" scroll-y="true" scroll-with-animation="true">
     <view class="dew">
-    <view class="vedw">1、行驶证原件</view>
-    <view class="vedw">2、登记证原件（大绿本）</view>
-    <view class="vedw">3、购车发票原件（如有过户记录携带过户票原件)</view>
-    <view class="vedw">4、买卖双方身份证原件，及复印件各2张</view>
-    <view class="vedw">5、买方非西安市户籍需提供有效居住证原件</view>
-    <view class="vedw">6、已办理三证合一的企业需营业执照副本和公章</view>
-    <view class="vedw">7、未办理三证合一的企业需组织机构代码证副本和公章</view>
-    <view style='margin-top:10px;' class="vedw"><h style="color:black; font-weight:bold;">快递地址</h></view>
-    <view class="vedw">收件人：xxx</view>
-    <view class="vedw">联系电话：xxxx</view>
-    <view class="vedw">邮寄地址：xxx</view>
-    <view class="vedw">邮政编码：710000</view> 
+    <view class="vedw">1、机动车所有人身份证明：</view>
+    <view class="vedw">居民，需身份证原件及复印件，非本市户籍还需提供有效期内暂住证或居住卡原件及复印件；</view>
+    <view class="vedw">企业，需三证合一的营业执照副本和公章。)</view>
+    <view class="vedw">港澳台居民、军人、华侨、外国人等其他类型身份，可向客服咨询业务办理所需身份证明。</view>
+    <view class="vedw">2、机动车来历证明是指：</view>
+    <view class="vedw">在国内购买的机动车，机动车购车发票原件及复印件（需包含发票联、报税联、注册登记联；</view>
+    <view class="vedw">在国外购买的机动车，销售单位开具的销售发票及其翻译文本；</view>
+    <view class="vedw">继承、赠予、中奖、协议离婚、法院调解、裁定等其他情况，可向客服咨询业务办理所需来历证明。</view>
+    <view class="vedw">3、机动车整车出厂合格证原件及复印件。</view>
+    <view class="vedw">4、机动车车辆购置税的完税证明副本原件及复印件。</view>
+    <view class="vedw">5、机动车交通事故责任强制保险凭证副本原件及复印件。</view>
+    <view class="vedw">6、限购城市，需小客车配置或更新指标确认通知书2张。</view>
 </view>
+</scroll-view>
 </modal>
 <modal class="modal" hidden="{{modalFlag1}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
     <view class="dew">
-    <view class="vedw">1、车辆需到场，办理当天车辆不要限号</view>
-    <view class="vedw">2、办理业务前需先处理完毕车辆的所有违章</view>
-    <view class="vedw">3、因车辆问题产生的额外费用需车主自行承担并单独支付</view>
-    <view class="vedw">4、车辆购买方如无法到现场，需要车管所与购车人远程视频确认</view>
-    <view class="vedw">5、请核对办理本市过户所需原车主证件以及车辆证件、新车主证件</view>
-    <view class="vedw">6、已办理三证合一的企业需营业执照副本和公章</view>
-    <view class="vedw">6、已支付的订单，客服确认无法办理后，会在3个工作日之内无条件全额退款</view> 
+    <view class="vedw">1、办理当天需车辆到场，不要选择限号日期办理。</view>
+    <view class="vedw">2、未在当地车管系统做首次备案的新车所产生的各类费用需自行承担。</view>
+    <view class="vedw">3、已支付的订单，客服确认无法办理，会在3个工作日之内全额退款。</view>
 </view>
 </modal>
 <view wx:if="{{condition}}" class="citypicker">
