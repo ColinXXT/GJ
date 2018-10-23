@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "证件服务",
+  "usingComponents": {
+    "v-panel": "../../temp/keyboard/index"
+  }
+}

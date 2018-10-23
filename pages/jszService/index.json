@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "驾驶证服务",
+  "usingComponents": {
+    "v-panel": "../../temp/keyboard/index"
+  }
+}

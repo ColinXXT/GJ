@@ -1,0 +1,160 @@
+<view class='mask' catchtouchmove="move" hidden='{{maskFlag}}'></view>
+   <v-panel is-show="{{isShow}}" bindok="keyInputDone" binddelete="inputdelete" bindinputchange="inputChange" key-board-type="{{keyBoardType}}" backgroundColor="white" />
+  <view class='main'>
+  <view class="note">
+      <view class="journey_title">如实填写，下单前仔细阅读所需材料跟注意事项</view>
+  </view>
+     <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>服务类型：</view>
+      </view>
+    </view>
+    <picker class='inputStyle' range="{{transferServiceArr}}" value="{{transferServiceIndex}}" bindchange="bindTransferSvsChange">  
+            <view class='picker'>{{transferServiceArr[transferServiceIndex]}}<image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;'/></view> 
+    </picker> 
+    </view>    
+    <!-- <view class="carStyle">
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>车牌号码：</view>
+      </view>
+    </view>
+     <view class='inputStyle' bindtap="keyBoard"><view class='picker'>{{carnumber}}</view>    
+     </view>
+</view> -->
+<view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>预约日期：<h style='color:red;'>（请选择期望办理的日期）</h></view>
+      </view>
+    </view>
+<view class="Grid">
+      <view class="Grid-cell">
+        <picker class='inputStyle1' name="banli_date" mode="date" value="{{dates}}" start="{{nowTime}}" end="2025-1" bindchange="bindApoDateChange">  
+            <view class='picker'>{{dates}} </view> 
+        </picker> 
+      </view>
+      <view class="Grid-cell">
+        <picker class='inputStyle1' mode="time" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
+        <view class="picker">
+        {{time}}
+        </view>
+        </picker>
+      </view>
+    </view>
+    </view>
+
+    <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>联系人姓名：</view>
+      </view>
+    </view>
+    <input class='inputStyle' placeholder='请输入联系人姓名' bindinput='inputlinsener' data-id="owner" value='{{ownerValue}}'></input>
+    </view>
+         <!--上门取送地址-->
+    <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>上门取证地址：</view>
+      </view>
+    </view>
+    <view class='inputStyle' bindtap="open"><view class='picker'> {{province}}-{{city}}-{{county}} <image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;'/></view></view>
+    <input class='inputStyle_text' placeholder='请输入详细取证地址' bindinput='inputlinsener' data-id="address" value='{{addressValue}}'></input>
+    </view>
+ <view class="tnc">
+      <view bindtap="showRequireInfo" class="journey_text">*点击查看所需手续*</view>
+      <view bindtap="showNotice" class="journey_text">*点击查看注意事项*</view>
+  </view>
+  <image style='height:15px; width:100%;' src='../../images/driImage/half.jpg'></image>
+   <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view>订单总价</view>
+      </view>
+      <view class="Grid-cell-sub">
+              <text>￥{{price}}</text>
+      </view>
+    </view>
+    </view>
+  <view data-id="{{item.id}}" class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
+    <button style='background: #FF6100;' data-money="{{price}}" type="warn" bindtap="submitOrder">提交订单</button>
+    
+  </view>
+    </view>
+
+     <modal class="modal" hidden="{{qmhzModel1}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+  <view class="dew">
+    <view class="vedw">1、持有大型客车、牵引车、城市公交车、中型客车、大型货车驾驶证在本记分周期内没有记分，或者持有其他准驾车型驾驶证在本记分周期内记分未达到12分。</view>
+    <view class="vedw">2、持有大型客车、牵引车、城市公交车、中型客车、大型货车驾驶证一个记分周期内有记分，以及持有其他准驾车型驾驶证发生交通事故造成人员死亡承担同等以上责任未被吊销机动车驾驶证的驾驶人，已参加审验教育的。</view>
+    <view class="vedw">3、机动车驾驶证没有被依法扣押、扣留、暂扣、吊销、注销或撤销的情形。</view>
+    <view class="vedw">4、办理前驾驶证无任何未处理违章记录。</view>
+    <view class="vedw">5、客户下单时需填写有效邮寄地址。</view>
+    <view class="vedw">6、异地驾驶证在当地办理补换业务，驾驶证会变更为办理城市当地驾照。</view>
+    <view class="vedw">7、已支付的订单，客服确认无法办理，会在3个工作日之内全额退款。</view>
+</view>
+</modal>
+
+<modal class="modal" hidden="{{qmhzModel}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+  <view class="dew">
+   <view class="vedw">1、机动车驾驶人的身份证明：</view>
+    <view class="vedw">居民，需身份证原件及复印件，非本市户籍还需提供有效期内暂住证或居住卡原件及复印件；</view>
+    <view class="vedw">企业，需三证合一的营业执照副本和公章。</view>
+    <view class="vedw">港澳台居民、军人、华侨、外国人等其他类型身份，可向客服咨询业务办理所需身份证明。</view>
+    <view class="vedw">2、原机动车驾驶证原件。</view>
+    <view class="vedw">3、车管所授予资格的三级甲等及以上医院出具的机动车驾驶人身体条件证明。</view>
+    <view class="vedw">4、机动车驾驶人近期白底一寸免冠相片3张。</view>
+</view>
+</modal>
+
+ 
+<modal class="modal" hidden="{{jzblModel}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+    <view class="dew">
+    <view class="vedw">1、机动车驾驶人的身份证明：</view>
+    <view class="vedw">居民，需身份证原件及复印件，非本市户籍还需提供有效期内暂住证或居住卡原件及复印件；</view>
+    <view class="vedw">企业，需三证合一的营业执照副本和公章。</view>
+    <view class="vedw">港澳台居民、军人、华侨、外国人等其他类型身份，可向客服咨询业务办理所需身份证明。</view>
+    <view class="vedw">2、原机动车驾驶证原件。</view>
+    <view class="vedw">3、车管所授予资格的三级甲等及以上医院出具的机动车驾驶人身体条件证明。</view>
+    <view class="vedw">4、机动车驾驶人近期白底一寸免冠相片3张。</view>
+</view>
+</modal>
+<modal class="modal" hidden="{{jzblModel1}}" no-cancel bindconfirm="modalOk" confirmText="我知道了">
+    <view class="dew">
+    <view class="vedw">1、机动车没有达到或超过国家强制报废标准。</view>
+    <view class="vedw">2、补换领机动车号牌，无需车辆及机动车所有人到场。</view>
+    <view class="vedw">3、办理前车辆无任何未处理违章记录。</view>
+    <view class="vedw">4、已支付的订单，客服确认无法办理，会在3个工作日之内全额退款。</view>
+</view>
+</modal>
+
+<view wx:if="{{condition}}" class="citypicker">
+  <picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; " value="{{value}}" bindchange="bindChange" class="citybody" >
+    <view class="cityheader">
+      <view bindtap="open1" class="city-cancel">取消</view>
+      <view bindtap="open1" class="city-true">确定</view>
+    </view>
+    <picker-view-column >
+      <view wx:for="{{provinces}}" wx:key="item" style="line-height: 50px;padding-left:10px;">{{item}}</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{citys}}" wx:key="item" style="line-height: 50px;padding-left:10px;">{{item}}</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{countys}}" wx:key="item" style="line-height: 50px;padding-left:10px;">{{item}}</view>
+    </picker-view-column>
+  </picker-view>
+</view>
+ <modal class="modal" hidden="{{phoneModalFlag}}" cancel-text="取消" bindcancel="phoneModalCancel" bindconfirm="phoneModalOk" confirmText="验证登录">
+    <view class="section">
+    <text>手机号码</text>
+    <input placeholder="请输入手机号码" type="number" maxlength="11" bindinput="inputPhoneNum" />
+    <text wx:if="{{send}}" class="sendMsg" bindtap="sendMsg">发送</text>
+    <text wx:if="{{alreadySend}}" class="sendMsg" bindtap="sendMsg">{{second+"s"}}</text>
+  </view>
+  <view class="section">
+    <text>短信验证</text>
+    <input placeholder="短信验证码" type="number" bindinput="addCode" />
+  </view>     
+</modal>
