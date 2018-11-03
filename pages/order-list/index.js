@@ -131,10 +131,9 @@ console.log(that.data.currentType)
   /**
    * 电话联系客服
    */
-  calling: function (e) {
-    console.log(e)
+  calling: function () {
     wx.makePhoneCall({
-      phoneNumber: e.currentTarget.dataset.phone,
+      phoneNumber: '029-88850320',
     })
   },
   toDelTap: function(e){
@@ -184,44 +183,45 @@ console.log(that.data.currentType)
     console.log(e)
     var self = this;
     var orderId = e.currentTarget.dataset.oid;
-    wx.showLoading({
-      title: '确认中',
-      mask: true
-    })
-    wx.request({
-      url: app.globalData.host + '/order/completeOrder?orderNumber=' + orderId,
-      method: 'GET',
-      header: {
-        'token': wx.getStorageSync('token')
-      },
+    wx.showModal({
+      title: '温馨提示',
+      content: '确认完成该订单？',
       success: (res) => {
-        console.log(res)
-        if (res.data.httpStatus == 200) {
-          that.onShow();
-          wx.hideLoading();
-        } else if (res.data.httpStatus == 401) {
-          wx.navigateTo({
-            url: '../authorize/index',
-          })
-          wx.hideLoading();
-        } else {
-          wx.showModal({
-            title: '温馨提示',
-            content: '服务器不稳定,请重试',
-            showCancel:false
-          })
-          wx.hideLoading();
-        }
-
-      }, fail: (res) => {
-        console.log(res)
-        wx.showModal({
-          title: '错误提示',
-          content: '网络异常，请重试',
-          showCancel: false
+        wx.showLoading({
+          title: '确认中...',
+          mask:true
         })
-        wx.hideLoading();
-      }
-    })
+        wx.request({
+          url: app.globalData.host + '/order/changeOrderComplete?orderNumber=' + orderId,
+          method: 'GET',
+          header: {
+            'token': wx.getStorageSync('token')
+          },
+          success: (res) => {
+            console.log(res)
+            if (res.data.httpStatus == 200) {
+              self.onShow();
+              wx.showToast({
+                title: '确认成功！',
+              })
+              wx.hideLoading();
+            } else if (res.data.httpStatus == 401) {
+              wx.navigateTo({
+                url: '../authorize/index',
+              })
+              wx.hideLoading();
+            } else {
+              wx.showModal({
+                title: '温馨提示',
+                content: '服务器不稳定,请重试',
+                showCancel: false
+              })
+              wx.hideLoading();
+            }
+
+        }
+      })
+    }
+  })
   }
 })
