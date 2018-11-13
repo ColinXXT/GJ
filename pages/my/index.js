@@ -100,7 +100,7 @@ Page({
       success: function (res) {
         console.log(res)
         //false 没有注册过手机号
-        if (res.data.data!="") {
+        if (res.data.data!=null) {
           return;
         } else {
           self.setData({
@@ -281,7 +281,7 @@ Page({
           wx.hideLoading()    
         } else {
           wx.showToast({
-            title: res.data.data,
+            title: "验证失败",
             image: "../../images/more/error.png",
           })
           wx.hideLoading()    

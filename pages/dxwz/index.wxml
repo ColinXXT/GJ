@@ -43,17 +43,25 @@
   </view>
   
     <view class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
-     <view class='carStyle'>
+    <view class='carStyle'>
     <view class="Grid">
       <view class="Grid-cell">
-              <view>订单总价</view>
+              <view>推荐人电话：（选填，如无推荐人，无须填写）</view>
       </view>
+    </view>
+     <input placeholder="请输入推荐人手机号" type="number" maxlength="11" class='inputStyle_text' bindinput="inputRefereePhoneNum" />
+    </view>
+     <view class='carStyle'>
+        <view class="Grid">
+          <view class="Grid-cell">
+              <view>订单总价</view>
+        </view>
       <view class="Grid-cell-sub">
               <text>￥{{price}}</text>
       </view>
     </view>
     </view>
-    <button style='background: #fff2df;' type="warn" data-money="{{price}}" bindtap="submitOrder">提交订单</button>
+    <button style='background: #fff2df;' type="warn" data-money="{{price}}" bindtap="submitOrderWithReferee">提交订单</button>
   
   </view>
    <modal class="modal" hidden="{{modalFlag}}" cancel-text="取消" bindcancel="modalCancel" bindconfirm="modalOk" confirmText="验证登录">

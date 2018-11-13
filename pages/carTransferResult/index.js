@@ -24,6 +24,7 @@ Page({
     ownerValue: "",
     contactValue:"",
     addressValue: "",
+    refereePhoneNum:"",
     items: [
       { name: 'Y', value: '是：车主自行驾车到车管所参与办理。', checked: 'true' },
       { name: 'N', value: '否：由温馨车管家司机代驾，上门取送车。' },
@@ -58,7 +59,7 @@ Page({
     disabled: true,
     buttonType: 'default',
     phoneNum: '',
-    isRegPhone:'',
+    isRegPhone:null,
   },
 
   /**
@@ -305,6 +306,15 @@ Page({
     }
   },
   /**
+   * 提交订单带推荐人
+   * 
+   */
+  submitOrderWithReferee : function(e){
+    var self = this;
+    if (self.data.refereePhoneNum =="")return self.submitOrder(e);
+    self.validateRefereePhoneNum(e);
+  },
+  /**
    * 提交订单 
    */
   submitOrder: function (e) {
@@ -350,9 +360,10 @@ console.log(e)
       "name": self.data.contactValue,
       "price": money,
       "resolveTime": self.data.dates+" "+self.data.time,
-      "address": self.data.selectedValue == "Y" ? self.data.cartube :self.data.province + self.data.city + self.data.county + self.data.addressValue
+      "address": self.data.selectedValue == "Y" ? self.data.cartube :self.data.province + self.data.city + self.data.county + self.data.addressValue,
+      "inviteTelphone": self.data.refereePhoneNum
   };
-    if(self.data.isRegPhone){
+    if(self.data.isRegPhone!=null){
       wx.showModal({
         title: '',
         content: '确认订单？',
@@ -651,10 +662,11 @@ console.log(e)
         console.log(res)
         if (res.data.httpStatus == 200) {
             that.setData({
-              phoneModalFlag: true
+            phoneModalFlag: true,
+            isRegPhone:res.data.data
             })
           wx.showToast({
-            title: '验证成功',
+            title: '验证成功，请提交订单',
             icon: 'success'
           })
           wx.hideLoading()
@@ -665,7 +677,7 @@ console.log(e)
           wx.hideLoading()
         } else {
           wx.showToast({
-            title: res.data.msg,
+            title: "验证失败",
             image: "../../images/more/error.png",
           })
           wx.hideLoading()
@@ -798,6 +810,40 @@ console.log(e)
     })
   },
   move: function () {},
+  // 手机号部分
+  inputRefereePhoneNum: function (e) {
+    this.setData({
+      refereePhoneNum: e.detail.value
+    })
+  },
+  validateRefereePhoneNum: function (e) {
+    var self = this;
+    if (!self.checkPhoneNum(self.data.refereePhoneNum))
+      return;
+    wx.showLoading({
+      title: '推荐人检测中...'
+    })
+    wx.request({
+      url: app.globalData.host + '/findByPhone?phone=' + self.data.refereePhoneNum,
+      method: 'GET',
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      success: function (res) {
+        console.log(res)
+        if (res.data.data.telphoneNumber){
+          self.submitOrder(e)
+          wx.hideLoading()
+        } else {
+          wx.showToast({
+            title: '推荐人号码无效',
+            icon: "none"
+          })
+          wx.hideLoading()
+        }
+      }
+    })
+  },
   bindTransferSvsChange: function(e){
     var self = this;
   

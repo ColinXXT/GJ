@@ -20,6 +20,7 @@ Page({
     code:"",
     fen:"",
     handled:"",
+    refereePhoneNum:"",
     archiveno:"",
     xsz: "",
     carNumber:'',
@@ -34,7 +35,7 @@ Page({
     disabled: true,
     buttonType: 'default',
     phoneNum: '',
-    isRegPhone:'',
+    isRegPhone:null,
     path:"",
     lienceNumber:""
   },
@@ -215,17 +216,30 @@ Page({
   
   },
 
+  /**
+   * 提交订单带推荐人
+   * 
+   */
+  submitOrderWithReferee : function(e){
+    var self = this;
+    if (self.data.refereePhoneNum =="")return self.submitOrder(e);
+    self.validateRefereePhoneNum(e);
+  },
+  /**
+   * 提交订单 
+   */
   submitOrder:function(e){
     var self = this;
     var money = e.currentTarget.dataset.money;
-    var reqData = Object.assign({}, { "peccancyEntity": self.data.wzList }, { "personLienceNumber": app.globalData.lienceNumber }, { "carNumber": app.globalData.chepai }, { "price": money})        
+    var reqData = Object.assign({}, { "peccancyEntity": self.data.wzList }, { "personLienceNumber": app.globalData.lienceNumber }, { "carNumber": app.globalData.chepai }, { "price": money }, { "inviteTelphone": self.data.refereePhoneNum}) 
+    console.log(reqData)       
     if (this.data.carNumber==""){
       wx.showToast({
         title: '请选择驾驶证',
         image:"../../images/more/error.png",
       })
     }else{
-      if (self.data.isRegPhone) {
+    if(self.data.isRegPhone!=null){
         wx.showModal({
           title: '',
           content: '确认订单？',
@@ -490,17 +504,13 @@ Page({
       success: function (res) {
         console.log(res)
         if (res.data.httpStatus == 200) {
-          setTimeout(function () {
             that.setData({
-              modalFlag: true
+              modalFlag: true,
+isRegPhone:res.data.data
             })
-          }, 2000)
           wx.showToast({
-            title: '验证成功',
+            title: '验证成功，请提交订单',
             icon: 'success'
-          })
-          that.setData({
-            isRegPhone:res.data.data
           })
           wx.hideLoading()
         } else if (res.data.httpStatus == 401) {
@@ -510,7 +520,7 @@ Page({
           wx.hideLoading()
         } else {
           wx.showToast({
-            title: res.data.msg,
+            title: "验证失败",
             image: "../../images/more/error.png",
           })
           wx.hideLoading()
@@ -553,6 +563,40 @@ Page({
         } 
       }, fail(res) {
         console.log(res)
+      }
+    })
+    },
+  // 手机号部分
+  inputRefereePhoneNum: function (e) {
+    this.setData({
+      refereePhoneNum : e.detail.value
+    })
+  },
+  validateRefereePhoneNum : function(e){
+    var self = this;
+    if (!self.checkPhoneNum(self.data.refereePhoneNum))
+    return;
+    wx.showLoading({
+      title: '推荐人检测中...'
+    })
+    wx.request({
+      url: app.globalData.host + '/findByPhone?phone=' + self.data.refereePhoneNum,
+      method: 'GET',
+      header: {
+        'token': wx.getStorageSync('token')
+      },
+      success: function (res) {
+        console.log(res)
+        if (res.data.data.telphoneNumber){
+            self.submitOrder(e)
+            wx.hideLoading()
+          }else{
+            wx.showToast({
+              title: '推荐人号码无效',
+              icon:"none"
+            })        
+          wx.hideLoading()
+        }
       }
     })
   }

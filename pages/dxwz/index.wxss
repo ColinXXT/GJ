@@ -10,6 +10,15 @@ page{
   align-items: stretch;
   background-color: #69C3AA;
 }
+.inputStyle_text{
+  margin: 20rpx 20rpx 0rpx 20rpx;
+  border: 1px solid #E0E0E0;
+  border-radius: 2px;
+  height:35px;
+  padding-left:5px;
+  overflow: inherit;
+  background-color:#fff2df;
+}
 .container {
   position: relative;
   flex: 1;
@@ -262,8 +271,8 @@ background-color:#E64340;
 }
 .Grid {
   display: flex;
-  color:#5F5F5F;
-  font-size: 13pt;
+  color:#fff;
+  font-size: 32rpx;
 }
 
 .Grid-cell{

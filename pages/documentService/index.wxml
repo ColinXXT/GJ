@@ -112,6 +112,14 @@
    <view class='carStyle'>
     <view class="Grid">
       <view class="Grid-cell">
+              <view>推荐人电话：（选填，如无推荐人，无须填写）</view>
+      </view>
+    </view>
+     <input placeholder="请输入推荐人手机号" type="number" maxlength="11" class='inputStyle_text' bindinput="inputRefereePhoneNum" />
+    </view>
+   <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
               <view>订单总价</view>
       </view>
       <view class="Grid-cell-sub">
@@ -120,7 +128,7 @@
     </view>
     </view>
   <view data-id="{{item.id}}" class="my-item" style="border:none;padding:10rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;"> 
-    <button style='background: #FF6100;' data-money="{{price}}" type="warn" bindtap="submitOrder">提交订单</button>
+    <button style='background: #FF6100;' data-money="{{price}}" type="warn" bindtap="submitOrderWithReferee">提交订单</button>
     
   </view>
     </view>
