@@ -1,1 +1,6 @@
-{}
+{
+  "navigationBarTitleText": "托运服务",
+  "usingComponents": {
+    "v-panel": "../../temp/keyboard/index"
+  }
+}

@@ -7,12 +7,12 @@ const carDetails = [
     "detail": [
       {
         "thumb": "/images/cate/bmcw-wz-icon.jpg",
-        "name": "违章查询代办",
+        "name": "查询代办 (证）",
         "id": "wzcx"
       },
       {
         "thumb": "/images/cate/main5.jpg",
-        "name": "敬请期待",
+        "name": "查询代办 (车）",
         "id": "dxwz"
       },
     ]
@@ -60,12 +60,12 @@ const carDetails = [
     "detail": [
       {
         "thumb": "/images/cate/main7.jpg",
-        "name": "本市车辆",
+        "name": "车辆托运",
         "id": "bscl"
       },
       {
         "thumb": "/images/cate/main8.jpg",
-        "name": "异地车辆",
+        "name": "敬请期待",
         "id": "ydcl"
       }
     ]
@@ -221,10 +221,16 @@ Page({
         wx.navigateTo({
           url: "/pages/jszService/index?id=" + e.currentTarget.dataset.id
         })
-        break;      
-      case "bscl":
-      case "ydcl":
+        break;   
       case "dxwz":  
+       
+      break;     
+      case "bscl":
+        wx.navigateTo({
+          url: "/pages/carConsignment/index?id=" + e.currentTarget.dataset.id
+        })
+        break;  
+      case "ydcl":
         wx.showToast({
           title: '敬请期待！',
           image: '/images/cate/hope.png',

@@ -15,7 +15,6 @@
     "pages/carTransferResult/index",
     "pages/newCar/index",
     "pages/carConsignment/index",
-    "pages/carConsignmentResult/index",
     "pages/order-details/index",
     "pages/documentService/index",
     "pages/jszService/index"
