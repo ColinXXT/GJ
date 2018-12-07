@@ -1,4 +1,7 @@
 <view class="container">
+<view class='scroll_view_border'>
+<view class="srcoll_view" bindtap="textclick"><image class="anno" src='../../images/more/anno.png'/><span class="box"><h style="color:red;">10元</h>现金红包奖励规则：点击右上角转发并成功推荐车友下单后联系客服领取，快快行动起来吧!</span></view>
+</view>
    <view class="swiper-container">
         <swiper class="swiper_box" 
                     autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">

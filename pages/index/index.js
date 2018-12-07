@@ -7,12 +7,12 @@ const carDetails = [
     "detail": [
       {
         "thumb": "/images/cate/bmcw-wz-icon.jpg",
-        "name": "查询代办 (证）",
+        "name": "查询代办 (车）",
         "id": "wzcx"
       },
       {
         "thumb": "/images/cate/main5.jpg",
-        "name": "查询代办 (车）",
+        "name": "查询代办 (证）",
         "id": "dxwz"
       },
     ]
@@ -118,6 +118,7 @@ Page({
   onShow(){
   },
 
+
   onReady() {
     var that = this;
     setTimeout(function () {
@@ -155,9 +156,20 @@ Page({
       scrollTop: e.scrollTop
     })
    },
-  
-  onShareAppMessage: function () {
- 
+  //分享功能
+    onShareAppMessage: (res) => {
+      return {
+        title: '推荐朋友下单，您就可以获得10元红包奖励，快快行动起来吧',
+        path: '/pages/index/index',
+        success: (res) => {
+          wx.showToast({
+            title: '联系客服获取奖励 ',
+          })
+        },
+        fail: (res) => {
+          console.log("转发失败", res);
+        }
+      }
   },
 
   toDetailsTap: function (e) {

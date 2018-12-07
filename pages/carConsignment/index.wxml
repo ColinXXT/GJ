@@ -55,9 +55,9 @@
             <h class='noteIcon'>*</h>托运起始地：</view>
         </view>
       </view>
-      <picker class='inputStyle' value="{{addressFromIndex}}" range="{{addressFromArr}}" bindchange="bindTargetAddressFromChange">
+      <picker disabled='true' class='inputStyle' value="{{addressFromIndex}}" range="{{addressFromArr}}" bindchange="bindTargetAddressFromChange">
         <view class='picker'>{{addressFromArr[addressFromIndex]}}
-          <image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;' />
+          <!-- <image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;' /> -->
         </view>
       </picker>
     </view>
@@ -78,16 +78,16 @@
             <h class='noteIcon'>*</h>托运目的地：</view>
         </view>
       </view>
-      <!-- <picker class="inputStyle" mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+      <picker class="inputStyle" mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
     <view class="picker">
       {{multiArray[0][multiIndex[0]]}}省 - {{multiArray[1][multiIndex[1]]}}市<image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;'/>
     </view>
-  </picker> -->
-      <picker class='inputStyle' value="{{addressIndex}}" range="{{addressIndexArr}}" bindchange="bindTargetAddressChange">
+  </picker>
+      <!-- <picker class='inputStyle' value="{{addressIndex}}" range="{{addressIndexArr}}" bindchange="bindTargetAddressChange">
         <view class='picker'>{{addressIndexArr[addressIndex]}}
           <image src='../../images/more/down.png' style='height:50px; width:50px; float:right; margin-top:-8px;' />
         </view>
-      </picker>
+      </picker> -->
     </view>
 
     <!-- <view class='carStyle'>
@@ -99,6 +99,14 @@
       </view>
       <input style="font-size:15px;" class='inputStyle' placeholder="请输入联系电话" type="number" maxlength="11" bindinput="contactNumber" />
     </view> -->
+    <view class='carStyle'>
+    <view class="Grid">
+      <view class="Grid-cell">
+              <view><h class='noteIcon'>*</h>联系人姓名：</view>
+      </view>
+    </view>
+    <input class='inputStyle' placeholder='请输入联系人姓名' bindinput='inputlinsener' data-id="contact" value='{{contactValue}}'></input>
+    </view>
 
     <view style="margin:20rpx 0rpx; height:20rpx;background: #eee;width:100%;"></view>
 
