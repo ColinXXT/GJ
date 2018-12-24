@@ -7,8 +7,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    host: "https://www.wxcheguanjia.com",
-    //host:"http://wdwdwdandy.6655.la:56089",
+    host: "",
     version: "127.0.0.4",
     chepai: "",
     lienceNumber: "",

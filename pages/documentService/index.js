@@ -643,70 +643,16 @@ Page({
       title: '验证中',
       mask: true
     })
-    wx.request({
-      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log(res)
-        if (res.data.httpStatus == 200) {
-          that.setData({
-            phoneModalFlag: true,
-            isRegPhone:res.data.data
-          })
-          wx.showToast({
-            title: '验证成功，请提交订单',
-            icon: 'success'
-          })
-          wx.hideLoading()
-        } else if (res.data.httpStatus == 401) {
-          wx.navigateTo({
-            url: '../authorize/index',
-          })
-          wx.hideLoading()
-        } else {
-          wx.showToast({
-            title: "验证失败",
-            image: "../../images/more/error.png",
-          })
-          wx.hideLoading()
-        }
-      },
-      fail: function (res) {
-        console.log(res)
-        wx.showModal({
-          title: '温馨提示',
-          content: '验证失败，请重新绑定',
-          showCancel: false
-        })
-        wx.hideLoading()
-      }
+    that.setData({
+      phoneModalFlag: true,
+      isRegPhone: "12312"
     })
-  },
-  phoneModalCancel: function () {
-    this.setData({
-      phoneModalFlag: true
+    wx.showToast({
+      title: '验证成功，请提交订单',
+      icon: 'success'
     })
-  },
-  isPhoneRegisted: function () {
-    var self = this;
-    wx.request({
-      url: app.globalData.host + '/isPhoneRegisted',
-      method: 'GET',
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      success: function (res) {
-        console.log(res)
-        self.setData({
-          isRegPhone: res.data.data
-        })
-      }, fail(res) {
-        console.log(res)
-      }
-    })
+    wx.hideLoading()
+   
   },
   getPrice: function () {
     var self = this;
@@ -748,55 +694,10 @@ Page({
           });
         break;
     }
-    console.log("提交的下单的参数"+self.data.selected)
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
+    self.setData({
+      price: 100
     })
-    wx.request({
-      url: app.globalData.host + '/product/gerPrice?productId=' + self.data.selected,
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log(res)
-        if (res.data.httpStatus == 200) {
-          self.setData({
-            price: res.data.data
-          })
-          wx.hideLoading()
-        } else if (res.data.httpStatus == 401) {
-          wx.navigateTo({
-            url: '../authorize/index',
-          })
-          wx.hideLoading()
-        } else {
-          wx.showModal({
-            title: '温馨提示',
-            content: '服务器不稳定，获取价格失败，请重试',
-            showCancel: false,
-            success: function () {
-              wx.reLaunch({
-                url: '/pages/index/index',
-              })
-            }
-          })
-        }
-        wx.hideLoading()
-      }, fail(res) {
-        console.log(res)
-        wx.showModal({
-          title: '错误提示',
-          content: '网络异常，请返回重新选择',
-          showCancel: false,
-          success: function (res) {
-            wx.navigateBack()
-          }
-        })
-        wx.hideLoading()
-      }
-    })
+    
   },
   move: function () { },
   // 手机号部分

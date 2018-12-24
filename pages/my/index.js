@@ -1,5 +1,5 @@
 const app = getApp()
-
+const userInfo = { nickName: "你の名字", gender: 1, language: "zh_CN", city: "Xi'an", province: "Shaanxi",  }
 Page({
 	data: {
     mobile:"",
@@ -17,6 +17,7 @@ Page({
   onShow() {
     let that = this;
     let userInfo = wx.getStorageSync('userInfo')
+    console.log(userInfo)
     that.setData({
       userInfo: userInfo,
     })
@@ -24,11 +25,13 @@ Page({
   
   bindGetUserInfo: function (e) {
     console.log(e)
-    if (!e.detail.userInfo) {
-      return;
-    }
+   
     wx.setStorageSync('userInfo', e.detail.userInfo)
-    this.login();
+    wx.setStorageSync('token', "12312312312")
+    this.setData({
+      userInfo: wx.getStorageSync("userInfo")
+    })
+
   },
   login: function () {
     let that = this;

@@ -7,46 +7,11 @@ function wzPay(app, money, productId, reqDate) {
     mask: true
   })
   console.info(reqDate)
-  wx.request({
-    url: app.globalData.host + "/pay/getPayId?amount=" + money + "&productId=" + productId,
-    method: "POST",
-    data: Object.assign({}, reqDate, { "orderNumber": orderNumber }),
-    header: {
-      token: wx.getStorageSync('token'),
-      "WL-Proxy-Client-IP": app.globalData.version
-    },
-    success: function (res) {
-      console.log(res)
-      if (res.data.httpStatus == 200) {
-        // 发起支付
-        app.globalData.orderNumber = res.data.data.orderNumber;
-        wx.requestPayment({
-          timeStamp: res.data.data.timestap,
-          nonceStr: res.data.data.nonceStr,
-          package: res.data.data.packageStr,
-          signType: 'MD5',
-          paySign: res.data.data.paySign,
-          fail: function (res) {
-            wx.showToast({
-              title: '取消可再提交！',
-              duration: 1500
-              })
-            wx.hideLoading()
-          },
-          success: function () {
-            wx.showToast({ title: '支付成功' })
-            wx.redirectTo({
-              url: '/pages/order-list/index?orderStatus='+1,
-            })
-            wx.hideLoading()
-          }
-        })
-      } else {
-        wx.showToast({ title: '网络异常'  })
-        wx.hideLoading()
-      }
-    }
+  wx.showToast({ title: '支付成功' })
+  wx.redirectTo({
+    url: '/pages/order-list/index?orderStatus=' + 1,
   })
+wx.hideLoading()
 }
 
 function wxpayOrder(app, money, productId, orderNumber) {

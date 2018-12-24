@@ -87,7 +87,7 @@ Page({
   onReady: function () {
     var self = this;
       self.getPrice();
-      self.isPhoneRegisted();
+      //self.isPhoneRegisted();
     app.globalData.orderNumber = "";
   },
 
@@ -553,48 +553,16 @@ Page({
       title: '验证中',
       mask: true
     })
-    wx.request({
-      url: app.globalData.host + '/validate/phone?code=' + this.data.code + '&telphone=' + this.data.phoneNum,
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log(res)
-        if (res.data.httpStatus == 200) {
-          that.setData({
-            phoneModalFlag: true,
-            isRegPhone:res.data.data
-          })
-          wx.showToast({
-            title: '验证成功，请提交订单',
-            icon: 'success'
-          })
-          wx.hideLoading()
-        } else if (res.data.httpStatus == 401) {
-          wx.navigateTo({
-            url: '../authorize/index',
-          })
-          wx.hideLoading()
-        } else {
-          wx.showToast({
-            title: "验证失败",
-            image: "../../images/more/error.png",
-          })
-          wx.hideLoading()
-        }
-      },
-      fail: function (res) {
-        console.log(res)
-        wx.showModal({
-          title: '温馨提示',
-          content: '验证失败，请重新绑定',
-          showCancel: false,
-
-        })
-        wx.hideLoading()
-      }
+    that.setData({
+      phoneModalFlag: true,
+      isRegPhone: "12312312312"
     })
+    wx.showToast({
+      title: '验证成功，请提交订单',
+      icon: 'success'
+    })
+    wx.hideLoading()
+    
   },
   phoneModalCancel: function () {
     this.setData({
@@ -622,54 +590,11 @@ Page({
   getPrice: function () {
     var self = this;
         console.log(wx.getStorageSync('token'))
-    wx.request({
-      url: app.globalData.host + '/product/gerPrice?productId=' + self.data.selected,
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log(res)
-        if (res.data.httpStatus == 200) {
-          self.setData({
-            price: res.data.data
-          })
-
-        } else if (res.data.httpStatus == 401) {
-          wx.navigateTo({
-            url: '../authorize/index',
-          })
- 
-        } else {
-          wx.showModal({
-            title: '温馨提示',
-            content: '服务器不稳定，获取价格失败，请重试',
-            showCancel: false,
-            success: function () {
-              wx.reLaunch({
-                url: '/pages/index/index',
-              })
-            }
-          })
-        } 
-        setTimeout(function () {
-          self.setData({
-            remind: ''
-          });
-        }, 1000);
-      }, fail(res) {
-        console.log(res)
-        wx.showModal({
-          title: '错误提示',
-          content: '网络异常，请返回重新选择',
-          showCancel: false,
-          success: function (res) {
-            wx.navigateBack()
-          }
-        })
-
-      }
+    self.setData({
+      price: 100,
+      remind:""
     })
+    
   },
   move: function () {},
 

@@ -1,10 +1,53 @@
 var wxpay = require('../../utils/pay.js')
+const dealingOrder = [{
+  address:"西安市车辆管理所总所",
+  carLienceEntity : null,
+  completeTime : "",
+  name : "Colin",
+  orderId : 29,
+  orderNumber :"b1577c36f4124fc4899309e470b5c5e1",
+  orderStatus:2,
+  payTime:"",
+  peccancyEntity:null,
+  personLienceEntity:null,
+  price:"0.01",
+  resolveTime:"2018-11-13 16:58",
+  timestamp: "2018-11-13 16:58:34",
+  serverPeopleEntity:{
+    bz:"",
+    ip:"0:0:0:0:0:0:0:1",
+    lastLogin:"2018-11-16 16:14:27",
+    name:"colin",          password:"b6e048529a2f0694006ec56aba0aae0be166133d",
+    peopleId:"b2b4a961cca04447b06fae3272bd5a92",
+    phoneNumber:"13572106202",
+    rights:"",
+    roleId:"2",
+    skin:"default",
+    status:"0",
+    userName:"Colin"
+  },
+  productEntity:
+    { 
+      price: 0.01, 
+      productId: 6, 
+      productName: "新车上牌（自行到现场）" 
+    },
+  customerInfoEntity:{
+    city: "Xi'an", 
+    gender: "1", 
+    nickName: "Colin", 
+    openId: "ouTco4xJihTx1gEU75yW3k1j16mk", 
+    province: "Shaanxi", 
+    telphoneNumber:"15594807003" 
+    }
+}]
+const notPayOrder = []
 var app = getApp()
 Page({
   data:{
     statusType: ["未支付","待处理", "处理中", "已完成"],
     currentType:0,
-    tabClass: ["", "", "",""]
+    tabClass: ["", "", "red-dot",""]
   },
   statusTap:function(e){
      var curType =  e.currentTarget.dataset.index;
@@ -48,32 +91,7 @@ Page({
   },
   getOrderStatistics : function () {
     var that = this;
-    wx.request({
-      url: app.globalData.host + '/order/findByStatus?status=' + 0,
-      method: 'GET',
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      success: (res) => {
-        wx.hideLoading();
-        if (res.data.httpStatus == 200) {
-          var tabClass = that.data.tabClass;
-          var currentType = 0;
-          if (res.data.data.length > 0) {
-            that.setData({
-              orderList: res.data.data,
-              tabClass : "red-dot",
-              currentType : 0,
-            });
-          } else {
-            that.setData({
-              tabClass: "",
-              currentType: 1,
-            });
-          }
-        }
-      }
-    })
+    
   },
   onShow:function(){
     var that = this;
@@ -82,34 +100,22 @@ Page({
       title: '数据加载中',
       mask:true
     })
-console.log(that.data.currentType)
-    wx.request({
-      url: app.globalData.host + '/order/findByStatus?status='+that.data.currentType,
-      method: 'GET',
-      header: {
-        'token': wx.getStorageSync('token')
-      },
-      success: (res) => {
-        console.log(res)
-        if (res.data.httpStatus == 200) {
-          if (res.data.data.length > 0){
-            that.setData({
-              orderList: res.data.data
-            });
-          }else{
-            that.setData({
-              orderList: null
-            });
-          }     
-          wx.hideLoading();
-        } else {
-          this.setData({
-            orderList: null
-          });
-          wx.hideLoading();
-        }
-      }
-    })
+    var svsType = that.data.currentType;
+    switch (svsType) {
+      case 0 :
+      case 1 :
+      case 3 :
+        that.setData({
+          orderList: null
+        })
+        break;
+      case 2:
+        that.setData({
+          orderList: dealingOrder
+        })
+        break
+    }
+    wx.hideLoading()
     
   },
   onHide:function(){

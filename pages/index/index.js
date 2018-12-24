@@ -1,35 +1,16 @@
 //index.js
 //获取应用实例
 const carDetails = [
-  {
-    "id": "search",
-    "cate": "违章服务",
-    "detail": [
-      {
-        "thumb": "/images/cate/bmcw-wz-icon.jpg",
-        "name": "查询代办 (车）",
-        "id": "wzcx"
-      },
-      {
-        "thumb": "/images/cate/main5.jpg",
-        "name": "查询代办 (证）",
-        "id": "dxwz"
-      },
-    ]
-  },
+  
   {
     "id": "carValidate",
     "cate": "汽车服务",
     "detail": [
-      {
-        "thumb": "/images/cate/bmcw-jz-icon.jpg",
-        "name": "汽车年审",
-        "id": "qcns"
-      }, 
+      
       {
         "thumb": "/images/cate/main1.jpg",
         "name": "汽车过户 (迁）",
-        "id": "qcgh"
+        "id": "ydcl"
       },
       {
         "thumb": "/images/cate/main4.jpg",
@@ -84,7 +65,7 @@ Page({
     selectCurrent:0,
     remind: '加载中',
     category: [
-      { name: '违章服务', id: 'search' },
+
       { name: '汽车服务', id: 'carValidate' },
       { name: '证件服务', id: 'certService' },
       { name: '托运服务', id: 'inspection' }
@@ -92,7 +73,7 @@ Page({
     detail: [],
     curIndex: 0,
     isScroll: false,
-    toView: 'search',
+    toView: 'carValidate',
     index_city: ''
   },
   //事件处理函数
